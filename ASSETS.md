@@ -33,3 +33,5 @@ Authored Three.js geometry in `src/world-art.ts`: terrain, broad leaves, fallen 
 ## Authored material refinement
 
 After inspection of actual gameplay, dark brown earth grain, soil roughness/bump, fibrous moss noise, and leaf veins were added as deterministic procedural DataTextures. Six buffers occupy786,432 bytes in memory and add zero texture network bytes. They are original environment materials, not generated creature art. Moss clumps were reduced and raised to resolve the flat polygon appearance. The garden is batched to66 Mesh objects plus one Points object, with59 shadow casters; collider landmarks and both reflected layouts remain aligned. The favicon is original simple vector icon geometry.
+
+Final recovery check: after the app's IAB became responsive and the game passed final browser tests, the art owner retried only the existing Chrome Tripo tab512279444. That read/bind attempt again timed out at30 seconds (returned34.6 seconds); no UI input, native focus, duplicate generation or new job occurred. IAB responsiveness did not restore signed-in Chrome control. The unknown puffling submission, GLB acquisition, rigs and clips remain open.

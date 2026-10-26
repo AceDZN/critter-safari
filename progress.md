@@ -16,3 +16,5 @@ Original prompt: "Let's build another 3 English games." Continue the human's sta
 1. Art owner reacquires own Tripo tab under shared lock; inspect unknown puffling job and credits before another generation. Acquire up to3 original models total, useful creature rigs/clips and localGLBs; record ownership/cost/bytes/SHA256.
 2. Enable real loader only after files exist; verify AnimationMixer clips, optimize GLBs and remeasure initial load.
 3. Recompare actual camera/state with targets, improve canopy/bubble/creature silhouettes/materials and repeat normal-input desktop/mobile checks. Do not label prototype art pipeline complete before these steps.
+
+Final external audit: IAB and headed local-game testing recovered, so art owner made one fresh bounded bind of the existing signed-in Chrome Tripo tab. It still timed out30s/returned34.6s, with no input or newjob. This distinct final check confirms Chrome asset acquisition remains blocked; do not infer recovery from the local preview. Verified checkpoint7e2513a pushed toorigin/main; final audit appended without changing gameplay.
