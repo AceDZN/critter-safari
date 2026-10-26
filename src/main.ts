@@ -11,7 +11,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=
 const scene=new THREE.Scene();scene.background=new THREE.Color(0xc5d4a3);scene.fog=new THREE.Fog(0xc5d4a3,12,35);
 const camera=new THREE.PerspectiveCamera(64,1,.04,65);camera.rotation.order='YXZ';
 scene.add(new THREE.HemisphereLight(0xf6f5c7,0x496344,2.3));
-const sun=new THREE.DirectionalLight(0xffedb0,3.5);sun.position.set(-7,12,4);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:32});sun.shadow.normalBias=.04;scene.add(sun);sun.target.position.set(0,0,0);scene.add(sun.target);
+const sun=new THREE.DirectionalLight(0xffedb0,3.5);sun.position.set(-7,12,4);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:32});sun.shadow.normalBias=.04;scene.add(sun);sun.target.position.set(0,0,0);scene.add(sun.target);
 let garden=createGarden(scene,false,game.variant),shownLevel=-1;
 const actorViews=new Map<string,{root:THREE.Group;body:THREE.Object3D;tag:THREE.Sprite;visual:CritterVisual|null}>();
 const mat=(color:number)=>new THREE.MeshStandardMaterial({color,roughness:.8});const brass=mat(0xb59a58),wood=mat(0x60452d),green=mat(0x799155);
@@ -23,7 +23,7 @@ function diagnosticCreature(kind:Archetype){const root=new THREE.Group();const b
  const leg=mesh(new THREE.CylinderGeometry(.047,.063,kind==='hopper'?.65:.18,6),wood,root,side*.25,kind==='hopper'?.25:.09,0);if(kind==='hopper')leg.rotation.z=side*.3;}
  return root;
 }
-function label(name:string){const c=document.createElement('canvas');c.width=256;c.height=72;const ctx=c.getContext('2d')!;ctx.fillStyle='#243e28d9';ctx.beginPath();ctx.roundRect(26,5,204,57,14);ctx.fill();ctx.font='30px Georgia';ctx.textAlign='center';ctx.fillStyle='#fff4d8';ctx.fillText(name,128,43);const texture=new THREE.CanvasTexture(c);const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:true}));sprite.scale.set(1.05,.3,1);sprite.position.y=1.22;return sprite}
+function label(name:string){const c=document.createElement('canvas');c.width=256;c.height=72;const ctx=c.getContext('2d')!;ctx.fillStyle='#243e28d9';ctx.beginPath();ctx.roundRect(26,5,204,57,14);ctx.fill();ctx.font='30px Georgia';ctx.textAlign='center';ctx.fillStyle='#fff4d8';ctx.fillText(name,128,43);const texture=new THREE.CanvasTexture(c);const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthTest:true,sizeAttenuation:false}));sprite.scale.set(.14,.04,1);sprite.position.y=1.22;return sprite}
 async function buildActors(){const version=game.level;for(const v of actorViews.values())scene.remove(v.root);actorViews.clear();for(const a of game.actors){const root=new THREE.Group();const body=diagnosticCreature(a.spec.archetype);root.add(body);const tag=label(a.spec.name);root.add(tag);root.scale.setScalar(Math.sqrt(a.spec.size));scene.add(root);actorViews.set(a.spec.id,{root,body,tag,visual:null});}
  for(const a of game.actors){try{const visual=await loadCritter(a.spec.archetype);if(version!==game.level)return;const view=actorViews.get(a.spec.id)!;if(visual){view.root.remove(view.body);view.root.add(visual.root);view.body=visual.root;view.visual=visual}}catch(err){console.error('Critter asset failed',err);$('asset-status').textContent='Tripo model could not load — art requirement remains open.'}}
 }
@@ -36,10 +36,11 @@ const bubbleEdge=mesh(new THREE.TorusGeometry(1.07,.012,5,64),new THREE.MeshBasi
 const pulseRing=mesh(new THREE.TorusGeometry(1,.025,6,64),new THREE.MeshBasicMaterial({color:0xe0fbe3,transparent:true,opacity:.7}),trapRoot,0,.08,0);pulseRing.rotation.x=Math.PI/2;
 const aimMark=mesh(new THREE.TorusGeometry(.23,.012,5,32),new THREE.MeshBasicMaterial({color:0xf5e9b8,transparent:true,opacity:.75}),scene,0,.03,0);aimMark.rotation.x=Math.PI/2;
 const baitViews:THREE.Group[]=[];
-const gadget=new THREE.Group();camera.add(gadget);scene.add(camera);gadget.position.set(.43,-.34,-.68);gadget.rotation.set(-.12,-.2,.14);
+const gadget=new THREE.Group();camera.add(gadget);scene.add(camera);gadget.scale.setScalar(.8);gadget.position.set(.34,-.34,-.75);gadget.rotation.set(-.12,-.2,.14);
 const barrel=mesh(new THREE.CylinderGeometry(.115,.14,.49,12),brass,gadget);barrel.rotation.x=Math.PI/2;const grip=mesh(new THREE.BoxGeometry(.18,.24,.18),wood,gadget,0,-.1,.16);grip.rotation.x=-.2;mesh(new THREE.SphereGeometry(.105,16,12),new THREE.MeshPhysicalMaterial({color:0xb7dcd5,metalness:.15,roughness:.1,transparent:true,opacity:.7}),gadget,0,0,-.22);
 for(const z of[-.12,.1]){const band=mesh(new THREE.TorusGeometry(.13,.025,6,16),wood,gadget,0,0,z)}
-let reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,muted=false,pitch=-.22,recoil=0,lastMode='',lastInstruction='',lastMessage='',lastStamp=performance.now();
+let needsRender=true;
+let reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,muted=false,pitch=-.3,recoil=0,lastMode='',lastInstruction='',lastMessage='',lastStamp=performance.now();
 let audio:AudioContext|null=null;function sound(type:'bait'|'pulse'|'success'|'miss'|'step'){if(muted)return;audio??=new AudioContext();audio.resume();const now=audio.currentTime,o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.type=type==='step'?'triangle':'sine';const f=type==='success'?620:type==='miss'?190:type==='pulse'?330:type==='bait'?480:95;o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(type==='success'?1050:f*.55,now+.18);g.gain.setValueAtTime(type==='step'?.022:.07,now);g.gain.exponentialRampToValueAtTime(.001,now+.22);o.start();o.stop(now+.23)}
 const keys=new Set<string>(),touchKeys=new Set<string>();
 function input(){const has=(s:string)=>keys.has(s)||touchKeys.has(s);return{forward:+has('KeyW')-+has('KeyS'),strafe:+has('KeyD')-+has('KeyA'),turn:+has('ArrowRight')-+has('ArrowLeft')}}
@@ -59,13 +60,13 @@ function modalHTML(){const c=game.contract;
  return `<div class="eyebrow">THE GARDEN IS WAITING</div><h2>הפסקה בגינה</h2><p>העולם נעצר. אפשר לקרוא ולתכנן בלי לחץ.</p><div class="actions"><button id="resume-btn" class="primary">ממשיכים ←</button><button id="restart-btn" class="quiet">מתחילים מחדש</button></div><div class="toggle-row"><button id="mute-btn" class="quiet">${muted?'צליל כבוי':'צליל פעיל'}</button><button id="motion-btn" class="quiet">${reduced?'תנועה מופחתת':'תנועה מלאה'}</button><button id="full-btn" class="quiet">מסך מלא</button></div>`;
 }
 function sync(){
- if(shownLevel!==game.level){if(shownLevel>=0){garden.dispose();garden=createGarden(scene,game.contract.scene==='transfer',game.variant)}shownLevel=game.level;void buildActors();pitch=-.22}
+ if(shownLevel!==game.level){if(shownLevel>=0){garden.dispose();garden=createGarden(scene,game.contract.scene==='transfer',game.variant)}shownLevel=game.level;void buildActors();pitch=-.3}
  const instruction=game.contract.instruction;if(lastInstruction!==instruction){$('instruction').textContent=instruction;$('contract-label').textContent=`FIELD CONTRACT ${String(game.level+1).padStart(2,'0')} / ${game.contract.transfer?'NEW CLEARING':'FERN GARDEN'}`;$('count').textContent=String(game.level+1).padStart(2,'0');lastInstruction=instruction}
  $('bait-icon').textContent=game.diet==='leaf'?'❧':'●';$('bait-text').innerHTML=`${game.diet==='leaf'?'עלה':'פרי'} <kbd>Q</kbd>`;
  if(lastMessage!==game.message){$('toast').textContent=game.message;lastMessage=game.message}
  $('asset-status').textContent=TRIPO_ASSETS_READY?'':'ART PIPELINE OPEN · diagnostic creature silhouettes; Tripo acquisition / rigs pending';
  $('modal').classList.toggle('hidden',game.mode==='playing');$('modal').classList.toggle('capture',game.mode==='caught');
- if(lastMode!==game.mode){lastMode=game.mode;if(game.mode!=='playing'){$('modal-body').innerHTML=modalHTML();
+ if(lastMode!==game.mode){needsRender=true;lastMode=game.mode;if(game.mode!=='playing'){$('modal-body').innerHTML=modalHTML();
  if(game.mode==='intro'){modalAction('start-btn',()=>{game.start();game.mode='notes';sync()});modalAction('intro-help',()=>{game.mode='help';sync()})}
  if(['notes','help','paused'].includes(game.mode))modalAction('resume-btn',resume);
  if(game.mode==='notes')modalAction('notes-help',()=>{game.hints++;game.noteEvent('hint');game.mode='help';sync()});
@@ -84,7 +85,7 @@ canvas.addEventListener('pointermove',e=>{if(!drag||game.mode!=='playing')return
 canvas.addEventListener('pointerup',e=>{if(!drag)return;const moved=Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY);drag=null;if(moved<6)toss()});canvas.addEventListener('pointercancel',()=>drag=null);canvas.addEventListener('contextmenu',e=>e.preventDefault());
 for(const b of document.querySelectorAll<HTMLButtonElement>('[data-move]')){const key=({forward:'KeyW',back:'KeyS',left:'KeyA',right:'KeyD'} as Record<string,string>)[b.dataset.move!];b.addEventListener('pointerdown',e=>{e.preventDefault();touchKeys.add(key);b.setPointerCapture(e.pointerId)});for(const event of['pointerup','pointercancel','lostpointercapture'])b.addEventListener(event,()=>touchKeys.delete(key))}
 function focusPause(){keys.clear();touchKeys.clear();drag=null;if(game.mode==='playing'){game.open('paused');sync()}}window.addEventListener('blur',focusPause);document.addEventListener('visibilitychange',()=>{if(document.hidden)focusPause()});
-function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
+function resize(){needsRender=true;renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
 function draw(dt=0){
  camera.position.set(game.player.x,1.25,game.player.z);camera.rotation.set(pitch,game.player.yaw,0,'YXZ');
  garden.update(game.time,reduced);
@@ -94,8 +95,8 @@ function draw(dt=0){
  baitViews.forEach((v,i)=>{const b=game.baits[i];v.visible=!!b;if(!b)return;const old=v.userData.diet;if(old!==b.diet){v.clear();const item=mesh(new THREE.SphereGeometry(.12,10,7),mat(b.diet==='leaf'?0x99b947:0xae4662),v);if(b.diet==='leaf')item.scale.set(.65,.12,1.4);v.userData.diet=b.diet}const t=1-b.flight/.55;v.position.set(THREE.MathUtils.lerp(b.from.x,b.x,t),.12+Math.sin(t*Math.PI)*1.6,THREE.MathUtils.lerp(b.from.z,b.z,t));});
  const aim=aimPoint();aimMark.position.set(aim.x,.025,aim.z);aimMark.visible=game.mode==='playing';(aimMark.material as THREE.MeshBasicMaterial).color.setHex(game.fits(aim,.4)&&distance(game.player,aim)<5?0xf9efb2:0xb86648);
  $('aim-label').textContent=game.mode==='playing'?`${distance(game.player,aim).toFixed(1)}m` :'';
- recoil=Math.max(0,recoil-dt*.35);gadget.position.z=-.68+recoil;gadget.visible=game.mode!=='intro';renderer.render(scene,camera);
+ recoil=Math.max(0,recoil-dt*.35);gadget.position.z=-.75+recoil;gadget.visible=game.mode!=='intro';renderer.render(scene,camera);
 }
-let accumulator=0;function advance(ms:number){const safe=Math.min(ms,300000);for(let t=0;t<safe;t+=1000/60){game.update(Math.min(1/60,(safe-t)/1000),input());}sync();draw(safe/1000)}
-Object.assign(window,{render_game_to_text:()=>JSON.stringify({...game.text(),aim:aimPoint(),art:{tripoReady:TRIPO_ASSETS_READY,animatedModels:[...actorViews.values()].filter(v=>v.visual?.clips.length).length},settings:{muted,reducedMotion:reduced}}),advanceTime:advance});
-function frame(stamp:number){const dt=Math.min((stamp-lastStamp)/1000,.05);lastStamp=stamp;accumulator+=dt;game.update(dt,input());if(accumulator>.12){sync();accumulator=0}draw(dt);requestAnimationFrame(frame)}sync();draw();requestAnimationFrame(frame);
+let manualTime=false,accumulator=0;function advance(ms:number){manualTime=true;const safe=Math.min(ms,300000);for(let t=0;t<safe;t+=1000/60){game.update(Math.min(1/60,(safe-t)/1000),input());}sync();draw(safe/1000);needsRender=false}
+Object.assign(window,{render_game_to_text:()=>JSON.stringify({...game.text(),aim:aimPoint(),art:{tripoReady:TRIPO_ASSETS_READY,animatedModels:[...actorViews.values()].filter(v=>v.visual?.clips.length).length},settings:{muted,reducedMotion:reduced},render:{drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,pixelRatio:renderer.getPixelRatio()}}),advanceTime:advance});
+function frame(stamp:number){const dt=Math.min((stamp-lastStamp)/1000,.05);lastStamp=stamp;accumulator+=dt;if(!manualTime)game.update(dt,input());if(accumulator>.12){sync();accumulator=0}if(!manualTime&&game.mode==='playing'){draw(dt);needsRender=false}else if(needsRender){draw(0);needsRender=false}requestAnimationFrame(frame)}sync();setTimeout(()=>requestAnimationFrame(frame),0);

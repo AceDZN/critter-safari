@@ -35,12 +35,12 @@ export class SafariSimulation {
  trap.charge=0;trap.pulse=1;this.noteEvent('pulse');
  const candidates=this.actors.filter(a=>a.mode!=='caught'&&distance(a,trap)<1.06&&segmentClear(a,trap,this.obstacles,.1)).sort((a,b)=>distance(a,trap)-distance(b,trap));
  const actor=candidates[0];if(!actor){this.message='כמעט! הבועה התפוגגה. הפיתיון עדיין יכול לעבוד.';return false}
- this.captureId=actor.spec.id;actor.mode='caught';this.correct=acceptsCapture(this.contract,actor.spec.id);this.attempts++;this.noteEvent('capture',actor.spec.id);this.mode='caught';this.message=this.correct?'לכידה מוצלחת! אפשר להעביר את היצור בבטחה.':this.contract.misconceptionHe;return true;
+ this.captureId=actor.spec.id;actor.mode='caught';actor.x=trap.x;actor.z=trap.z;this.correct=acceptsCapture(this.contract,actor.spec.id);this.attempts++;this.noteEvent('capture',actor.spec.id);this.mode='caught';this.message=this.correct?'לכידה מוצלחת! אפשר להעביר את היצור בבטחה.':this.contract.misconceptionHe;return true;
  }
  release(){if(this.mode!=='caught'||this.correct)return;const actor=this.actors.find(a=>a.spec.id===this.captureId)!;actor.mode='escape';actor.timer=2;actor.destination=this.home(actor.spec);this.captureId=null;this.baits=[];if(this.trap)this.trap.charge=1;this.mode='playing';this.message='היצור שוחרר. אפשר לשנות פיתיון, מיקום ותזמון ולנסות שוב.';this.noteEvent('retry')}
  next(){if(this.mode!=='caught'||!this.correct)return;this.noteEvent('contract-complete',this.captureId!);if(this.level===CONTRACTS.length-1){this.mode='complete';return}this.load(this.level+1);this.mode='notes'}
  resetTrap(){if(this.mode!=='playing')return;this.trap=null;this.baits=[];this.message='המלכודת הוחזרה. E כדי להציב מחדש.';this.noteEvent('reset-trap')}
- restart(){this.noteEvent('restart');this.load(0);this.mode='intro'}
+ restart(){this.events=[];this.load(0);this.noteEvent('restart');this.mode='intro'}
  open(mode:'notes'|'help'|'paused'){if(this.mode!=='playing')return;this.mode=mode;if(mode==='help'){this.hints++;this.noteEvent('hint')}}
  update(dt:number,input:Input={forward:0,strafe:0,turn:0}){
  if(this.mode!=='playing')return;dt=Math.min(dt,.05);this.time+=dt;this.player.yaw+=input.turn*dt*1.8;
@@ -55,5 +55,5 @@ export class SafariSimulation {
  let dx=a.destination.x-a.x,dz=a.destination.z-a.z;const len=Math.hypot(dx,dz);if(len>.08){const speed=a.spec.usualSpeed*(a.mode==='lured'?1.55:a.mode==='escape'?1.8:1);dx=dx/len*speed*dt;dz=dz/len*speed*dt;const prev={x:a.x,z:a.z};this.move(a,dx,dz,.23);if(distance(prev,a)<.001){this.move(a,-dz*1.7,dx*1.7,.23)}a.angle=Math.atan2(dx,dz)}
  }
  }
- text(){return {coordinateSystem:'ground x east/right, z south; y up; yaw 0 looks north (-z); units metres',mode:this.mode,variant:this.variant,contract:this.level+1,instruction:this.contract.instruction,player:this.player,trap:this.trap,baitType:this.diet,baits:this.baits.map(({x,z,diet,age,flight})=>({x,z,diet,age,flight})),creatures:this.actors.map(a=>({id:a.spec.id,name:a.spec.name,x:+a.x.toFixed(2),z:+a.z.toFixed(2),mode:a.mode,diet:a.spec.diet,usualSpeed:a.spec.usualSpeed,size:a.spec.size,habit:a.spec.habit})),obstacles:this.obstacles,captureId:this.captureId,correct:this.correct,attempts:this.attempts,hints:this.hints,message:this.message,events:this.events.slice(-8)}}
+ text(){return {coordinateSystem:'ground x east/right, z south; y up; yaw 0 looks north (-z); units metres',mode:this.mode,variant:this.variant,contract:this.level+1,instruction:this.contract.instruction,player:this.player,trap:this.trap,baitType:this.diet,baits:this.baits.map(({x,z,diet,age,flight})=>({x,z,diet,age,flight})),creatures:this.actors.map(a=>({id:a.spec.id,name:a.spec.name,x:+a.x.toFixed(2),z:+a.z.toFixed(2),y:a.mode==='caught'?.35:0,mode:a.mode,diet:a.spec.diet,usualSpeed:a.spec.usualSpeed,size:a.spec.size,habit:a.spec.habit})),obstacles:this.obstacles,captureId:this.captureId,correct:this.correct,attempts:this.attempts,hints:this.hints,message:this.message,events:this.events.slice(-8)}}
 }

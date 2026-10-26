@@ -1,0 +1,14 @@
+{
+  "viewport": [
+    1672,
+    941
+  ],
+  "frames": 80,
+  "medianFrameMs": 8.299999999999955,
+  "p95FrameMs": 10.200000000000045,
+  "render": {
+    "drawCalls": 131,
+    "triangles": 154256,
+    "pixelRatio": 1
+  }
+}

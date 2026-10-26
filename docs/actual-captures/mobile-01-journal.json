@@ -1,0 +1,129 @@
+{
+  "coordinateSystem": "ground x east/right, z south; y up; yaw 0 looks north (-z); units metres",
+  "mode": "notes",
+  "variant": 1,
+  "contract": 1,
+  "instruction": "Catch the puffling that eats leaves and rests by the ferns.",
+  "player": {
+    "x": 0,
+    "z": 6,
+    "yaw": 0
+  },
+  "trap": null,
+  "baitType": "leaf",
+  "baits": [],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "x": 3,
+      "z": -1,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns"
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "x": -2.6,
+      "z": 0.7,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles"
+    },
+    {
+      "id": "tumble",
+      "name": "Tumble",
+      "x": -3,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.95,
+      "size": 1.3,
+      "habit": "shelters in shade"
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "x": 0.8,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "hops beside twigs"
+    },
+    {
+      "id": "nib",
+      "name": "Nib",
+      "x": -0.6,
+      "z": 0.4,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.85,
+      "size": 0.9,
+      "habit": "seeks sunny patches"
+    },
+    {
+      "id": "pebble",
+      "name": "Pebble",
+      "x": 2.5,
+      "z": 1,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 0.78,
+      "size": 1.1,
+      "habit": "rests by logs"
+    }
+  ],
+  "obstacles": [
+    {
+      "x": 0,
+      "z": -0.6,
+      "r": 0.65
+    },
+    {
+      "x": 4.6,
+      "z": -2.8,
+      "r": 0.65
+    },
+    {
+      "x": -4.9,
+      "z": 1.5,
+      "r": 0.7
+    }
+  ],
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "message": "E — הצבת מלכודת · לחיצה — פיתיון · רווח — בועה",
+  "events": [],
+  "aim": {
+    "x": 0,
+    "z": 1.9590898202927152
+  },
+  "art": {
+    "tripoReady": false,
+    "animatedModels": 0
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 53,
+    "triangles": 140698,
+    "pixelRatio": 1
+  }
+}

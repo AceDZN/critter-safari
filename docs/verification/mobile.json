@@ -1,0 +1,17 @@
+{
+  "touchMovement": true,
+  "touchLook": true,
+  "trap": true,
+  "baitSwitch": true,
+  "toss": true,
+  "lured": true,
+  "correctCapture": true,
+  "overflow": {
+    "body": 390,
+    "width": 390,
+    "table": 384,
+    "tableViewport": 322
+  },
+  "errors": [],
+  "failed": []
+}

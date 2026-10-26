@@ -1,0 +1,194 @@
+{
+  "coordinateSystem": "ground x east/right, z south; y up; yaw 0 looks north (-z); units metres",
+  "mode": "caught",
+  "variant": 1,
+  "contract": 3,
+  "instruction": "Among the three leaf-eaters, catch the one that is slower than Reed but faster than Moss.",
+  "player": {
+    "x": -3.3358850609099604,
+    "z": -0.008620575657291768,
+    "yaw": 0.3006005859375
+  },
+  "trap": {
+    "x": -4.0399998537974025,
+    "z": -2.2799994484052366,
+    "charge": 0,
+    "pulse": 1
+  },
+  "baitType": "leaf",
+  "baits": [
+    {
+      "x": -4.0399998537974025,
+      "z": -2.2799994484052366,
+      "diet": "leaf",
+      "age": 0.8000000000000003,
+      "flight": 0
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "x": 2.18,
+      "z": -0.85,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns"
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "x": -2.67,
+      "z": 0.05,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles"
+    },
+    {
+      "id": "tumble",
+      "name": "Tumble",
+      "x": -4.04,
+      "z": -2.28,
+      "y": 0.35,
+      "mode": "caught",
+      "diet": "leaf",
+      "usualSpeed": 0.95,
+      "size": 1.3,
+      "habit": "shelters in shade"
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "x": -0.64,
+      "z": -1.64,
+      "y": 0,
+      "mode": "lured",
+      "diet": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "hops beside twigs"
+    },
+    {
+      "id": "nib",
+      "name": "Nib",
+      "x": -1.4,
+      "z": 0.2,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.85,
+      "size": 0.9,
+      "habit": "seeks sunny patches"
+    },
+    {
+      "id": "pebble",
+      "name": "Pebble",
+      "x": 2.85,
+      "z": 0.41,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 0.78,
+      "size": 1.1,
+      "habit": "rests by logs"
+    }
+  ],
+  "obstacles": [
+    {
+      "x": 0,
+      "z": -0.6,
+      "r": 0.65
+    },
+    {
+      "x": 4.6,
+      "z": -2.8,
+      "r": 0.65
+    },
+    {
+      "x": -4.9,
+      "z": 1.5,
+      "r": 0.7
+    }
+  ],
+  "captureId": "tumble",
+  "correct": true,
+  "attempts": 1,
+  "hints": 0,
+  "message": "לכידה מוצלחת! אפשר להעביר את היצור בבטחה.",
+  "events": [
+    {
+      "type": "bait",
+      "level": 2,
+      "time": 1.5,
+      "assisted": false
+    },
+    {
+      "type": "pulse",
+      "level": 2,
+      "time": 2.6,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 2,
+      "time": 2.6,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 2,
+      "time": 2.6,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 3,
+      "time": 2.8,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 3,
+      "time": 2.8,
+      "assisted": false
+    },
+    {
+      "type": "pulse",
+      "level": 3,
+      "time": 4.1,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 3,
+      "time": 4.1,
+      "id": "tumble",
+      "assisted": false
+    }
+  ],
+  "aim": {
+    "x": -4.0399998537974025,
+    "z": -2.2799994484052366
+  },
+  "art": {
+    "tripoReady": false,
+    "animatedModels": 0
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 59,
+    "triangles": 147420,
+    "pixelRatio": 1
+  }
+}

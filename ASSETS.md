@@ -17,7 +17,7 @@ Observed 26 October 2026:
 - Displayed balance before work: **6415** credits.
 - Opened https://studio.tripo3d.ai/workspace/generate/ . Selected text generation, H3.1 Best Quality. Displayed Generate cost: **30 credits**.
 - Attempted prompt entry and Generate in one bounded UI call. The call timed out after 30 seconds; generation submission/result and credit debit are **unverified**. No duplicate job was submitted.
-- Own-tab recovery also timed out after 30 seconds. Native `cua.getApp('com.google.Chrome')` fallback timed out after 30 seconds. Native UI lock was acquired with this game's owner metadata and released after the failed bounded session. A later recovery attempt was deferred because Sentence Foundry owned the shared native lock.
+- Own-tab recovery also timed out after 30 seconds. Native `cua.getApp('com.google.Chrome')` fallback timed out after 30 seconds. Native UI lock was acquired with this game's owner metadata and released after the failed bounded session. A later `cua.getState()` inventory attempt also timed out after the bounded 30-second call (returned after about42 seconds). Sentence Foundry owned the shared native lock during another opportunity; its lock was left untouched.
 - No local creature GLB, rig, or clip has been obtained. `TRIPO_ASSETS_READY=false` is explicit in `src/world-art.ts`; `loadCritter` returns null. Runtime diagnostics must identify any temporary silhouettes as placeholders. This requirement remains open.
 
 Attempted generation prompt (exact):
@@ -29,3 +29,7 @@ Limit: at most three new model generations, plus needed rig/animation jobs, usin
 ## Environment
 
 Authored Three.js geometry in `src/world-art.ts`: terrain, broad leaves, fallen twigs, moss, dew drops, bubble trap, bait launcher, and particles. These are intentionally procedural environment/tool geometry rather than substitutions for the required character pipeline.
+
+## Authored material refinement
+
+After inspection of actual gameplay, dark brown earth grain, soil roughness/bump, fibrous moss noise, and leaf veins were added as deterministic procedural DataTextures. Six buffers occupy786,432 bytes in memory and add zero texture network bytes. They are original environment materials, not generated creature art. Moss clumps were reduced and raised to resolve the flat polygon appearance. The garden is batched to66 Mesh objects plus one Points object, with59 shadow casters; collider landmarks and both reflected layouts remain aligned. The favicon is original simple vector icon geometry.

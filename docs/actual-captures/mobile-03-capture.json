@@ -1,0 +1,168 @@
+{
+  "coordinateSystem": "ground x east/right, z south; y up; yaw 0 looks north (-z); units metres",
+  "mode": "caught",
+  "variant": 1,
+  "contract": 1,
+  "instruction": "Catch the puffling that eats leaves and rests by the ferns.",
+  "player": {
+    "x": 2.5,
+    "z": 3.0000000000000036,
+    "yaw": -0.480788818359375
+  },
+  "trap": {
+    "x": 4.309999990563483,
+    "z": -0.469999717712255,
+    "charge": 0,
+    "pulse": 1
+  },
+  "baitType": "leaf",
+  "baits": [
+    {
+      "x": 4.309999990563483,
+      "z": -0.469999717712255,
+      "diet": "leaf",
+      "age": 1.25,
+      "flight": 0
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "x": 4.31,
+      "z": -0.47,
+      "y": 0.35,
+      "mode": "caught",
+      "diet": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns"
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "x": -2.74,
+      "z": 0.06,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles"
+    },
+    {
+      "id": "tumble",
+      "name": "Tumble",
+      "x": -2.16,
+      "z": -2.06,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.95,
+      "size": 1.3,
+      "habit": "shelters in shade"
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "x": 3.43,
+      "z": -0.72,
+      "y": 0,
+      "mode": "lured",
+      "diet": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "hops beside twigs"
+    },
+    {
+      "id": "nib",
+      "name": "Nib",
+      "x": -1.43,
+      "z": 0.29,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.85,
+      "size": 0.9,
+      "habit": "seeks sunny patches"
+    },
+    {
+      "id": "pebble",
+      "name": "Pebble",
+      "x": 2.78,
+      "z": 0.39,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 0.78,
+      "size": 1.1,
+      "habit": "rests by logs"
+    }
+  ],
+  "obstacles": [
+    {
+      "x": 0,
+      "z": -0.6,
+      "r": 0.65
+    },
+    {
+      "x": 4.6,
+      "z": -2.8,
+      "r": 0.65
+    },
+    {
+      "x": -4.9,
+      "z": 1.5,
+      "r": 0.7
+    }
+  ],
+  "captureId": "moss",
+  "correct": true,
+  "attempts": 1,
+  "hints": 0,
+  "message": "לכידה מוצלחת! אפשר להעביר את היצור בבטחה.",
+  "events": [
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 2,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 2,
+      "assisted": false
+    },
+    {
+      "type": "pulse",
+      "level": 1,
+      "time": 3.8,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 3.8,
+      "id": "moss",
+      "assisted": false
+    }
+  ],
+  "aim": {
+    "x": 4.309999990563483,
+    "z": -0.469999717712255
+  },
+  "art": {
+    "tripoReady": false,
+    "animatedModels": 0
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 73,
+    "triangles": 146310,
+    "pixelRatio": 1
+  }
+}

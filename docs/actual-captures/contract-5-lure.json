@@ -1,0 +1,194 @@
+{
+  "coordinateSystem": "ground x east/right, z south; y up; yaw 0 looks north (-z); units metres",
+  "mode": "playing",
+  "variant": 1,
+  "contract": 5,
+  "instruction": "Among the three berry-eaters, catch the slowest one.",
+  "player": {
+    "x": -3.974813858191623,
+    "z": -0.8908138581915958,
+    "yaw": -0.22871020507812503
+  },
+  "trap": {
+    "x": -3.130000188911331,
+    "z": -4.519999412322559,
+    "charge": 1,
+    "pulse": 0
+  },
+  "baitType": "berry",
+  "baits": [
+    {
+      "x": -3.130000188911331,
+      "z": -4.519999412322559,
+      "diet": "berry",
+      "age": 0,
+      "flight": 0.55
+    }
+  ],
+  "creatures": [
+    {
+      "id": "alba",
+      "name": "Alba",
+      "x": 2.23,
+      "z": 0.57,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.9,
+      "size": 1.2,
+      "habit": "rests by stones"
+    },
+    {
+      "id": "brin",
+      "name": "Brin",
+      "x": -3.13,
+      "z": -2.52,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 0.7,
+      "size": 0.85,
+      "habit": "shelters in reeds"
+    },
+    {
+      "id": "coda",
+      "name": "Coda",
+      "x": 1.43,
+      "z": -2.12,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.1,
+      "size": 1.05,
+      "habit": "circles fallen seeds"
+    },
+    {
+      "id": "dune",
+      "name": "Dune",
+      "x": -2.78,
+      "z": 1.65,
+      "y": 0,
+      "mode": "wander",
+      "diet": "berry",
+      "usualSpeed": 1.5,
+      "size": 0.65,
+      "habit": "seeks dry ground"
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "x": 1.86,
+      "z": -2.05,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 1.85,
+      "size": 0.75,
+      "habit": "circles mushrooms"
+    },
+    {
+      "id": "fizz",
+      "name": "Fizz",
+      "x": -0.55,
+      "z": 0.45,
+      "y": 0,
+      "mode": "wander",
+      "diet": "leaf",
+      "usualSpeed": 0.55,
+      "size": 1.3,
+      "habit": "rests by moss"
+    }
+  ],
+  "obstacles": [
+    {
+      "x": 0.7,
+      "z": 1,
+      "r": 0.8
+    },
+    {
+      "x": -1.7,
+      "z": -0.1,
+      "r": 0.65
+    },
+    {
+      "x": 4.5,
+      "z": -1.7,
+      "r": 0.65
+    }
+  ],
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "message": "פרי נזרק — אוכלי פירות יגיבו.",
+  "events": [
+    {
+      "type": "contract-complete",
+      "level": 3,
+      "time": 4.1,
+      "id": "tumble",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 4,
+      "time": 3.1,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 4,
+      "time": 3.1,
+      "assisted": false
+    },
+    {
+      "type": "pulse",
+      "level": 4,
+      "time": 4.3,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 4,
+      "time": 4.3,
+      "id": "reed",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 4,
+      "time": 4.3,
+      "id": "reed",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 5,
+      "time": 3.6,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 5,
+      "time": 3.6,
+      "assisted": false
+    }
+  ],
+  "aim": {
+    "x": -3.130000188911331,
+    "z": -4.519999412322559
+  },
+  "art": {
+    "tripoReady": false,
+    "animatedModels": 0
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 49,
+    "triangles": 139206,
+    "pixelRatio": 1
+  }
+}

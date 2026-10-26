@@ -25,7 +25,7 @@ Five authored contracts: identifying clause/diet/habit, independent size and spe
 
 Implemented: Three.js garden, collision/line-of-sight/range rules, flying bait and reactive movement, trap charge/miss/capture/release, five-contract progression, local in-memory attempt/hint/retry events, Hebrew help and explicit LTR English, pausable reading, touch/keyboard/drag controls, sound after interaction, motion preference, restart, deterministic advance hook and observable text state.
 
-Open: actual Tripo model acquisition, skeletal rigs/clips and runtime verification; final art-quality match to targets. Browser outcomes and performance limitations are in PLAYTEST.md and VISUAL_REVIEW.md. Do not describe this checkpoint as a completed art slice or validated learning intervention.
+Open: actual Tripo model acquisition, skeletal rigs/clips and runtime verification; final art-quality match to targets. Build and25 independent tests pass. The headed browser completed all5 contracts plus wrong-capture recovery; real mobile touch movement/aim/bait/trap/capture passed at390×844. Both final runs logged no console/HTTP errors. Browser outcomes and performance limits are in PLAYTEST.md and VISUAL_REVIEW.md. Do not describe this checkpoint as a completed art slice or validated learning intervention.
 
 ## Static Vercel preparation
 
@@ -34,3 +34,7 @@ Framework Vite; build command `npm run build`; output directory `dist`. No serve
 ## Evidence and sources
 
 GAME_IDENTITY.md describes the loop. CURRICULUM.md maps original fixtures to exact saved Workbook sources. ASSETS.md records provenance and the open art gate. docs/visual-targets contains two built-in image_gen concepts and exact prompts; docs/actual-captures is reserved for actual browser captures. Automated tests establish fixture consistency and tool solvability, not fun or learning gains.
+
+## Repeat browser verification
+
+Start `npm run preview`, install the normal Playwright Chromium browser with `npx playwright install chromium` if needed, then `npm run test:browser`. It uses a headed test window separate from the human's browsing. `CRITTER_HEADLESS=1` enables headless; `CRITTER_BROWSER_PATH` can select an already installed Chromium binary. The script reads observable state and sends normal inputs; it never injects wins. It saves screenshots/state under docs/actual-captures and scratch results under work/. Initial no-art diagnostics and all open asset requirements remain visible.
