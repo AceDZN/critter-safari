@@ -1,0 +1,32 @@
+[
+  {
+    "file": "public/audio/bait.mp3",
+    "bytes": 19864,
+    "sha256": "cab46a303cc497bed1b8dc3431aa749696bc94ba072974a81ce1eea183733d8c"
+  },
+  {
+    "file": "public/audio/capture.mp3",
+    "bytes": 33464,
+    "sha256": "17948161fc74f783b14b6a863901ddc817ef6a1bcd30de70783fead7a800d605"
+  },
+  {
+    "file": "public/audio/fern-garden.mp3",
+    "bytes": 1047399,
+    "sha256": "54b9504605f7800220263d379b1c2a3ae48a540fe1c35658ceba4617a47d7dea"
+  },
+  {
+    "file": "public/audio/pulse.mp3",
+    "bytes": 28543,
+    "sha256": "ce38a7a828c8b6b8d6aa5906321ce812cc15bbe69dade355aaace38f46c61fa8"
+  },
+  {
+    "file": "public/audio/release.mp3",
+    "bytes": 36838,
+    "sha256": "17f71953b2511ef5b99736ef13805272084b1cd420ea43b3ed67b1c75bfb28a4"
+  },
+  {
+    "file": "public/audio/trap.mp3",
+    "bytes": 12879,
+    "sha256": "c775dbeb703d09303fc5637cc5bf82601a0cec8adedce7be35e1d2b81c871d19"
+  }
+]
