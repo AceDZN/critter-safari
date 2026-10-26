@@ -1,10 +1,4 @@
 node_modules/
 dist/
 work/
-tmp/
-.env
-.env.*
-!.env.example
 .DS_Store
-playwright-report/
-test-results/
