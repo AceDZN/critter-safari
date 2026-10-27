@@ -1,0 +1,94 @@
+[
+  {
+    "gait": "authored:rabbit:quadruped-walk",
+    "duration": 1,
+    "nominalSpeed": 0.347538,
+    "cycleDistance": 0.347538,
+    "sampledPoses": 481,
+    "minPlanted": 3,
+    "feet": [
+      {
+        "name": "frontRight",
+        "minFloor": -0.000037081466167969236,
+        "maxLift": 0.043935966879662905,
+        "maxPlantError": 0.00010015086362990307,
+        "kneeMin": 86.5071693778321,
+        "kneeMax": 134.84462018284603,
+        "stanceSlipRange": 0.0006441389991523883
+      },
+      {
+        "name": "frontLeft",
+        "minFloor": -0.000028178272397540078,
+        "maxLift": 0.04387948612770603,
+        "maxPlantError": 0.00013355491690904858,
+        "kneeMin": 86.49684965280828,
+        "kneeMax": 134.75672078759285,
+        "stanceSlipRange": 0.0012858438104758063
+      },
+      {
+        "name": "hindRight",
+        "minFloor": -0.0000011077646984299589,
+        "maxLift": 0.043920083372708495,
+        "maxPlantError": 0.00013431648624585518,
+        "kneeMin": 62.45107847739909,
+        "kneeMax": 100.4988942627012,
+        "stanceSlipRange": 0.0024060638826956526
+      },
+      {
+        "name": "hindLeft",
+        "minFloor": -0.0000013748105608685778,
+        "maxLift": 0.0439240631987033,
+        "maxPlantError": 0.00010102759000741087,
+        "kneeMin": 62.401928625810676,
+        "kneeMax": 100.4518927601551,
+        "stanceSlipRange": 0.0025073308728609522
+      }
+    ]
+  },
+  {
+    "gait": "authored:rabbit:quadruped-trot",
+    "duration": 0.65,
+    "nominalSpeed": 1.0033387,
+    "cycleDistance": 0.6521701,
+    "sampledPoses": 481,
+    "minPlanted": 2,
+    "feet": [
+      {
+        "name": "frontRight",
+        "minFloor": -0.0003202990252050155,
+        "maxLift": 0.05500591384248316,
+        "maxPlantError": 0.0003202990252050155,
+        "kneeMin": 81.2858617227408,
+        "kneeMax": 164.2108504048643,
+        "stanceSlipRange": 0.0009833957446905295
+      },
+      {
+        "name": "frontLeft",
+        "minFloor": -0.00023640017994780297,
+        "maxLift": 0.05497811246198667,
+        "maxPlantError": 0.00023640017994780297,
+        "kneeMin": 81.27825421263698,
+        "kneeMax": 163.69369690010342,
+        "stanceSlipRange": 0.0015188387550327254
+      },
+      {
+        "name": "hindRight",
+        "minFloor": -0.000008602263283463194,
+        "maxLift": 0.05497851619216123,
+        "maxPlantError": 0.0009125116057931291,
+        "kneeMin": 59.81582383300964,
+        "kneeMax": 110.5924936459502,
+        "stanceSlipRange": 0.002884531118698075
+      },
+      {
+        "name": "hindLeft",
+        "minFloor": -0.000008594919030584933,
+        "maxLift": 0.05500650890982065,
+        "maxPlantError": 0.0010946710927079303,
+        "kneeMin": 59.743328724395944,
+        "kneeMax": 110.51362740781279,
+        "stanceSlipRange": 0.003006964945369145
+      }
+    ]
+  }
+]

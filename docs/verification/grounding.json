@@ -1,0 +1,98 @@
+[
+  {
+    "kind": "rabbit",
+    "clip": "authored:rabbit:quadruped-walk",
+    "authoredRabbit": true,
+    "checkedPoses": 601,
+    "footMinY": -0.00003942152655321772,
+    "footMaxY": 0.0000024863997670330276,
+    "nominalSpeed": 0.347538,
+    "minPlanted": 3,
+    "feet": [
+      {
+        "name": "frontRight",
+        "minFloor": -0.00003942152655321772,
+        "maxLift": 0.04393629158828604,
+        "maxPlantError": 0.000104005496215255,
+        "stanceSlipRange": 0.0006434735579388118
+      },
+      {
+        "name": "frontLeft",
+        "minFloor": -0.000030020599697396282,
+        "maxLift": 0.04388995331994774,
+        "maxPlantError": 0.00013629654261177772,
+        "stanceSlipRange": 0.0012865928216384548
+      },
+      {
+        "name": "hindRight",
+        "minFloor": -0.0000012813595773002701,
+        "maxLift": 0.04392329381837782,
+        "maxPlantError": 0.00013706462419720556,
+        "stanceSlipRange": 0.002408606497625393
+      },
+      {
+        "name": "hindLeft",
+        "minFloor": -0.0000013362955935184814,
+        "maxLift": 0.04391483724097803,
+        "maxPlantError": 0.00010490262873605785,
+        "stanceSlipRange": 0.0025095822289272762
+      }
+    ]
+  },
+  {
+    "kind": "rabbit",
+    "clip": "authored:rabbit:quadruped-trot",
+    "authoredRabbit": true,
+    "checkedPoses": 601,
+    "footMinY": -0.0003233079277981702,
+    "footMaxY": -9.979474851519456e-9,
+    "nominalSpeed": 1.0033387,
+    "minPlanted": 2,
+    "feet": [
+      {
+        "name": "frontRight",
+        "minFloor": -0.0003233079277981702,
+        "maxLift": 0.05497397948564924,
+        "maxPlantError": 0.0003233079277981702,
+        "stanceSlipRange": 0.0009852498818112565
+      },
+      {
+        "name": "frontLeft",
+        "minFloor": -0.00023927053200362494,
+        "maxLift": 0.05501858981357056,
+        "maxPlantError": 0.00023927053200362494,
+        "stanceSlipRange": 0.0015191288149113413
+      },
+      {
+        "name": "hindRight",
+        "minFloor": -0.000008727479415555783,
+        "maxLift": 0.0550186940493233,
+        "maxPlantError": 0.0008643534409777415,
+        "stanceSlipRange": 0.002887703852211182
+      },
+      {
+        "name": "hindLeft",
+        "minFloor": -0.000008573002828125779,
+        "maxLift": 0.05497540858572751,
+        "maxPlantError": 0.0011989808452340192,
+        "stanceSlipRange": 0.0029998353383724474
+      }
+    ]
+  },
+  {
+    "kind": "deer",
+    "clip": "preset:quadruped:walk",
+    "authoredRabbit": false,
+    "checkedPoses": 601,
+    "footMinY": -0.00015720534311369772,
+    "footMaxY": 0.0011352549642207332
+  },
+  {
+    "kind": "tortoise",
+    "clip": "preset:quadruped:walk",
+    "authoredRabbit": false,
+    "checkedPoses": 601,
+    "footMinY": -0.000026363275965550492,
+    "footMaxY": 0.00042346056438228447
+  }
+]

@@ -1,0 +1,302 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "playing",
+  "elapsedSeconds": 0,
+  "phase": "watch",
+  "variant": 0,
+  "contract": 5,
+  "instruction": "Among the three animals that prefer berries, catch the slowest.",
+  "trap": {
+    "x": 3.9999997756868373,
+    "z": -2.3999998255652084,
+    "arming": 0.55,
+    "pop": 0
+  },
+  "baits": [
+    {
+      "id": 5,
+      "x": 3.9999997756868373,
+      "z": -2.3999998255652084,
+      "diet": "berry",
+      "age": 0,
+      "flight": 0.38
+    }
+  ],
+  "creatures": [
+    {
+      "id": "alba",
+      "name": "Alba",
+      "archetype": "deer",
+      "x": -3,
+      "z": 0.3,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.9,
+      "size": 1.2,
+      "habit": "rests by stones",
+      "carrying": null
+    },
+    {
+      "id": "brin",
+      "name": "Brin",
+      "archetype": "rabbit",
+      "x": 2.9,
+      "z": -1.9,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 0.7,
+      "size": 0.85,
+      "habit": "shelters in reeds",
+      "carrying": null
+    },
+    {
+      "id": "coda",
+      "name": "Coda",
+      "archetype": "rabbit",
+      "x": -0.6,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.1,
+      "size": 1.05,
+      "habit": "circles fallen seeds",
+      "carrying": null
+    },
+    {
+      "id": "dune",
+      "name": "Dune",
+      "archetype": "tortoise",
+      "x": 2.8,
+      "z": 1,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.5,
+      "size": 0.65,
+      "habit": "seeks dry ground",
+      "carrying": null
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "archetype": "tortoise",
+      "x": -2.7,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 1.85,
+      "size": 0.75,
+      "habit": "circles mushrooms",
+      "carrying": null
+    },
+    {
+      "id": "fizz",
+      "name": "Fizz",
+      "archetype": "deer",
+      "x": 0.9,
+      "z": 0.6,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.55,
+      "size": 1.3,
+      "habit": "rests by moss",
+      "carrying": null
+    }
+  ],
+  "obstacles": [
+    {
+      "x": -0.7,
+      "z": 0.8,
+      "r": 0.65
+    },
+    {
+      "x": 1.7,
+      "z": -0.7,
+      "r": 0.55
+    },
+    {
+      "x": -4.1,
+      "z": -2.1,
+      "r": 0.45
+    }
+  ],
+  "placement": {
+    "bounds": {
+      "x": 6.5,
+      "z": 4.9
+    },
+    "trapRadius": 0.76
+  },
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "completed": 4,
+  "message": "הם בדרך! אפשר להוסיף פיתיון שיסיח חיה מתחרה.",
+  "events": [
+    {
+      "type": "capture",
+      "level": 2,
+      "time": 1.3,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 2,
+      "time": 1.3,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 3,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 3,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 3,
+      "time": 1.2,
+      "id": "tumble",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 3,
+      "time": 1.2,
+      "id": "tumble",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 4,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 4,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 4,
+      "time": 0.8,
+      "id": "reed",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 4,
+      "time": 0.8,
+      "id": "reed",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 5,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 5,
+      "time": 0,
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 6,
+    "rigs": [
+      {
+        "id": "alba",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "brin",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-walk",
+        "mixerTime": 0,
+        "playbackRate": 2.37
+      },
+      {
+        "id": "coda",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-trot",
+        "mixerTime": 0,
+        "playbackRate": 1.044
+      },
+      {
+        "id": "dune",
+        "skins": 1,
+        "bones": 32,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "echo",
+        "skins": 1,
+        "bones": 32,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "fizz",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      }
+    ],
+    "animatedModels": 6
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 4,
+    "mode": "playing",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.5141260623931885,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 73,
+    "triangles": 190222,
+    "pixelRatio": 1
+  }
+}

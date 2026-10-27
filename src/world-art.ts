@@ -6,7 +6,7 @@ import { CLEARING_OBSTACLES, TRANSFER_OBSTACLES } from './simulation';
 
 export interface GardenObstacle { x: number; z: number; r: number }
 export interface GardenArt { obstacles: GardenObstacle[]; update(time: number, reducedMotion?: boolean): void; dispose(): void }
-export interface CritterVisual { root: THREE.Group; mixer: THREE.AnimationMixer; clips: THREE.AnimationClip[] }
+export interface CritterVisual { root: THREE.Group; mixer: THREE.AnimationMixer; clips: THREE.AnimationClip[]; nominalSpeeds?: Record<string, number> }
 
 const palette = { soil: 0x59412e, moss: 0x486633, lightMoss: 0x788a49, leaf: 0x315d34, youngLeaf: 0x62843b, bark: 0x72533a, stone: 0x9c9b73 };
 function rng(seed: number) { return () => { seed = (Math.imul(seed, 1664525) + 1013904223) | 0; return (seed >>> 0) / 4294967296; }; }
@@ -130,8 +130,11 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   const groundGeo = new THREE.PlaneGeometry(20, 18, 48, 40); groundGeo.rotateX(-Math.PI / 2);
   const p = groundGeo.attributes.position;
   for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i), z = p.getZ(i), edge = Math.max(0, Math.max(Math.abs(x) - 5.8, Math.abs(z) - 4.2));
-    p.setY(i, -.075 + Math.sin(x * .7) * Math.cos(z * .82) * .035 + edge * .22 + (random() - .5) * .035);
+    // Actor support and picking both use y=0. Keep the entire area inside the
+    // rails, plus a paw-width margin, exactly on that plane. Relief starts outside.
+    const x = p.getX(i), z = p.getZ(i), edge = Math.max(0, Math.abs(x) - 7.3, Math.abs(z) - 5.8);
+    const relief = Math.sin(x * .7) * Math.cos(z * .82) * .035 + (random() - .5) * .035;
+    p.setY(i, edge * .22 + relief * Math.min(1, edge / .7));
   }
   groundGeo.computeVertexNormals(); mesh(groundGeo, mats.soil, 0, 0, 0).castShadow = false;
   // Low timber rails frame the open clearing instead of forming an overhead tunnel.
@@ -236,14 +239,133 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
 }
 
 export type CritterKind = 'rabbit' | 'deer' | 'tortoise';
-export const CRITTER_ASSETS: Record<CritterKind, { file: string; bytes: number; joints: number; clips: string[] } | null> = {
-  rabbit: { file: 'rabbit.glb', bytes: 1195884, joints: 31, clips: ['preset:quadruped:walk'] },
+export const CRITTER_ASSETS: Record<CritterKind, { file: string; bytes: number; joints: number; clips: string[]; motionFile?: string } | null> = {
+  rabbit: { file: 'rabbit.glb', bytes: 1195884, joints: 31, clips: ['authored:rabbit:quadruped-walk', 'authored:rabbit:quadruped-trot'], motionFile: 'rabbit-gaits.json' },
   deer: { file: 'deer.glb', bytes: 1263100, joints: 35, clips: ['preset:quadruped:walk'] },
   tortoise: { file: 'tortoise.glb', bytes: 1402120, joints: 32, clips: ['preset:quadruped:walk'] },
 };
 export const TRIPO_ASSETS_READY = Object.values(CRITTER_ASSETS).every(Boolean);
 const loader = new GLTFLoader();
 const critterCache = new Map<string, Promise<{ scene: THREE.Group; animations: THREE.AnimationClip[] }>>();
+type CritterSource = { scene: THREE.Group; animations: THREE.AnimationClip[] };
+type RabbitGaits = { sourceSHA256: string; normalizationHeight: number; gaits: { name: string; nominalSpeed: number; clip: THREE.AnimationClipJSON }[] };
+type GroundedClips = { clips: THREE.AnimationClip[]; samples: number; sourceFloorRange?: [number, number]; nominalSpeeds?: Record<string, number> };
+const groundingCache = new WeakMap<THREE.Group, GroundedClips>();
+let rabbitGaitsCache: Promise<RabbitGaits> | null = null;
+function cachedRabbitGaits() {
+  if (!rabbitGaitsCache) rabbitGaitsCache = fetch(`${import.meta.env.BASE_URL}models/${CRITTER_ASSETS.rabbit!.motionFile}`).then(async response => {
+    if (!response.ok) throw new Error('Rabbit skeletal gait data is unavailable');
+    const data = await response.json() as RabbitGaits;
+    if (data.sourceSHA256 !== 'a374444210a92c13801841c55d837be650e86a0ae508df0a7f33bb8fae11207c' || data.normalizationHeight !== 1.1 || data.gaits.length !== 2) throw new Error('Rabbit gait data does not match the acquired rig');
+    return data;
+  });
+  return rabbitGaitsCache;
+}
+
+function normalizeCritter(model: THREE.Group, kind: CritterKind) {
+  const bounds = new THREE.Box3().setFromObject(model), size = bounds.getSize(new THREE.Vector3());
+  const targetHeight = kind === 'deer' ? 1.45 : kind === 'tortoise' ? .65 : 1.1;
+  model.scale.multiplyScalar(targetHeight / Math.max(size.y, .01));
+  const adjusted = new THREE.Box3().setFromObject(model), center = adjusted.getCenter(new THREE.Vector3());
+  model.position.x -= center.x; model.position.z -= center.z; model.position.y -= adjusted.min.y;
+}
+
+/** Offline measurements of the acquired GLBs at normalized scale (120 Hz).
+ * Each value is the whole-model Y support offset for the actual skinned Walk pose.
+ * Deer/tortoise raw GLBs and source bone tracks remain unchanged. Recheck with
+ * node scripts/verify-grounding.mjs after replacing a model or changing its scale.
+ */
+const WALK_SUPPORT: Record<'deer' | 'tortoise', { duration: number; sourceFloorRange: [number, number]; values: number[] }> = {
+  deer: {
+    duration: 2.5833332538604736,
+    sourceFloorRange: [-0.16178696663164432, -0.039718323988558055],
+    values: [
+      0.0453333, 0.0458838, 0.0464302, 0.0469724, 0.0475104, 0.0480441, 0.0502676, 0.0523804, 0.0543817, 0.0562707, 0.0580467, 0.0594015,
+      0.0605659, 0.0615379, 0.0623155, 0.062897, 0.0641048, 0.0651373, 0.0659919, 0.0666657, 0.0671563, 0.0682425, 0.0691842, 0.0699796,
+      0.0706267, 0.0711238, 0.0715423, 0.0718824, 0.0721442, 0.0723276, 0.0724325, 0.0722027, 0.0718171, 0.0712758, 0.0705793, 0.0697277,
+      0.0696812, 0.0693514, 0.0687378, 0.0678399, 0.0666573, 0.0664973, 0.0656518, 0.0641215, 0.0678112, 0.0730599, 0.0849136, 0.0959285,
+      0.106082, 0.1153547, 0.12373, 0.1317435, 0.1392359, 0.1461933, 0.1526033, 0.1584542, 0.1566124, 0.154493, 0.1520953, 0.1494186,
+      0.1464628, 0.1429677, 0.1392101, 0.1351902, 0.1309084, 0.1263651, 0.1241211, 0.1217613, 0.1192851, 0.1166925, 0.1139832, 0.1125357,
+      0.1110189, 0.1094328, 0.1077772, 0.106052, 0.1048561, 0.1035887, 0.1022495, 0.1008385, 0.0993556, 0.0972601, 0.0949995, 0.0925745,
+      0.0899857, 0.0877942, 0.0873892, 0.0865377, 0.0852386, 0.083491, 0.0812949, 0.0804949, 0.0789689, 0.0767174, 0.0737428, 0.0700487,
+      0.0679379, 0.0645054, 0.060209, 0.0546623, 0.0484941, 0.0451697, 0.0415966, 0.0405592, 0.0430506, 0.0453329, 0.04643, 0.0475102,
+      0.0485736, 0.04962, 0.0506495, 0.0525803, 0.0543816, 0.0560526, 0.0575924, 0.0590002, 0.0602956, 0.0614013, 0.0623152, 0.0630351,
+      0.063559, 0.0648218, 0.0659176, 0.0668437, 0.0675975, 0.0681763, 0.0691837, 0.0700539, 0.0707854, 0.0713764, 0.0718253, 0.0720263,
+      0.072144, 0.0721788, 0.0721308, 0.0720001, 0.0716959, 0.0712223, 0.0705793, 0.0697671, 0.0687861, 0.069012, 0.0688818, 0.0683945,
+      0.0675492, 0.0663458, 0.0656522, 0.0641357, 0.0695231, 0.0755514, 0.0811193, 0.0940817, 0.1060881, 0.1171041, 0.1270995, 0.1360477,
+      0.1419297, 0.1474512, 0.1526055, 0.1573859, 0.1617866, 0.1587315, 0.155281, 0.1514352, 0.147195, 0.1425615, 0.1392127, 0.1356384,
+      0.1318386, 0.1278135, 0.1235633, 0.1214757, 0.1192844, 0.1169892, 0.1145899, 0.1120863, 0.110716, 0.1092796, 0.1077769, 0.1062078,
+      0.1045721, 0.1034417, 0.1022287, 0.1009332, 0.099555, 0.098094, 0.094996, 0.0916534, 0.0881505, 0.0875153, 0.0867182, 0.0862225,
+      0.0852382, 0.0837641, 0.0817995, 0.0793445, 0.0782571, 0.0763891, 0.0737426, 0.0703216, 0.0661317, 0.0634747, 0.0599384, 0.0554075,
+      0.050371, 0.0442999, 0.0415967, 0.0399036, 0.0418308, 0.0436407, 0.0453328, 0.0469721, 0.0485736, 0.0501369, 0.051662, 0.0531487,
+      0.054789, 0.0562706, 0.0575924, 0.0587536, 0.0597531, 0.0611182, 0.0623002, 0.0632963, 0.0641042, 0.0647214, 0.0659175, 0.0669502,
+      0.0678171, 0.0685155, 0.0690431, 0.0699795, 0.0707856, 0.0714601, 0.0720016, 0.0724086, 0.0724202, 0.0723274, 0.0721307, 0.0718303,
+      0.0714267, 0.0712987, 0.0709653, 0.0704261, 0.069681, 0.06873, 0.0688817, 0.0686325, 0.0679813, 0.0669277, 0.0654717, 0.0641217,
+      0.0695266, 0.0763706, 0.0826899, 0.088482, 0.1024716, 0.1153591, 0.1270954, 0.1376364, 0.1469433, 0.14962, 0.152126, 0.1544594,
+      0.1566183, 0.1586005, 0.155286, 0.1516031, 0.1475521, 0.1431337, 0.1383491, 0.1351897, 0.1318368, 0.1282903, 0.1245502, 0.1206165,
+      0.1187001, 0.1166912, 0.1145894, 0.1123946, 0.1101065, 0.1088901, 0.1076096, 0.1062648, 0.1048557, 0.1033819, 0.1022284, 0.1009845,
+      0.09965, 0.098225, 0.0967095, 0.0925669, 0.0881503, 0.0874026, 0.0864402, 0.0852629, 0.0846444, 0.0834904, 0.0817997, 0.079572,
+      0.0768076, 0.0760035, 0.0742543, 0.0715644, 0.0679409, 0.0633932, 0.0599421, 0.0557205, 0.0512018, 0.045895, 0.039718,
+    ],
+  },
+  tortoise: {
+    duration: 2.5833332538604736,
+    sourceFloorRange: [-0.07237493254769974, -0.058699850808842484],
+    values: [
+      0.072005, 0.0720588, 0.0721085, 0.0721539, 0.0721952, 0.0722323, 0.0723381, 0.0723488, 0.0722643, 0.0720848, 0.0718104, 0.0714671,
+      0.0710549, 0.070574, 0.0700248, 0.0694074, 0.0688656, 0.0682778, 0.0676441, 0.0669648, 0.06624, 0.0656363, 0.0649906, 0.0655325,
+      0.0661351, 0.0666753, 0.0666232, 0.0665341, 0.0664082, 0.0662455, 0.066046, 0.0649625, 0.0638312, 0.0626524, 0.0614267, 0.0601636,
+      0.0603444, 0.0604786, 0.0605662, 0.0606074, 0.0606025, 0.0602009, 0.0601714, 0.0599308, 0.05967, 0.0612482, 0.0628641, 0.0643637,
+      0.0657461, 0.0670105, 0.0681561, 0.0691035, 0.0699359, 0.0706532, 0.0712551, 0.0717417, 0.0719339, 0.0720332, 0.0720397, 0.0719537,
+      0.0717755, 0.0714593, 0.0710813, 0.0706416, 0.0701406, 0.0695785, 0.0690849, 0.0685494, 0.0679723, 0.0673538, 0.0666942, 0.0662131,
+      0.0657127, 0.0651931, 0.0648412, 0.065416, 0.0658143, 0.0661447, 0.0664469, 0.0669203, 0.0673239, 0.0670015, 0.0666313, 0.0662134,
+      0.065748, 0.065235, 0.0633963, 0.0628615, 0.0623592, 0.0616521, 0.0607442, 0.0597927, 0.0588591, 0.0602487, 0.0620473, 0.0636884,
+      0.0651523, 0.0664884, 0.0676961, 0.0687744, 0.0697227, 0.070359, 0.0709056, 0.0713623, 0.0717289, 0.0720053, 0.0721086, 0.0721952,
+      0.0722652, 0.0723184, 0.072355, 0.0723549, 0.072264, 0.0720823, 0.0718101, 0.0714474, 0.0710378, 0.0705635, 0.0700247, 0.0694217,
+      0.0687548, 0.0681874, 0.0675861, 0.0669512, 0.0662828, 0.065581, 0.0649907, 0.0655243, 0.066122, 0.0666603, 0.0671387, 0.0667928,
+      0.0664082, 0.0659851, 0.0655237, 0.0650243, 0.0638721, 0.0626727, 0.0614267, 0.0602424, 0.0601555, 0.060208, 0.060195, 0.0601167,
+      0.0601373, 0.0601698, 0.0601716, 0.0599588, 0.0597373, 0.061362, 0.0628719, 0.064368, 0.0657462, 0.0670057, 0.0681459, 0.0691662,
+      0.0699755, 0.0706719, 0.0712551, 0.0717251, 0.0720821, 0.0721233, 0.0720804, 0.0719533, 0.0717423, 0.0714477, 0.0710813, 0.0706574,
+      0.0701761, 0.0696379, 0.069043, 0.0685264, 0.0679723, 0.0673811, 0.0667528, 0.0660879, 0.0656267, 0.0651489, 0.0648412, 0.0653018,
+      0.0657068, 0.0660028, 0.0662266, 0.0665889, 0.066998, 0.0673328, 0.0666309, 0.0658795, 0.0650789, 0.0642293, 0.0633311, 0.0628398,
+      0.0623577, 0.0616684, 0.0607759, 0.0596847, 0.0588056, 0.0602349, 0.0620478, 0.0636986, 0.0651858, 0.066538, 0.0677468, 0.0688112,
+      0.0697306, 0.0705043, 0.0709058, 0.0712568, 0.0715571, 0.0718067, 0.0720056, 0.0721542, 0.0722654, 0.072339, 0.0723751, 0.0723736,
+      0.0722723, 0.0720845, 0.0718102, 0.0714495, 0.0710028, 0.0705535, 0.0700475, 0.0694848, 0.0688659, 0.0681909, 0.0675862, 0.0669522,
+      0.0662889, 0.0655964, 0.064887, 0.0655326, 0.0661221, 0.0666551, 0.0671313, 0.0675501, 0.066921, 0.0662455, 0.0655238, 0.0647563,
+      0.0639433, 0.0627482, 0.0615079, 0.0603104, 0.0603449, 0.0603453, 0.0601943, 0.0600672, 0.0601695, 0.0601843, 0.060112, 0.0599305,
+      0.0597374, 0.0613957, 0.0629438, 0.0643805, 0.0657552, 0.0670105, 0.0681458, 0.0691606, 0.0700543, 0.0706835, 0.0712065, 0.0716233,
+      0.0719338, 0.0721384, 0.0720803, 0.0719425, 0.0717251, 0.0714284, 0.0710528, 0.0706416, 0.0701761, 0.0696564, 0.069083, 0.0684561,
+      0.0679216, 0.0673538, 0.0667529, 0.066119, 0.0654523, 0.06507, 0.065128, 0.0654965, 0.0658142, 0.0660808, 0.0662265, 0.066503,
+      0.066833, 0.0670955, 0.0672901, 0.0662129, 0.0650787, 0.0638879, 0.0629889, 0.0627755, 0.0623176, 0.0616502, 0.060777, 0.0597023,
+      0.0587, 0.0601317, 0.0619412, 0.0636112, 0.0651404, 0.0665276, 0.0677353, 0.0688009, 0.0697238, 0.0705032, 0.0711388,
+    ],
+  },
+};
+
+/** Clone clips once per loaded source; runtime never scans skinned vertices. */
+function groundedClips(gltf: CritterSource, kind: CritterKind, rabbitGaits: RabbitGaits | null): GroundedClips {
+  const cached = groundingCache.get(gltf.scene);
+  if (cached) return cached;
+  if (kind === 'rabbit') {
+    if (!rabbitGaits) throw new Error('Rabbit requires its authored quadruped gait data');
+    const clips = rabbitGaits.gaits.map(gait => THREE.AnimationClip.parse(gait.clip));
+    const result: GroundedClips = { clips, samples: clips.reduce((sum, clip) => sum + clip.tracks[clip.tracks.length - 1].times.length, 0), nominalSpeeds: Object.fromEntries(rabbitGaits.gaits.map(gait => [gait.name, gait.nominalSpeed])) };
+    groundingCache.set(gltf.scene, result); return result;
+  }
+  const support = WALK_SUPPORT[kind];
+  const clips = gltf.animations.map(sourceClip => {
+    if (sourceClip.name !== 'preset:quadruped:walk' || Math.abs(sourceClip.duration - support.duration) > 1e-6) {
+      throw new Error(`Missing measured foot support for ${kind}/${sourceClip.name}`);
+    }
+    const clip = sourceClip.clone();
+    const times = support.values.map((_, i) => sourceClip.duration * i / (support.values.length - 1));
+    // Move the complete model vertically, preserving all acquired limb/body tracks.
+    clip.tracks.push(new THREE.NumberKeyframeTrack('.position[y]', times, support.values));
+    return clip;
+  });
+  const result: GroundedClips = { clips, samples: support.values.length, sourceFloorRange: support.sourceFloorRange };
+  groundingCache.set(gltf.scene, result); return result;
+}
 function cachedCritter(kind: CritterKind) {
   const asset = CRITTER_ASSETS[kind];
   if (!asset) return null;
@@ -253,22 +375,24 @@ function cachedCritter(kind: CritterKind) {
 }
 /** Warm only acquired local assets; partial acquisition never requests phantom files. */
 export async function preloadCritters() {
-  return Promise.allSettled((Object.keys(CRITTER_ASSETS) as CritterKind[]).map(kind => cachedCritter(kind)).filter((p): p is NonNullable<typeof p> => p !== null));
+  const pending: Promise<unknown>[] = (Object.keys(CRITTER_ASSETS) as CritterKind[]).map(kind => cachedCritter(kind)).filter((p): p is NonNullable<typeof p> => p !== null);
+  if (CRITTER_ASSETS.rabbit) pending.push(cachedRabbitGaits());
+  return Promise.allSettled(pending);
 }
 /** Real skinned GLBs only. Individual kinds become usable as their exports are verified. */
 export async function loadCritter(kind: CritterKind): Promise<CritterVisual | null> {
   const pending = cachedCritter(kind);
   if (!pending) return null;
-  const gltf = await pending;
+  const [gltf, rabbitGaits] = await Promise.all([pending, kind === 'rabbit' ? cachedRabbitGaits() : Promise.resolve(null)]);
+  const grounding = groundedClips(gltf, kind, rabbitGaits);
   const model = clone(gltf.scene) as THREE.Group;
   const root = new THREE.Group(); root.name = `${kind}-visual`; root.add(model);
-  const bounds = new THREE.Box3().setFromObject(model), size = bounds.getSize(new THREE.Vector3());
-  const targetHeight = kind === 'deer' ? 1.45 : kind === 'tortoise' ? .65 : 1.1;
-  model.scale.multiplyScalar(targetHeight / Math.max(size.y, .01));
-  const adjusted = new THREE.Box3().setFromObject(model), center = adjusted.getCenter(new THREE.Vector3());
-  model.position.x -= center.x; model.position.z -= center.z; model.position.y -= adjusted.min.y;
+  normalizeCritter(model, kind);
   model.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
-  const mixer = new THREE.AnimationMixer(model), clips = gltf.animations;
+  const mixer = new THREE.AnimationMixer(model), clips = grounding.clips;
   if (clips.length) mixer.clipAction(clips.find(c => /walk/i.test(c.name)) ?? clips[0]).play();
-  return { root, mixer, clips };
+  mixer.update(0);
+  root.userData.grounding = { groundY: 0, samples: grounding.samples, sourceFloorRange: grounding.sourceFloorRange };
+  root.userData.locomotion = grounding.nominalSpeeds;
+  return { root, mixer, clips, nominalSpeeds: grounding.nominalSpeeds };
 }

@@ -10,7 +10,7 @@ The old first-person prototype required walking, camera aim, range, bait selecti
 
 ## First useful action
 
-Open directly on two recognizable rabbits and the English preference clause. Both rabbits have neutral, readable name/preference facts. One short Hebrew prompt asks for a trap drop, then changes to food placement. There is no title wall or mandatory journal before play. Holding an object pauses planning; dropping it resumes the animals. The first real-model browser check placed the trap in about1.9 seconds through normal inputs; this is automated evidence, not a learner usability study.
+Open directly on two recognizable rabbits and the English preference clause. Every current animal has a neutral, always-visible name/preference/pace/size entry, matched to its world name label. One short Hebrew prompt asks for a trap drop, then changes to food placement. There is no title wall or mandatory journal before play. Holding an object pauses planning; dropping it resumes the animals. The first real-model browser check placed the trap in about1.9 seconds through normal inputs; this is automated evidence, not a learner usability study.
 
 ## Five contracts
 
@@ -18,7 +18,7 @@ Actor counts grow2→3→6→6→6. Identification/preference becomes size versu
 
 ## Visual and audio direction
 
-Open sunlit meadow, warm earth path, restrained low foliage, small flowers and clear animal silhouettes. Real original Pro Tripo rabbit/tortoise/deer GLBs use weighted skeletons and in-place Walk clips. The camera frames the first two animals more closely and expands for larger groups; portrait uses the same direct gestures with a responsive view. No procedural character stand-ins remain.
+Open sunlit meadow, warm earth path, restrained low foliage, small flowers and clear animal silhouettes. Real original Pro Tripo rabbit/tortoise/deer GLBs use weighted skeletons. Rabbit uses authored four-paw Walk/Trot calibrated to travel speed; deer/tortoise retain imported Walk. The camera frames the first two animals more closely and expands for larger groups; portrait uses the same direct gestures with a responsive view. No procedural character stand-ins remain.
 
 A restrained cream English contract, current Hebrew action cue, three tangible tray items and a small capture/release card support the world. Reading, help, settings and capture review preserve state. An original woodland waltz and five matching musical cues replace the former chirps. Music/effects levels are independent; global mute, reduced motion, restart and fullscreen remain available.
 

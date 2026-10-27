@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SafariSimulation, distance, BOUNDS, type Point } from "./simulation";
+import { SafariSimulation, distance, BOUNDS, TRAP_RADIUS, type Point } from "./simulation";
 import { CONTRACTS, GLOSSARY, type Archetype } from "./content";
 import {
   createGarden,
@@ -27,7 +27,7 @@ try {
     "צריך דפדפן עם WebGL והאצת חומרה כדי לפתוח את קרחת היער.";
   throw Error("WebGL unavailable");
 }
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.25));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -39,9 +39,9 @@ scene.fog = new THREE.Fog(0xd8dfba, 25, 50);
 const camera = new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 60);
 scene.add(new THREE.HemisphereLight(0xfff6d8, 0x80965c, 2.3));
 const sun = new THREE.DirectionalLight(0xffe1aa, 2.8);
-sun.position.set(-6, 12, 7);
+sun.position.set(-5, 15, 5);
 sun.castShadow = true;
-sun.shadow.mapSize.set(1024, 1024);
+sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, {
   left: -8,
   right: 8,
@@ -50,7 +50,7 @@ Object.assign(sun.shadow.camera, {
   near: 1,
   far: 28,
 });
-sun.shadow.normalBias = 0.035;
+sun.shadow.normalBias = 0.002;
 scene.add(sun);
 scene.add(sun.target);
 let garden = createGarden(scene, false, game.variant, 0),
@@ -70,9 +70,11 @@ const views = new Map<
     root: THREE.Group;
     heading: THREE.Group;
     visual: CritterVisual;
+    contact: THREE.Mesh;
     carried: THREE.Group;
     tag: THREE.Sprite;
     lastClip: string;
+    playbackRate: number;
     last: Point;
     skins: number;
     bones: number;
@@ -128,6 +130,18 @@ function tag(name: string, fact?: string) {
   s.renderOrder = 10;
   return s;
 }
+// Small ambient contact complements the cast shadow without changing foot height.
+const contactCanvas = document.createElement("canvas");
+contactCanvas.width = contactCanvas.height = 64;
+const contactContext = contactCanvas.getContext("2d")!;
+const falloff = contactContext.createRadialGradient(32, 32, 0, 32, 32, 32);
+falloff.addColorStop(0, "rgba(0,0,0,1)");
+falloff.addColorStop(.4, "rgba(0,0,0,.55)");
+falloff.addColorStop(1, "rgba(0,0,0,0)");
+contactContext.fillStyle = falloff;
+contactContext.fillRect(0, 0, 64, 64);
+const contactMaterial = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(contactCanvas), transparent: true, opacity: .14, depthWrite: false, toneMapped: false });
+const contactGeometry = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 async function buildAnimals() {
   const version = ++assetVersion;
   ready = false;
@@ -159,6 +173,10 @@ async function buildAnimals() {
       const root = new THREE.Group(),
         heading = new THREE.Group();
       heading.add(visual.root);
+      const contact = new THREE.Mesh(contactGeometry, contactMaterial);
+      contact.position.y = .003;
+      contact.scale.set(actor.spec.archetype === "tortoise" ? .85 : .65, 1, actor.spec.archetype === "deer" ? 1.1 : .85);
+      heading.add(contact);
       const carried = snack(actor.spec.diet);
       carried.visible = false;
       carried.scale.setScalar(0.65);
@@ -180,18 +198,13 @@ async function buildAnimals() {
       root.scale.setScalar(actor.spec.size);
       const label = tag(
         actor.spec.name,
-        game.level === 0
-          ? actor.spec.diet === "leaf"
-            ? "prefers leaves"
-            : "prefers berries"
-          : undefined,
       );
       label.position.y =
         actor.spec.archetype === "deer"
           ? 1.65
           : actor.spec.archetype === "tortoise"
             ? 0.9
-            : 1.5;
+            : 1.3;
       root.add(label);
       scene.add(root);
       let skins = 0;
@@ -206,9 +219,11 @@ async function buildAnimals() {
         root,
         heading,
         visual,
+        contact,
         carried,
         tag: label,
         lastClip: "",
+        playbackRate: 1,
         last: { x: actor.x, z: actor.z },
         skins,
         bones: bones.size,
@@ -225,11 +240,14 @@ async function buildAnimals() {
   }
 }
 const catcher = new THREE.Group();
+const catcherShape = new THREE.Group();
+catcherShape.scale.setScalar(TRAP_RADIUS);
+catcher.add(catcherShape);
 scene.add(catcher);
 const base = mesh(
   new THREE.TorusGeometry(1, 0.065, 9, 64),
   brass,
-  catcher,
+  catcherShape,
   0,
   0.07,
   0,
@@ -239,7 +257,7 @@ for (const x of [-1, 1]) {
   const handle = mesh(
     new THREE.TorusGeometry(0.14, 0.035, 7, 16),
     brass,
-    catcher,
+    catcherShape,
     x,
     0.17,
     0,
@@ -259,7 +277,7 @@ const glassMaterial = new THREE.MeshPhysicalMaterial({
 const dome = mesh(
   new THREE.SphereGeometry(1.04, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2),
   glassMaterial,
-  catcher,
+  catcherShape,
   0,
   0.08,
   0,
@@ -268,7 +286,7 @@ dome.scale.y = 0.78;
 const fullBubble = mesh(
   new THREE.SphereGeometry(1.05, 36, 24),
   glassMaterial,
-  catcher,
+  catcherShape,
   0,
   0.76,
   0,
@@ -286,6 +304,18 @@ const marker = mesh(
 marker.rotation.x = Math.PI / 2;
 marker.position.y = 0.035;
 marker.visible = false;
+const placementBoundary = new THREE.LineLoop(
+  new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-BOUNDS.x, .025, -BOUNDS.z),
+    new THREE.Vector3(BOUNDS.x, .025, -BOUNDS.z),
+    new THREE.Vector3(BOUNDS.x, .025, BOUNDS.z),
+    new THREE.Vector3(-BOUNDS.x, .025, BOUNDS.z),
+  ]),
+  new THREE.LineDashedMaterial({ color: 0xfff3cc, dashSize: .16, gapSize: .09, transparent: true, opacity: .9, depthTest: false }),
+);
+placementBoundary.computeLineDistances();
+placementBoundary.visible = false;
+scene.add(placementBoundary);
 const snackViews = new Map<number, THREE.Group>();
 function snack(type: "leaf" | "berry") {
   const group = new THREE.Group();
@@ -352,8 +382,7 @@ function worldPoint(x: number, y: number): Point | null {
 }
 function valid(p: Point) {
   return held === "catcher"
-    ? game.fits(p, 1.02) &&
-        game.actors.every((a) => distance(a, p) >= 1.05 + 0.15 * a.spec.size)
+    ? game.placementIssue(p) === null
     : game.fits(p, 0.12);
 }
 function select(type: typeof held) {
@@ -364,7 +393,7 @@ function select(type: typeof held) {
   dirty = true;
 }
 function overInterface(x: number, y: number) {
-  return ["tray", "contract", "action-prompt", "capture-card", "modal"].some(
+  return ["tray", "contract", "action-prompt", "animal-stats", "capture-card", "modal"].some(
     (id) => {
       const box = $(id).getBoundingClientRect();
       return (
@@ -435,7 +464,7 @@ canvas.addEventListener("pointerdown", (e) => {
   if (game.mode !== "playing" || !ready) return;
   void soundtrack.unlock();
   const p = worldPoint(e.clientX, e.clientY);
-  if (!held && p && game.trap && distance(p, game.trap) < 1.05) {
+  if (!held && p && game.trap && distance(p, game.trap) < TRAP_RADIUS + .08) {
     select("catcher");
     $("drag-token").innerHTML =
       $("catcher-tool").querySelector("svg")!.outerHTML;
@@ -476,8 +505,12 @@ canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 function alignAction() {
   const box = $("contract").getBoundingClientRect();
   $("action-prompt").style.top = `${box.bottom + 8}px`;
+  resize();
 }
 new ResizeObserver(alignAction).observe($("contract"));
+new ResizeObserver(([entry]) => {
+  document.documentElement.style.setProperty("--facts-height", `${entry.borderBoxSize[0]?.blockSize ?? 0}px`);
+}).observe($("animal-stats"));
 function fullscreen() {
   if (document.fullscreenElement) void document.exitFullscreen();
   else void document.documentElement.requestFullscreen();
@@ -511,6 +544,10 @@ function sync() {
       game.level,
     );
     shownLevel = game.level;
+    $("animal-facts").innerHTML = game.contract.creatures.map(a =>
+      `<li data-creature="${a.id}"><b>${a.name} <span>· ${a.archetype}</span></b><span>prefers ${a.diet === "leaf" ? "leaves" : "berries"}</span><span>speed <strong>${a.usualSpeed.toFixed(2)}</strong> · size <strong>${a.size.toFixed(2)}</strong></span></li>`
+    ).join("");
+    $("animal-stats").dataset.count = String(game.actors.length);
     resize();
     void buildAnimals();
     lastCapture = "";
@@ -530,13 +567,21 @@ function sync() {
         ? "כל החברים הגיעו למחנה!"
         : held
           ? held === "catcher"
-            ? "הניחו את המלכודת על דשא פנוי"
+            ? pointer && game.placementIssue(pointer) === "edge"
+              ? "הכניסו את כל הטבעת לתוך גבול הדשא המסומן"
+              : pointer && game.placementIssue(pointer) === "rock"
+                ? "הטבעת נוגעת באבן — הזיזו אותה מעט הצידה"
+                : pointer && game.placementIssue(pointer) === "animal"
+                  ? "הטבעת קרובה לחיה — הניחו לצידה ופַתו אותה במזון"
+                  : "הניחו את הטבעת על דשא פנוי בתוך הקו המקווקו"
             : "הניחו את המזון על הדשא"
           : game.phase() === "place-catcher"
             ? "גררו את המלכודת אל הדשא"
             : game.phase() === "drop-food"
               ? "ועכשיו גררו עלה או פרי אל השטח"
               : "הם בדרך… אפשר להזיז מלכודת או להסיח יריב";
+  $("animal-stats").hidden = game.mode !== "playing";
+  $("toast").hidden = held !== null || game.mode !== "playing";
   for (const tool of document.querySelectorAll<HTMLButtonElement>(
     "[data-tool]",
   ))
@@ -553,8 +598,9 @@ function sync() {
     soundtrack.play(game.correct ? "capture" : "release");
     const name = game.actors.find((a) => a.spec.id === game.captureId)!.spec
       .name;
+    const caughtSpec = game.actors.find(a => a.spec.id === game.captureId)!.spec;
     $("capture-card").innerHTML =
-      `<div class="eyebrow">${game.correct ? "SAFE & SOUND" : "RELEASE & TRY AGAIN"}</div><h2>${game.correct ? `<bdi dir="ltr">${name}</bdi> בדרך למחנה!` : `<bdi dir="ltr">${name}</bdi> בתוך הבועה`}</h2><p>${game.correct ? "בדיוק החיה שמתאימה לתיאור." : game.message}</p><button id="capture-btn" class="primary">${game.correct ? "עוד משימה ←" : "שחרור וניסיון נוסף ←"}</button>`;
+      `<div class="eyebrow">${game.correct ? "SAFE & SOUND" : "RELEASE & TRY AGAIN"}</div><h2>${game.correct ? `<bdi dir="ltr">${name}</bdi> בדרך למחנה!` : `<bdi dir="ltr">${name}</bdi> בתוך הבועה`}</h2><p lang="en" dir="ltr">prefers ${caughtSpec.diet === "leaf" ? "leaves" : "berries"} · speed ${caughtSpec.usualSpeed.toFixed(2)} · size ${caughtSpec.size.toFixed(2)}</p><p>${game.correct ? "בדיוק החיה שמתאימה לתיאור." : game.message}</p><button id="capture-btn" class="primary">${game.correct ? "עוד משימה ←" : "שחרור וניסיון נוסף ←"}</button>`;
     bind("capture-btn", () => {
       if (game.correct) game.next();
       else {
@@ -759,6 +805,41 @@ function resize() {
     camera.bottom = -halfHeight;
   }
   camera.lookAt(0, 0, 0);
+  if (aspect >= .85 && game.level > 0) {
+    // Reserve the roster's screen area, so a wandering animal cannot hide behind it.
+    const reserve = Math.min(285, innerWidth * .38);
+    const scale = innerWidth / (innerWidth - reserve);
+    camera.left *= scale;
+    camera.right *= scale;
+    camera.top *= scale;
+    camera.bottom *= scale;
+    const shift = reserve / 2 * (camera.right - camera.left) / innerWidth;
+    camera.left += shift;
+    camera.right += shift;
+  }
+  if (aspect < .85) {
+    // Fit the whole patrol envelope, including heads/labels, between the visible UI.
+    // This also covers wider portrait panes where a width-only zoom hid the top rabbit.
+    camera.updateMatrixWorld(true);
+    let low = Infinity, high = -Infinity;
+    for (const spec of game.contract.creatures) {
+      const home = game.home(spec);
+      const labelHeight = (spec.archetype === "deer" ? 1.65 : spec.archetype === "tortoise" ? .9 : 1.3) * spec.size + .25;
+      for (const x of [-1, 1]) for (const z of [-1, 1]) for (const y of [0, labelHeight]) {
+        const point = new THREE.Vector3(home.x + x * (1.05 + .3 * spec.size), y, home.z + z * (.85 + .35 * spec.size)).applyMatrix4(camera.matrixWorldInverse);
+        low = Math.min(low, point.y); high = Math.max(high, point.y);
+      }
+    }
+    const top = $("contract").getBoundingClientRect().bottom + 55;
+    const factsHeight = 52 + Math.ceil(game.actors.length / 2) * 50;
+    const bottom = innerHeight - 130 - factsHeight - 12;
+    const halfHeight = Math.max(camera.top, (high - low) * innerHeight / Math.max(180, bottom - top) / 2);
+    const center = (high + low) / 2 + ((top + bottom) / 2 - innerHeight / 2) * 2 * halfHeight / innerHeight;
+    camera.top = center + halfHeight;
+    camera.bottom = center - halfHeight;
+    camera.left = -halfHeight * aspect;
+    camera.right = halfHeight * aspect;
+  }
   camera.updateProjectionMatrix();
   dirty = true;
 }
@@ -771,10 +852,11 @@ function draw(dt = 0) {
     const view = views.get(actor.spec.id);
     if (!view) continue;
     view.carried.visible = actor.carrying !== null;
+    view.contact.visible = actor.mode !== "caught";
     view.tag.visible =
       game.captureId === null || actor.spec.id === game.captureId;
     const moving =
-      actor.mode !== "caught" && distance(view.last, actor) > 0.001;
+      actor.mode !== "caught" && distance(view.last, actor) > 0.00001;
     view.root.position.set(
       actor.x,
       actor.mode === "caught" ? 0.12 : 0,
@@ -787,25 +869,33 @@ function draw(dt = 0) {
     view.heading.rotation.y +=
       turn * (reduced || dt === 0 ? 1 : Math.min(1, dt * 9));
     view.tag.scale.set(
-      (pxWorld * (game.level === 0 ? 168 : 72)) / actor.spec.size,
-      (pxWorld * (game.level === 0 ? 48 : 21)) / actor.spec.size,
+      (pxWorld * 86) / actor.spec.size,
+      (pxWorld * 25) / actor.spec.size,
       1,
     );
-    const desired =
-      view.visual.clips.find((c) =>
-        moving
-          ? /walk|hop|run|trot/i.test(c.name)
-          : /idle|rest|breath/i.test(c.name),
-      ) ?? view.visual.clips[0];
+    const walk = view.visual.clips.find(c => /walk|hop/i.test(c.name)) ?? view.visual.clips[0];
+    const trot = view.visual.clips.find(c => /trot|run/i.test(c.name));
+    const locomotion = actor.spec.archetype === "rabbit" && actor.spec.usualSpeed / actor.spec.size > .9
+      ? trot ?? walk : walk;
+    // A brief stop must hold the selected gait, rather than restart walk/trot each frame.
+    const desired = (!moving && view.visual.clips.find(c => /idle|rest|breath/i.test(c.name))) || locomotion;
     if (desired && desired.name !== view.lastClip) {
       view.visual.mixer.stopAllAction();
       const action = view.visual.mixer
         .clipAction(desired)
         .reset()
-        .setEffectiveWeight(1);
-      if (game.mode === "playing" && !held) action.fadeIn(0.15);
+        .setEffectiveWeight(1)
+        .setEffectiveTimeScale(1);
       action.play();
       view.lastClip = desired.name;
+    }
+    if (desired) {
+      const nominal = view.visual.nominalSpeeds?.[desired.name];
+      const travelMultiplier = actor.mode === "lured" ? 1.35 : actor.mode === "escape" ? 1.5 : 1;
+      view.playbackRate = nominal
+        ? actor.spec.usualSpeed * travelMultiplier / (actor.spec.size * nominal)
+        : 1;
+      view.visual.mixer.clipAction(desired).setEffectiveTimeScale(view.playbackRate);
     }
     const hasIdleMotion = /idle|rest|breath/i.test(desired?.name ?? "");
     view.visual.mixer.update(
@@ -817,6 +907,9 @@ function draw(dt = 0) {
   if (game.trap) {
     catcher.position.set(game.trap.x, 0, game.trap.z);
     const captured = game.captureId !== null;
+    const capturedSpec = game.actors.find(a => a.spec.id === game.captureId)?.spec;
+    const height = capturedSpec ? (capturedSpec.archetype === "deer" ? 1.45 : capturedSpec.archetype === "rabbit" ? 1.1 : .65) * capturedSpec.size : 0;
+    catcherShape.scale.setScalar(captured ? Math.max(TRAP_RADIUS, (height + .12) / 1.6) : TRAP_RADIUS);
     dome.visible = !captured;
     fullBubble.visible = captured;
     glassMaterial.opacity = captured ? 0.2 : 0.09;
@@ -842,11 +935,12 @@ function draw(dt = 0) {
   marker.visible = held !== null && pointer !== null && game.mode === "playing";
   if (marker.visible && pointer) {
     marker.position.set(pointer.x, 0.03, pointer.z);
-    marker.scale.setScalar(held === "catcher" ? 1 : 0.27);
+    marker.scale.setScalar(held === "catcher" ? TRAP_RADIUS : 0.27);
     (marker.material as THREE.MeshBasicMaterial).color.setHex(
       valid(pointer) ? 0xf6efb9 : 0xbb7357,
     );
   }
+  placementBoundary.visible = held !== null && game.mode === "playing";
   renderer.render(scene, camera);
   dirty = false;
 }
@@ -876,6 +970,7 @@ Object.assign(window, {
           bones: v.bones,
           clip: v.lastClip,
           mixerTime: +v.visual.mixer.time.toFixed(3),
+          playbackRate: +v.playbackRate.toFixed(3),
         })),
         animatedModels: [...views.values()].filter(
           (v) => v.visual.clips.length > 0,
@@ -899,13 +994,13 @@ Object.assign(window, {
   advanceTime: advance,
 });
 function frame(stamp: number) {
-  const dt = Math.min((stamp - lastStamp) / 1000, 0.05);
+  const dt = Math.max(0, Math.min((stamp - lastStamp) / 1000, 0.25));
   lastStamp = stamp;
   if (capturePop > 0) {
     capturePop = Math.max(0, capturePop - dt * 3.5);
     dirty = true;
   }
-  if (ready && !manualTime && !held) game.update(dt);
+  if (ready && !manualTime && !held) game.advance(dt);
   syncAge += dt;
   if (syncAge > 0.1) {
     sync();

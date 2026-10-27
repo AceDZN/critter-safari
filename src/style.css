@@ -112,6 +112,24 @@ header {
   pointer-events: none;
   box-shadow: 0 4px 14px #384c2717;
 }
+#animal-stats {
+  position: absolute;
+  top: 80px;
+  right: 24px;
+  width: 253px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: #fbf1d9ed;
+  box-shadow: 0 5px 20px #30472d20;
+}
+#animal-stats > strong { display: block; font-size: 13px; }
+#animal-stats > small { display: block; font-size: 9px; margin: 3px 0 8px; }
+#animal-facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+#animal-facts li { border-top: 1px solid #74865b33; padding: 6px 0; font: 12px/1.35 Arial, sans-serif; }
+#animal-facts li > b, #animal-facts li > span { display: block; }
+#animal-facts li > b { font-size: 13px; }
+#animal-facts li > b span { font-size: 10px; font-weight: 400; color: #60734f; }
+#animal-facts li > span { color: #465c37; }
 #tray {
   position: absolute;
   bottom: 22px;
@@ -448,6 +466,20 @@ td:first-child {
     font-size: 12px;
     padding: 8px 13px;
   }
+  #animal-stats {
+    top: auto;
+    bottom: 130px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    padding: 8px 12px;
+  }
+  #animal-stats > strong { font-size: 11px; }
+  #animal-stats > small { font-size: 8px; margin: 2px 0 4px; }
+  #animal-facts { grid-template-columns: 1fr 1fr; column-gap: 14px; }
+  #animal-facts li { font-size: 10px; line-height: 1.25; padding: 5px 0; }
+  #animal-facts li > b { font-size: 12px; }
+  #animal-facts li > b span { font-size: 9px; }
   #tray {
     bottom: 16px;
     padding: 7px 12px 26px;
@@ -463,7 +495,7 @@ td:first-child {
     height: 51px;
   }
   #toast {
-    bottom: 143px;
+    bottom: calc(138px + var(--facts-height, 0px));
     font-size: 11px;
     max-width: 92vw;
     padding: 7px 12px;

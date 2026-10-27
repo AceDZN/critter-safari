@@ -110,12 +110,15 @@ test('notes, vocabulary help and pause freeze animal travel, bait flight, arming
 
 test('a drop must land on clear grass, with room for the whole trap and no animal beneath it', () => {
   const sim = new SafariSimulation();
-  assert.equal(sim.place({ x: 6, z: 0 }), false, 'outside the arena');
-  assert.equal(sim.place({ x: 4.8, z: 0 }), false, 'trap radius crosses the garden edge');
+  assert.equal(sim.place({ x: 7, z: 0 }), false, 'outside the arena');
+  assert.equal(sim.place({ x: 6, z: 0 }), false, 'trap radius crosses the visible garden edge');
+  assert.equal(sim.placementIssue({ x: 6, z: 0 }), 'edge');
+  assert.equal(sim.place({ x: 4.8, z: 0 }), true, 'clear grass inside the rails is usable');
   assert.equal(sim.place({ x: -2, z: 0 }), false, 'cannot drop directly onto Moss');
-  assert.equal(sim.toss({ x: 6, z: 0 }, 'leaf'), false, 'bait also respects the arena edge');
+  assert.equal(sim.toss({ x: 7, z: 0 }, 'leaf'), false, 'bait also respects the arena edge');
   sim.load(2);
   assert.equal(sim.place({ x: 0.15, z: -0.3 }), false, 'solid central stone');
+  assert.equal(sim.placementIssue({ x: 0.15, z: -0.3 }), 'rock');
   assert.equal(sim.toss({ x: 0.15, z: -0.3 }, 'leaf'), false, 'bait cannot be hidden inside a stone');
   assert.equal(sim.place({ x: 1.6, z: -2.2 }), true);
   assert.equal(sim.toss({ x: 1.6, z: -2.2 }, 'leaf'), true);

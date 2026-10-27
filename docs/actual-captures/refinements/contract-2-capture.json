@@ -1,0 +1,187 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "caught",
+  "elapsedSeconds": 1.25,
+  "phase": "watch",
+  "variant": 0,
+  "contract": 2,
+  "instruction": "Catch the rabbit that is smaller than Moss but faster than Reed.",
+  "trap": {
+    "x": 2.5295923755663807e-7,
+    "z": 1.3000005707180637,
+    "arming": 0,
+    "pop": 1
+  },
+  "baits": [
+    {
+      "id": 2,
+      "x": 2.5295923755663807e-7,
+      "z": 1.3000005707180637,
+      "diet": "berry",
+      "age": 0.8750000000000007,
+      "flight": 0
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -1.79,
+      "z": -0.5,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 0,
+      "z": 1.3,
+      "y": 0.12,
+      "mode": "caught",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "archetype": "deer",
+      "x": -0.76,
+      "z": -1.8,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "rests beside twigs",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "placement": {
+    "bounds": {
+      "x": 6.5,
+      "z": 4.9
+    },
+    "trapRadius": 0.76
+  },
+  "captureId": "pip",
+  "correct": true,
+  "attempts": 1,
+  "hints": 0,
+  "completed": 1,
+  "message": "בדיוק! עוד חיה בדרך למחנה.",
+  "events": [
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 0.1,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 0.1,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 2.1,
+      "id": "moss",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 1,
+      "time": 2.1,
+      "id": "moss",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 2,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 2,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 2,
+      "time": 1.3,
+      "id": "pip",
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 3,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-walk",
+        "mixerTime": 1.2,
+        "playbackRate": 1.622
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-trot",
+        "mixerTime": 1.2,
+        "playbackRate": 2.207
+      },
+      {
+        "id": "reed",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 1.2,
+        "playbackRate": 1
+      }
+    ],
+    "animatedModels": 3
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 3,
+    "mode": "caught",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.2615632712841034,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 60,
+    "triangles": 130474,
+    "pixelRatio": 1
+  }
+}

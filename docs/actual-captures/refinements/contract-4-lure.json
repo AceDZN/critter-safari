@@ -1,0 +1,302 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "playing",
+  "elapsedSeconds": 0,
+  "phase": "watch",
+  "variant": 0,
+  "contract": 4,
+  "instruction": "Among the three animals that prefer leaves, catch the fastest.",
+  "trap": {
+    "x": -1.999999874007746,
+    "z": -2.100000036731414,
+    "arming": 0.55,
+    "pop": 0
+  },
+  "baits": [
+    {
+      "id": 4,
+      "x": -1.999999874007746,
+      "z": -2.100000036731414,
+      "diet": "leaf",
+      "age": 0,
+      "flight": 0.38
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -3,
+      "z": -1,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 2.6,
+      "z": 0.7,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    },
+    {
+      "id": "tumble",
+      "name": "Tumble",
+      "archetype": "tortoise",
+      "x": 3,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.95,
+      "size": 1.3,
+      "habit": "shelters in shade",
+      "carrying": null
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "archetype": "deer",
+      "x": -0.8,
+      "z": -2,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "rests beside twigs",
+      "carrying": null
+    },
+    {
+      "id": "nib",
+      "name": "Nib",
+      "archetype": "deer",
+      "x": 1.1,
+      "z": 0.7,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.85,
+      "size": 0.9,
+      "habit": "seeks sunny patches",
+      "carrying": null
+    },
+    {
+      "id": "pebble",
+      "name": "Pebble",
+      "archetype": "tortoise",
+      "x": -2.5,
+      "z": 1,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 0.78,
+      "size": 1.1,
+      "habit": "rests by logs",
+      "carrying": null
+    }
+  ],
+  "obstacles": [
+    {
+      "x": 0.15,
+      "z": -0.3,
+      "r": 0.62
+    },
+    {
+      "x": -3.9,
+      "z": -2.6,
+      "r": 0.45
+    },
+    {
+      "x": 3.9,
+      "z": 1.3,
+      "r": 0.5
+    }
+  ],
+  "placement": {
+    "bounds": {
+      "x": 6.5,
+      "z": 4.9
+    },
+    "trapRadius": 0.76
+  },
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "completed": 3,
+  "message": "הם בדרך! אפשר להוסיף פיתיון שיסיח חיה מתחרה.",
+  "events": [
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 2.1,
+      "id": "moss",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 1,
+      "time": 2.1,
+      "id": "moss",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 2,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 2,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 2,
+      "time": 1.3,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 2,
+      "time": 1.3,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 3,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 3,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 3,
+      "time": 1.2,
+      "id": "tumble",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 3,
+      "time": 1.2,
+      "id": "tumble",
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 4,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 4,
+      "time": 0,
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 6,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-walk",
+        "mixerTime": 0,
+        "playbackRate": 1.622
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "authored:rabbit:quadruped-trot",
+        "mixerTime": 0,
+        "playbackRate": 2.207
+      },
+      {
+        "id": "tumble",
+        "skins": 1,
+        "bones": 32,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "reed",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "nib",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      },
+      {
+        "id": "pebble",
+        "skins": 1,
+        "bones": 32,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0,
+        "playbackRate": 1
+      }
+    ],
+    "animatedModels": 6
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 4,
+    "mode": "playing",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.510668158531189,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 70,
+    "triangles": 189488,
+    "pixelRatio": 1
+  }
+}

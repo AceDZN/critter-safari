@@ -23,6 +23,7 @@ export interface Actor extends Point {
   route: Point[];
   routeAge: number;
   carrying: Diet | null;
+  wanderStep: number;
 }
 export interface Bait extends Point {
   id: number;
@@ -30,7 +31,10 @@ export interface Bait extends Point {
   age: number;
   flight: number;
 }
-export const BOUNDS = { x: 5.5, z: 3.8 };
+// The usable grass reaches the inner timber rails, rather than an invisible small rectangle.
+export const BOUNDS = { x: 6.5, z: 4.9 };
+export const TRAP_RADIUS = 0.76;
+export const CAPTURE_RADIUS = 0.64;
 export const CLEARING_OBSTACLES: Obstacle[] = [
   { x: 0.15, z: -0.3, r: 0.62 },
   { x: -3.9, z: -2.6, r: 0.45 },
@@ -217,6 +221,7 @@ export class SafariSimulation {
       route: [],
       routeAge: 0,
       carrying: null,
+      wanderStep: i,
     }));
   }
   noteEvent(type: string, id?: string) {
@@ -240,16 +245,21 @@ export class SafariSimulation {
   fits(p: Point, r = 0.25) {
     return pointClear(p, this.obstacles, r);
   }
+  placementIssue(point: Point): "edge" | "rock" | "animal" | null {
+    if (Math.abs(point.x) >= BOUNDS.x - TRAP_RADIUS || Math.abs(point.z) >= BOUNDS.z - TRAP_RADIUS) return "edge";
+    if (this.obstacles.some(o => distance(o, point) <= o.r + TRAP_RADIUS)) return "rock";
+    if (this.actors.some(a => distance(a, point) < TRAP_RADIUS + 0.15 * a.spec.size)) return "animal";
+    return null;
+  }
   place(point: Point) {
     if (this.mode !== "playing") return false;
-    if (!this.fits(point, 1.02)) {
-      this.message = "צריך פיסת דשא פנויה. נסו מעט הצידה.";
-      return false;
-    }
-    if (
-      this.actors.some((a) => distance(a, point) < 1.05 + 0.15 * a.spec.size)
-    ) {
-      this.message = "כאן עומדת חיה. הניחו את המלכודת על דשא פנוי לצידה.";
+    const issue = this.placementIssue(point);
+    if (issue) {
+      this.message = issue === "edge"
+        ? "כל הטבעת צריכה להיות בתוך גבול הדשא המסומן. הזיזו אותה מעט פנימה."
+        : issue === "rock"
+          ? "הטבעת נוגעת באבן. הרחיקו אותה מעט מהאבן המסומנת."
+          : "הטבעת קרובה מדי לחיה. הניחו אותה לצידה ופַתו אותה במזון.";
       return false;
     }
     this.trap = { ...point, arming: 0.55, pop: 0 };
@@ -364,6 +374,11 @@ export class SafariSimulation {
       actor.z += dz;
     }
   }
+  /** Retain elapsed real time on slower frames; collision updates remain short. */
+  advance(seconds: number) {
+    for (let remaining = Math.max(0, seconds); remaining > 1e-8 && this.mode === "playing"; remaining -= 1 / 60)
+      this.update(Math.min(1 / 60, remaining));
+  }
   update(dt: number) {
     if (this.mode !== "playing") return;
     dt = Math.min(dt, 0.05);
@@ -409,21 +424,27 @@ export class SafariSimulation {
           this.message = `${a.spec.name} לקח את הפיתיון!`;
           continue;
         }
-      } else if (a.timer <= 0 || distance(a, a.destination) < 0.1) {
+      } else if (
+        (a.mode === "escape" && (a.timer <= 0 || distance(a, a.destination) < .1)) ||
+        (a.mode === "wander" && (distance(a, a.destination) < .1 || (!a.route.length && a.timer <= 0)))
+      ) {
         a.mode = "wander";
         a.carrying = null;
-        const phase = this.time * 0.3 + this.actors.indexOf(a) * 1.7;
-        const goal = {
-          x:
-            this.home(a.spec).x +
-            Math.sin(phase) * 0.72 * (this.variant ? -1 : 1),
-          z: a.spec.spawn[1] + Math.cos(phase) * 0.58,
-        };
-        if (this.fits(goal, 0.3)) {
-          a.destination = goal;
-          a.route = [];
+        // Pick a real walking leg. Chasing a continuously moving nearby point
+        // previously reduced every animal to tiny ~0.2m/s steps after arrival.
+        for (let attempt = 0; attempt < 8; attempt++) {
+          const phase = ++a.wanderStep * 2.399963 + this.actors.indexOf(a) * 1.7;
+          const goal = {
+            x: this.home(a.spec).x + Math.sin(phase) * 1.05 * (this.variant ? -1 : 1),
+            z: a.spec.spawn[1] + Math.cos(phase) * .85,
+          };
+          if (this.fits(goal, .3) && distance(a, goal) > .75) {
+            a.destination = goal;
+            a.route = [];
+            break;
+          }
         }
-        a.timer = 2.5;
+        a.timer = 3;
       }
       this.move(
         a,
@@ -460,7 +481,7 @@ export class SafariSimulation {
         .filter(
           (a) =>
             a.mode !== "caught" &&
-            distance(a, this.trap!) < 0.9 &&
+            distance(a, this.trap!) < CAPTURE_RADIUS &&
             segmentClear(a, this.trap!, this.obstacles, 0.15),
         )
         .sort((a, b) => distance(a, this.trap!) - distance(b, this.trap!))[0];
@@ -472,6 +493,7 @@ export class SafariSimulation {
       coordinateSystem:
         "ground x east, z south, y up; fixed camera; units metres",
       mode: this.mode,
+      elapsedSeconds: +this.time.toFixed(3),
       phase: this.phase(),
       variant: this.variant,
       contract: this.level + 1,
@@ -500,6 +522,7 @@ export class SafariSimulation {
         carrying: a.carrying,
       })),
       obstacles: this.obstacles,
+      placement: { bounds: BOUNDS, trapRadius: TRAP_RADIUS },
       captureId: this.captureId,
       correct: this.correct,
       attempts: this.attempts,

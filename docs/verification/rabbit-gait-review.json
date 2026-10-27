@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-27",
+  "scope": "Independent asset-level frame/sequence review of corrected rabbit gait; not final game integration, user acceptance, or a validated fun study.",
+  "reviewedHumanDefect": "Screenshot 2026-10-27 at 10.19.38.png: torso upright, forepaws hanging, hind-only bipedal silhouette.",
+  "initialComparison": [
+    "bind-side.png",
+    "runtime-side.png"
+  ],
+  "fullPhaseEvidence": [
+    "review-moss-walk-side.png",
+    "review-moss-walk-three.png",
+    "review-pip-trot-side.png",
+    "review-pip-trot-three.png",
+    "review-pip-trot-side-lure.png"
+  ],
+  "consecutiveLoopBoundaryEvidence": [
+    "review-wrap-moss-walk-side.png",
+    "review-wrap-moss-walk-side-lure.png",
+    "review-wrap-pip-trot-side.png",
+    "review-wrap-pip-trot-side-lure.png"
+  ],
+  "videoMetadataVerified": {
+    "dimensions": [
+      1000,
+      760
+    ],
+    "fps": 30,
+    "frames": 48,
+    "durationSeconds": 1.6,
+    "files": [
+      "moss-walk-side.mp4",
+      "moss-walk-side-lure.mp4",
+      "pip-trot-side.mp4",
+      "pip-trot-side-lure.mp4"
+    ]
+  },
+  "calibrationChecked": {
+    "moss": {
+      "scale": 1.1,
+      "normalSpeed": 0.62,
+      "nominalWalkSpeed": 0.347538,
+      "normalPlaybackRate": 1.622,
+      "lurePlaybackRate": 2.19
+    },
+    "pip": {
+      "scale": 0.7,
+      "normalSpeed": 1.55,
+      "nominalTrotSpeed": 1.003339,
+      "normalPlaybackRate": 2.207,
+      "lurePlaybackRate": 2.98
+    }
+  },
+  "visualObservations": [
+    "Low/forward torso carriage is preserved across the reviewed walk and trot phases.",
+    "Forepaws visibly plant beneath the chest and recover, rather than remaining suspended as unused arms.",
+    "Hind hocks remain folded and participate in the cycle; the upright bipedal silhouette is absent.",
+    "Both side and three-quarter views were inspected to reduce far-limb occlusion ambiguity.",
+    "No obvious chest/limb mesh collapse, floor pop, or wrap discontinuity appears in the reviewed sequences.",
+    "Stance movement against the stationary translated grid shows no obvious skating at the demonstrated calibrated speeds."
+  ],
+  "assessment": "Passed asset-level posture/contact sequence review. The style reads as a low deliberate walk/scurry, not a photorealistic rabbit hopping gait.",
+  "remainingVerification": "Lead must verify main-game clip choice, effective playback rate and pose at both Moss/Pip scales during normal movement and luring. No browser was launched by this reviewer during this asset review."
+}

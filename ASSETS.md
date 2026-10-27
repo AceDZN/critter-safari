@@ -4,13 +4,13 @@
 
 The rebuilt game uses recognizable rabbit, tortoise and small deer models. Both fresh gameplay concepts were generated with built-in imagegen and inspected before this asset pipeline. Search-first was followed; selected gallery candidates lacked a verified reuse license and/or suitable riggable geometry. Three original models have now been submitted through the user's signed-in Chrome/Tripo Pro account, using existing credits only. No purchase, subscription, raw API, or third-party model generator was used.
 
-**All three models are acquired locally with actual creature rigs and useful Walk clips.** Each normal UI export was parsed to verify its skin, joints, weighted mesh, skeletal animation channels and in-place root translation before being added to `CRITTER_ASSETS`. `TRIPO_ASSETS_READY` is now true. The lead verified actual rabbit, tortoise and deer gameplay through all five contracts in the production browser. Rig counts and moving bone tracks are independently recorded in docs/verification/rebuild-rigs.json; actual captures and target comparison are in VISUAL_REVIEW.md. No diagnostic character geometry is used.
+**All three models are acquired locally with actual creature rigs. Rabbit now uses newly authored quadruped Walk/Trot clips on that acquired weighted skeleton; deer/tortoise retain their imported Walk.** Each normal UI export was parsed to verify its skin, joints, weighted mesh, skeletal animation channels and in-place root translation before being added to `CRITTER_ASSETS`. `TRIPO_ASSETS_READY` is now true. The lead verified actual rabbit, tortoise and deer gameplay through all five contracts in the production browser. Rig counts and moving bone tracks are independently recorded in docs/verification/rebuild-rigs.json; actual captures and target comparison are in VISUAL_REVIEW.md. No diagnostic character geometry is used.
 
 ## Original Tripo model ledger
 
 | Kind | UI job | Generation | Observed geometry | Rig / clip / export status |
 |---|---|---|---|---|
-| Rabbit | [f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00](https://studio.tripo3d.ai/workspace/generate/f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00) |30credits, balance6275→6245 |19,404 triangles,11,374 vertices |Other creature AutoRig20 completed; real31-joint skeleton including four leg chains and ears visually inspected; quadruped Walk exported with skeleton and Animation stay in Place enabled. |
+| Rabbit | [f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00](https://studio.tripo3d.ai/workspace/generate/f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00) |30credits, balance6275→6245 |19,404 triangles,11,374 vertices |Other creature AutoRig20 completed; real31-joint skeleton including four leg chains and ears visually inspected; original quadruped Walk exported in place, then rejected for bipedal-looking hind-leg extension. Runtime uses authored four-paw Walk/Trot described below. |
 | Tortoise | [f0a37d75-4801-4b26-adb8-9fca23515c70](https://studio.tripo3d.ai/workspace/generate/f0a37d75-4801-4b26-adb8-9fca23515c70) |30credits, balance6245→6215 |19,034 triangles,11,406 vertices |Other creature AutoRig20 completed; actual32-joint skeleton and96-channel quadruped Walk exported with skeleton and Animation stay in Place enabled. |
 | Deer | [4208314c-9666-4c7e-a07c-97563533a542](https://studio.tripo3d.ai/workspace/generate/4208314c-9666-4c7e-a07c-97563533a542) |30credits, after two rigs balance6175→6145 |19,480 generated /19,478 rigged triangles,11,658 vertices |Other creature AutoRig20 completed; actual35-joint skeleton and105-channel quadruped Walk exported with skeleton and Animation stay in Place enabled. |
 
@@ -25,8 +25,8 @@ Three generations cost90 credits and three creature rigs cost60 credits, for150 
 - Original and runtime bytes: **1,195,884** each, below3MB. SHA256 for both: `a374444210a92c13801841c55d837be650e86a0ae508df0a7f33bb8fae11207c`.
 - Export GLB /1k embedded JPEG textures /Export Skeleton ON /one selected animation /Animation stay in Place ON. The Pro export button showed no additional credit amount.
 - Locally parsed: one skin,31 joints, one mesh with `JOINTS_0` and `WEIGHTS_0`,93 skeletal animation channels. Clip name `preset:quadruped:walk`, duration **2.5833332538604736s**. No separate idle clip exists or is claimed.
-- Root translation is already in place: first≈(2.06e-9,.03686565,7.01e-10), last≈(2.04e-9,.03686564,7.01e-10). No root-motion stripping, vertex simplification, or animation rewriting was needed. Original bone tracks are retained unchanged.
-- `SkeletonUtils.clone` gives each actor its own skeleton; a parent normalization wrapper keeps placement transforms separate from skeletal tracks. A real `AnimationMixer` plays the acquired clip. Runtime integration was visually checked and advances the acquired gait only during actual locomotion.
+- Root translation is already in place: first≈(2.06e-9,.03686565,7.01e-10), last≈(2.04e-9,.03686564,7.01e-10). The source GLB needs no root-motion stripping or vertex simplification. Original bone tracks remain in the unchanged source GLB; the rabbit runtime now uses the authored skeletal replacement below.
+- `SkeletonUtils.clone` gives each actor its own skeleton; a parent normalization wrapper keeps placement transforms separate from skeletal tracks. A real `AnimationMixer` plays the selected authored rabbit clip or imported deer/tortoise clip; locomotion advances during actual travel.
 - `preloadCritters()` warms only manifest-listed local files; missing kinds produce no phantom requests.
 
 ### Local tortoise and deer exports
@@ -40,8 +40,33 @@ Both were downloaded normally from their own Animate pages through Export: GLB, 
 
 - Tortoise: one skin,32 joints, one weighted mesh/material,96 skeletal channels. Root translation first≈(1.053e-9,.030609267,8.669e-9), last≈(1.048e-9,.030609263,8.669e-9); largest range3.73e-9.
 - Deer: one skin,35 joints, one weighted mesh/material,105 skeletal channels. Root translation first≈(6.435e-9,.025390701,4.168e-9), last≈(6.435e-9,.025390696,4.191e-9); largest range5.59e-9.
-- Each has the actual clip `preset:quadruped:walk`, duration **2.5833332538604736s**, with leg/body skeletal motion visible in Tripo before export. There is no separate idle clip. The runtime holds the rig pose while stationary and advances Walk only during locomotion.
-- All three local GLBs total **3,861,104bytes**. They each use one material/mesh and remain below3MB without geometry reduction. `SkeletonUtils.clone`, normalization wrappers and per-actor `AnimationMixer` remain the shared loader path; `preloadCritters()` warms the available local files in the background.
+- Each tortoise/deer GLB has the actual clip `preset:quadruped:walk`, duration **2.5833332538604736s**, with leg/body skeletal motion visible in Tripo before export. There is no separate idle clip. The runtime holds the rig pose while stationary and advances Walk only during locomotion.
+- All three local GLBs total **3,861,104bytes**; authored rabbit motion metadata adds300,097bytes, giving4,161,201bytes for models plus motion. They each use one material/mesh and remain below3MB without geometry reduction. `SkeletonUtils.clone`, normalization wrappers and per-actor `AnimationMixer` remain the shared loader path; `preloadCritters()` warms the available local files in the background.
+
+## Ground contact correction — 27 October 2026
+
+The initial scene used terrain centered at y=-0.075 while simulation/picking placed animals at y=0, and normalization measured only a cached bind-pose box. The playable meadow is now exactly y=0 throughout the rails and beyond the expanded actor bounds; relief begins outside x±7.3/z±5.8. Colliders and the loader's public API are unchanged.
+
+Deer/tortoise skinned Walk cycles were sampled offline at120Hz (311 keys each), after normalization and the same `updateMatrixWorld` traversal used for rendering. Their cached clips retain all105/96 acquired bone channels and add one measured whole-model vertical support track. Raw GLBs remain unchanged. Runtime does no per-vertex loading or frame scan.
+
+### Rabbit gait repair after anatomy review
+
+The human's10.19 screenshot and actual skinned side-view renders revealed that the generic imported Walk extended both hind chains downward while barely moving the forelegs. Whole-model floor correction raised the torso and left the forepaws hanging. The previous support-only rabbit fix was rejected; this was an actual gait defect.
+
+`public/models/rabbit-gaits.json` is original authored animation data, **300,097bytes**, SHA256 `3a3b713cad0a652baa289ec8a25e8d75301fb1915d155b128ba127f0c8ed225f`. It targets the unchanged acquired rabbit GLB/SHA256 above, its31-joint skeleton, skin weights and textured surface. No primitive character parts, new model, external animation job or extra credits were used. The imported rabbit Walk is retained only in the source GLB and is not used in play.
+
+Two authored loops lower/incline the chest through the spine, preserve folded hind hocks, and solve all four paw targets independently. Each loop has31 skeletal quaternion tracks, real root/spine position tracks and one whole-model support track (34 tracks total). Skeletal poses are baked at120Hz, and support is measured offline at240Hz over the actual deformed mesh. Runtime parses/caches this finite local data and plays it with `AnimationMixer`; it performs no IK or vertex scan per frame.
+
+| Runtime clip | Duration | Stance | Cycle travel at size1 | Nominal speed at size1 |
+|---|---:|---:|---:|---:|
+|`authored:rabbit:quadruped-walk` |1.00s |.76 per paw; at least3 plants |.347538units |.347538units/s |
+|`authored:rabbit:quadruped-trot` |.65s |.54; diagonal support pair |.652170units |1.003339units/s |
+
+`CritterVisual.nominalSpeeds` exposes those constants. Recommended selection uses trot when usualSpeed/size>.9, otherwise walk. Playback rate =usualSpeed/(size×nominalSpeed), with the same1.35 lure/1.5 escape multiplier as actual travel; it does not follow noisy frame velocity. This gives Moss(size1.10,speed.62) Walk≈1.622× and Pip(size.70,speed1.55) Trot≈2.207×.
+
+All four paw regions were tracked through601 times between authored keys. Walk retained at least3 planted paws; Trot retained at least2. Maximum stance sole error was0.14mm Walk /1.20mm Trot at normalized scale; swing clearance≈4.4cm /5.5cm. Maximum planted-paw drift at declared nominal forward travel was2.51mm /3.00mm. The rig's crouched knee articulation and actual skinned side/three-quarter cycle renders were inspected; translated actual-loader videos at Moss/Pip scales and normal/lure rates provide the motion proof. These measurements do not claim perfect biological anatomy or zero sliding under every game turning/collision condition.
+
+Reproducible geometry oracle: `node scripts/verify-grounding.mjs`, saved measurements at `docs/verification/grounding.json`; Regeneration source is `scripts/author-rabbit-gaits.mjs`, with candidate validation at `scripts/check-rabbit-gaits.mjs`; intermediates stay in ignored `work/gait/`. Terrain raycasts at35 points spanning x±6.8/z±5.2 in both reflected variants measured y=0. The lead performs final gameplay, cadence and rendered contact review.
 
 ## Exact original prompts
 
