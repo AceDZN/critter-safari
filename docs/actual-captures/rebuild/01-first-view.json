@@ -1,0 +1,95 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "playing",
+  "phase": "place-catcher",
+  "variant": 0,
+  "contract": 1,
+  "instruction": "Catch the rabbit that prefers leaves.",
+  "trap": null,
+  "baits": [],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -2,
+      "z": 0.04,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 2.08,
+      "z": 0.05,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "completed": 0,
+  "message": "",
+  "events": [],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 2,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0.058
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0.058
+      }
+    ],
+    "animatedModels": 2
+  },
+  "audio": {
+    "context": "locked",
+    "loaded": 0,
+    "musicVoices": 0,
+    "activeEffects": 0,
+    "mode": "playing",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0,
+    "masterGain": 0,
+    "loopSeconds": 0,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 44,
+    "triangles": 104408,
+    "pixelRatio": 1
+  }
+}

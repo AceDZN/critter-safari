@@ -10,7 +10,9 @@ function matches(creature: CreatureSpec, clause: Clause, byId: ReadonlyMap<strin
   return clause.relation === 'greater' ? difference > EPSILON : difference < -EPSILON;
 }
 
-/** Only authored base measures enter truth. Runtime speed/animation/modifiers are ignored. */
+/** Only authored individual preferences/base measures enter truth. A `diet` clause
+ * selects the preferred-lure group, not an exclusive biological diet. Runtime
+ * speed, animation rates and movement modifiers never redefine usual pace. */
 export function selectCandidates(creatures: readonly CreatureSpec[], rule: CandidateRule): string[] {
   const byId = new Map(creatures.map((creature) => [creature.id, creature]));
   // Validate references even when an earlier filter would otherwise short-circuit.

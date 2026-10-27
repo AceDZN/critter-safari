@@ -1,0 +1,154 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "caught",
+  "phase": "watch",
+  "variant": 1,
+  "contract": 1,
+  "instruction": "Catch the rabbit that prefers leaves.",
+  "trap": {
+    "x": 0,
+    "z": 1.1102230246251565e-15,
+    "arming": 0,
+    "pop": 1
+  },
+  "baits": [
+    {
+      "id": 2,
+      "x": 0,
+      "z": 1.1102230246251565e-15,
+      "diet": "leaf",
+      "age": 0.7333333333333334,
+      "flight": 0
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": 0,
+      "z": 0,
+      "y": 0.12,
+      "mode": "caught",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": -2.24,
+      "z": -0.54,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "captureId": "moss",
+  "correct": true,
+  "attempts": 2,
+  "hints": 0,
+  "completed": 0,
+  "message": "בדיוק! עוד חיה בדרך למחנה.",
+  "events": [
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 0.1,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 0.1,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 0.9,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "retry",
+      "level": 1,
+      "time": 0.9,
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 2.9,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 2.9,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 4,
+      "id": "moss",
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 2,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 3.933
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 3.383
+      }
+    ],
+    "animatedModels": 2
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 6,
+    "mode": "caught",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.5093787908554077,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 37,
+    "triangles": 105644,
+    "pixelRatio": 1
+  }
+}

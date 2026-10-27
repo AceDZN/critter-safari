@@ -1,6 +1,6 @@
 # Critter Safari audio
 
-Prepared for the active fixed-camera rebuild. The music engine passed an independent check before the gameplay redesign; its new gameplay integration still needs a model-ready browser pass.
+Integrated into the fixed-camera rebuild, with local music and effects verified in the model-ready production browser.
 
 ## Original score
 
@@ -20,4 +20,4 @@ Five small musical cues use the same palette: bait pluck, woodblock trap click, 
 
 Audio begins only after a user gesture. Six local MP3 buffers are decoded once. One looping music source serves the whole session, across pause/resume and restart; completed effect voices disconnect after playback. Music fades out during reading/help/pause and ducks during capture review. Pause provides independent Hebrew-labeled music/effects level sliders plus global mute. No streaming service, remote music request or runtime AI is required.
 
-Verification is recorded in docs/verification/audio.json after the independent browser check. Taste and musical feel remain subjective; the preview is supplied for listening.
+The earlier independent engine check is retained in docs/verification/audio.json as historical evidence. Current model-ready integration and keyboard controls are recorded in docs/verification/rebuild-runtime.json and rebuild-desktop.json. Taste and musical feel remain subjective; the preview is supplied for listening.

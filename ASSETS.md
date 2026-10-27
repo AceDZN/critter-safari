@@ -1,89 +1,80 @@
 # Asset provenance
 
-## Status
+## Current acquisition status — 27 October 2026
 
-The lead confirmed first built-in imagegen target inspection before Tripo work. The Chrome acquisition step has an observed external browser-control blocker. No procedural character is represented as completed Tripo art.
+The rebuilt game uses recognizable rabbit, tortoise and small deer models. Both fresh gameplay concepts were generated with built-in imagegen and inspected before this asset pipeline. Search-first was followed; selected gallery candidates lacked a verified reuse license and/or suitable riggable geometry. Three original models have now been submitted through the user's signed-in Chrome/Tripo Pro account, using existing credits only. No purchase, subscription, raw API, or third-party model generator was used.
 
-## Bundled font
+**All three models are acquired locally with actual creature rigs and useful Walk clips.** Each normal UI export was parsed to verify its skin, joints, weighted mesh, skeletal animation channels and in-place root translation before being added to `CRITTER_ASSETS`. `TRIPO_ASSETS_READY` is now true. The lead verified actual rabbit, tortoise and deer gameplay through all five contracts in the production browser. Rig counts and moving bone tracks are independently recorded in docs/verification/rebuild-rigs.json; actual captures and target comparison are in VISUAL_REVIEW.md. No diagnostic character geometry is used.
 
-- `public/fonts/NotoSansHebrew.ttf`: unmodified Noto Sans Hebrew, 112,640 bytes. Copied from the user's existing local game asset with its adjacent license. Copyright 2022 The Noto Project Authors; upstream https://github.com/notofonts/hebrew . SIL Open Font License 1.1, retained at `public/fonts/OFL.txt`.
-- SHA256: `7ef36a2c3593758cdb622e1bdef4f84523e92fbc3ccc667438dd80ff54c2de88`.
+## Original Tripo model ledger
 
-## Tripo acquisition ledger
+| Kind | UI job | Generation | Observed geometry | Rig / clip / export status |
+|---|---|---|---|---|
+| Rabbit | [f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00](https://studio.tripo3d.ai/workspace/generate/f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00) |30credits, balance6275→6245 |19,404 triangles,11,374 vertices |Other creature AutoRig20 completed; real31-joint skeleton including four leg chains and ears visually inspected; quadruped Walk exported with skeleton and Animation stay in Place enabled. |
+| Tortoise | [f0a37d75-4801-4b26-adb8-9fca23515c70](https://studio.tripo3d.ai/workspace/generate/f0a37d75-4801-4b26-adb8-9fca23515c70) |30credits, balance6245→6215 |19,034 triangles,11,406 vertices |Other creature AutoRig20 completed; actual32-joint skeleton and96-channel quadruped Walk exported with skeleton and Animation stay in Place enabled. |
+| Deer | [4208314c-9666-4c7e-a07c-97563533a542](https://studio.tripo3d.ai/workspace/generate/4208314c-9666-4c7e-a07c-97563533a542) |30credits, after two rigs balance6175→6145 |19,480 generated /19,478 rigged triangles,11,658 vertices |Other creature AutoRig20 completed; actual35-joint skeleton and105-channel quadruped Walk exported with skeleton and Animation stay in Place enabled. |
 
-Observed 26 October 2026:
+All original generations: **Private**, verified **Pro** workspace; H3.1, triangle20,000 polycount,2K texture, PBR on, Remove Lighting on, Ultra Mesh off. Ownership basis: original text descriptions authored for this game in the user's paid account; [Tripo paid-generation rights](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) and [terms §5.2.2](https://www.tripo3d.ai/terms). No input reference photo or third-party character design was uploaded. Visible costs are recorded per UI, not inferred from API pricing. The three-generation limit is now exhausted; no fourth generation is authorized here.
 
-- Opened an exclusive Chrome session/tab `🌿 Critter Safari`, tab `512279444`, at https://studio.tripo3d.ai/assets . Inspected the user's My Assets and Rigged filter. Existing rigged assets were humanoid/cartoon characters (boy, goblin, raccoon, automaton, farmer, kid), without a matching terrarium creature silhouette. No discovery asset was downloaded or treated as licensed for redistribution.
-- Displayed balance before work: **6415** credits.
-- Opened https://studio.tripo3d.ai/workspace/generate/ . Selected text generation, H3.1 Best Quality. Displayed Generate cost: **30 credits**.
-- Attempted prompt entry and Generate in one bounded UI call. The call timed out after 30 seconds; generation submission/result and credit debit are **unverified**. No duplicate job was submitted.
-- Own-tab recovery also timed out after 30 seconds. Native `cua.getApp('com.google.Chrome')` fallback timed out after 30 seconds. Native UI lock was acquired with this game's owner metadata and released after the failed bounded session. A later `cua.getState()` inventory attempt also timed out after the bounded 30-second call (returned after about42 seconds). Sentence Foundry owned the shared native lock during another opportunity; its lock was left untouched.
-- No local creature GLB, rig, or clip has been obtained. `TRIPO_ASSETS_READY=false` is explicit in `src/world-art.ts`; `loadCritter` returns null. Runtime diagnostics must identify any temporary silhouettes as placeholders. This requirement remains open.
+Three generations cost90 credits and three creature rigs cost60 credits, for150 credits total; the final displayed balance was6125. Preset Walk selection and the Pro export button showed no additional credit amount. No duplicate model or rig jobs were submitted.
 
-Attempted generation prompt (exact):
+### Local rabbit export
 
-> Critter Safari original moss puffling creature, single full-body friendly small round forest animal, soft moss-green plush fur with leaf tufts, expressive big dark eyes and cream muzzle, four distinct stubby legs separated from round body in neutral standing quadruped pose, no clothing no props no ground no food shape, clean stylized game character with readable silhouette, warm natural colors, prepared for quadruped skeletal rigging.
+- Normal UI download: `/Users/acedzn/Downloads/cute+rabbit+3d+model.glb`.
+- Unchanged original saved at `work/raw-models/rabbit-walk.glb`; runtime copy `public/models/rabbit.glb`.
+- Original and runtime bytes: **1,195,884** each, below3MB. SHA256 for both: `a374444210a92c13801841c55d837be650e86a0ae508df0a7f33bb8fae11207c`.
+- Export GLB /1k embedded JPEG textures /Export Skeleton ON /one selected animation /Animation stay in Place ON. The Pro export button showed no additional credit amount.
+- Locally parsed: one skin,31 joints, one mesh with `JOINTS_0` and `WEIGHTS_0`,93 skeletal animation channels. Clip name `preset:quadruped:walk`, duration **2.5833332538604736s**. No separate idle clip exists or is claimed.
+- Root translation is already in place: first≈(2.06e-9,.03686565,7.01e-10), last≈(2.04e-9,.03686564,7.01e-10). No root-motion stripping, vertex simplification, or animation rewriting was needed. Original bone tracks are retained unchanged.
+- `SkeletonUtils.clone` gives each actor its own skeleton; a parent normalization wrapper keeps placement transforms separate from skeletal tracks. A real `AnimationMixer` plays the acquired clip. Runtime integration was visually checked and advances the acquired gait only during actual locomotion.
+- `preloadCritters()` warms only manifest-listed local files; missing kinds produce no phantom requests.
 
-Limit: at most three new model generations, plus needed rig/animation jobs, using existing credits. Existing owned assets must be inspected first. Runtime characters require actual useful skeletal clips and Three.js AnimationMixer playback.
+### Local tortoise and deer exports
 
-## Environment
+Both were downloaded normally from their own Animate pages through Export: GLB, 1k embedded textures, Export Skeleton ON, Walk explicitly selected (animation count1), and Animation stay in Place ON. The default animation count0 was not used. Original downloads are retained unchanged under `work/raw-models`; runtime files are byte-identical. No vertex simplification or animation rewriting was needed to meet the3MB per-model target.
 
-Authored Three.js geometry in `src/world-art.ts`: terrain, broad leaves, fallen twigs, moss, dew drops, bubble trap, bait launcher, and particles. These are intentionally procedural environment/tool geometry rather than substitutions for the required character pipeline.
+| Kind | Download name | Raw original / runtime | Bytes each | SHA256 |
+|---|---|---|---:|---|
+| Tortoise |`/Users/acedzn/Downloads/woodland+tortoise+3d+model.glb` |`work/raw-models/tortoise-walk.glb` / `public/models/tortoise.glb` |1,402,120 |`c20319f24e571d897130553ae05321ea1c10dde65a0c343d9dec17b14d3ea990` |
+| Deer |`/Users/acedzn/Downloads/fawn+3d+model.glb` |`work/raw-models/deer-walk.glb` / `public/models/deer.glb` |1,263,100 |`23ef02815dad1b7a772e3483d6d0df84f9dddac0fb17517da4c45fd23020286b` |
 
-## Authored material refinement
+- Tortoise: one skin,32 joints, one weighted mesh/material,96 skeletal channels. Root translation first≈(1.053e-9,.030609267,8.669e-9), last≈(1.048e-9,.030609263,8.669e-9); largest range3.73e-9.
+- Deer: one skin,35 joints, one weighted mesh/material,105 skeletal channels. Root translation first≈(6.435e-9,.025390701,4.168e-9), last≈(6.435e-9,.025390696,4.191e-9); largest range5.59e-9.
+- Each has the actual clip `preset:quadruped:walk`, duration **2.5833332538604736s**, with leg/body skeletal motion visible in Tripo before export. There is no separate idle clip. The runtime holds the rig pose while stationary and advances Walk only during locomotion.
+- All three local GLBs total **3,861,104bytes**. They each use one material/mesh and remain below3MB without geometry reduction. `SkeletonUtils.clone`, normalization wrappers and per-actor `AnimationMixer` remain the shared loader path; `preloadCritters()` warms the available local files in the background.
 
-After inspection of actual gameplay, dark brown earth grain, soil roughness/bump, fibrous moss noise, and leaf veins were added as deterministic procedural DataTextures. Six buffers occupy786,432 bytes in memory and add zero texture network bytes. They are original environment materials, not generated creature art. Moss clumps were reduced and raised to resolve the flat polygon appearance. The garden is batched to66 Mesh objects plus one Points object, with59 shadow casters; collider landmarks and both reflected layouts remain aligned. The favicon is original simple vector icon geometry.
+## Exact original prompts
 
-Final recovery check: after the app's IAB became responsive and the game passed final browser tests, the art owner retried only the existing Chrome Tripo tab512279444. That read/bind attempt again timed out at30 seconds (returned34.6 seconds); no UI input, native focus, duplicate generation or new job occurred. IAB responsiveness did not restore signed-in Chrome control. The unknown puffling submission, GLB acquisition, rigs and clips remain open.
-
-## Human reconnection follow-up
-
-After the human reported “should be good now”, the art owner made one bounded recovery call against the existing exclusive Chrome Tripo tab `512279444`. It again timed out at the requested30 seconds (returned31.3 seconds), resetting the tool session. This call did not enter UI text, submit a job, or change credits. The unknown puffling submission still cannot be verified.
-
-New human preference for the resumed acquisition work: **search existing assets first, generate only when a suitable asset is unavailable or the required design is very custom.** Once signed-in Chrome control works, inspect the unknown job and owned assets before searching the supplied gallery categories https://studio.tripo3d.ai/3d-model-gallery/category/animal and https://studio.tripo3d.ai/3d-model-gallery/category/plants-nature . Public discovery alone is not a redistribution license; verify each selected asset's displayed ownership/license basis before integrating. Gallery search was not performed because the existing-tab bind failed before UI access. No generation beyond the original unverified attempt was made.
-
-## Native recovery and prior-job resolution
-
-The shared native Chrome lock was later acquired normally after Sentence Foundry released it. `cua.getApp('com.google.Chrome')` succeeded, and the art owner selected only the existing `🌿 Critter Safari` tab. The generation screen showed **Ready For A New 3D Model** and only **75/1000** prompt characters: `Critter Safari original moss puffling creature, single full-body friendly s`. The original timed-out `typeText` call had stopped before its following awaited Generate click. The refreshed My Assets list included newer other-crew assets and no Safari puffling. Thus the earlier uncertain Safari attempt is resolved as **not submitted**: zero Safari model generations have been submitted so far. Displayed balance differed between cached pages (6415 on the Safari page, 6275 on another crew's page); no debit is attributed to Safari.
-
-Native navigation toward the animal gallery timed out before completion. A subsequent60-second-bounded native observation worked, but the human was actively playing Clockwork Alibi in another tab. Reacquiring the Safari tab was blocked by the runtime's human-navigation protection. The art owner stopped inputs and released the shared lock. Native access is viable but must coexist with active human browsing; the next step remains gallery inspection, not generation.
-
-Official workflow references reviewed while waiting: https://www.tripo3d.ai/product-doc/module-post-processing/rigging-animation documents Humanoid versus Others (including quadruped) and animation export; https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially describes paid-generation rights. These pages do not establish a blanket license for other people's gallery models. Selected gallery assets still need their own visible licensing/ownership basis.
-
-## Rebuild asset search and original jobs
-
-After both new fixed-camera rebuild targets were generated and inspected, Chrome background access recovered using the explicit browser ID `1`. Native focus is no longer required for ordinary tab work. The account menu visibly showed **Pro**; fresh gallery balance was6275. Search-first requirement was followed through Animal/Turtle/Rabbit/Deer and Plants & Nature/Leaf pages and specific model detail/export inspection:
-
-| Candidate | Observed quality / reason not integrated |
-|---|---|
-| https://studio.tripo3d.ai/3d-model/gray-brown-rabbit-sitting-on-mossy-forest-floor-with-dried-leaves-96e6105f-e971-4fb9-9642-fd899006ccce | Cute readable rabbit, creator vxv3327;977,014 triangles; seated/fused-leg pose; no displayed reuse license or verified useful rig/clips. |
-| https://studio.tripo3d.ai/3d-model/turtle-with-domed-shell-four-sturdy-limbs-beige-brown-color-rough-t-30ef0795-e04f-4bda-ad68-9d04fd1a43ca | Readable tortoise, creator archfer;947,700 triangles; Export offered GLB1k for5credits, no displayed reuse license. |
-| https://studio.tripo3d.ai/3d-model/stylized-brown-deer-fawn-with-white-patch-markings-standing-in-a-fore-2929768c-32c6-4d64-8b9e-4f9e06628125 |946,012 triangles; visually resembles an existing famous animated fawn; excluded, no displayed reuse license. |
-| https://studio.tripo3d.ai/3d-model/green-leaf-with-prominent-veins-and-curved-shape-f34daf45-8bca-4a29-b539-c57fcc81e8eb | Natural leaf, creator orroque07;972,618 triangles; no displayed reuse license. |
-| Owned original raccoon3bc68067-2954-4d62-b535-93de36cb34ca | Stronger quality and19,754 triangles, visible clean T-pose and animation workspace, but clothed biped mismatches new natural rabbit/tortoise/deer family. No mutation or new animation job was submitted. |
-
-No gallery model was downloaded or treated as licensed merely because Export was available. No coherent qualified existing family was found. New original models were therefore submitted within the user's authorized three-model budget, after the new two-view gate, with Private visibility in the verified Pro workspace. Settings: H3.1, triangle20,000 polycount,2K texture, PBR enabled, Remove Lighting enabled, Ultra Mesh disabled. No purchase/upgrade.
-
-### Original rabbit — generation1/3
-
-- UI job URL: https://studio.tripo3d.ai/workspace/generate/f1acdc0f-ac6b-4e4e-89b5-ec89b8cc0b00
-- Displayed cost30credits; balance6275→6245. Submission and Generating11% observed; later owned asset list named completed `cute rabbit3dmodel`.
-- Rig/export not yet obtained at this ledger entry.
-- Exact prompt:
+### Rabbit
 
 > Critter Safari original woodland rabbit game character. One clearly recognizable cute natural rabbit, warm chestnut brown fur, cream chest and muzzle, long upright ears with soft pink interiors, round glossy dark eyes, small pink nose, fluffy white tail. Polished hand-painted storybook 3D style, natural animal anatomy, gentle friendly expression, restrained fine fur detail, coherent warm woodland palette. Neutral standing quadruped pose with all FOUR legs and paws clearly separated, body raised slightly above ground so joints can be rigged, no fused legs. Full body only, no base, no scenery, no props, no clothing, no text, no existing character likeness. Clean game-ready topology, 20000 polygons, 2K texture, unlit albedo for real-time lighting.
 
-### Original tortoise — generation2/3
-
-- UI job URL: https://studio.tripo3d.ai/workspace/generate/f0a37d75-4801-4b26-adb8-9fca23515c70
-- Displayed cost30credits; balance6245→6215. Generating13% observed.
-- Rig/export not yet obtained at this ledger entry.
-- Exact prompt:
+### Tortoise
 
 > Critter Safari original woodland tortoise game character. One clearly recognizable cute natural small tortoise, warm ochre and cocoa domed shell with clean hexagonal scutes, warm beige scaled skin, round glossy dark eyes, small friendly face. Polished hand-painted storybook 3D style, natural animal anatomy, gentle expression, restrained surface detail, coherent warm woodland palette matching a chestnut rabbit. Neutral standing quadruped pose with FOUR sturdy legs clearly separated and fully visible, belly raised above ground, neck extended slightly, joints available for rigging. Full body only, no base, no scenery, no props, no clothing, no text, no existing character likeness. Clean game-ready topology, 20000 polygons, 2K texture, unlit albedo for real-time lighting.
 
-Generation3 deer has not been submitted yet. Navigation of own third tab toward Generate timed out, and its subsequent boundedAX read reset the tool; no prompt or Generate click occurred there. Known rabbit/tortoise jobs must be inspected rather than repeated.
+### Deer
 
-### Current external blocker after successful submissions
+> Critter Safari original woodland small deer game character. One clearly recognizable cute natural young roe deer, warm chestnut brown short fur, cream throat and belly, subtle small white spots along the back, large natural ears, round glossy dark eyes, small black nose, short white tail. Polished hand-painted storybook 3D style, natural animal anatomy, gentle curious expression, restrained fine fur detail, coherent warm woodland palette matching a chestnut rabbit and ochre tortoise. Neutral standing quadruped pose with all FOUR slender legs and hooves clearly separated, level back and relaxed neck, joints available for rigging. Full body only, no antlers, no base, no scenery, no props, no clothing, no text, no existing animated character likeness. Clean game-ready topology, 20000 polygons, 2K texture, unlit albedo for real-time lighting.
 
-The rabbit/tortoise jobs above were submitted successfully through normal signed-in ChromeUI. During the next deer-tab navigation and rabbit rebind, browser reads timed out again. A single native fallback under the shared lock returned a precise cause: **the Mac is locked and automatic unlock could not unlock it; the human must unlock the Mac manually.** The art owner released its lock. No agent credential entry, duplicate generation, cancellation, or purchase was attempted. LocalGLB download, actual quadruped rig/clip verification, and the third deer generation remain open until manual unlock restoresUI access.
+## Search-first assessment
+
+User-supplied categories inspected in their Chrome: [Animal](https://studio.tripo3d.ai/3d-model-gallery/category/animal), [Plants & Nature](https://studio.tripo3d.ai/3d-model-gallery/category/plants-nature), then Turtle/Rabbit/Deer and Leaf model pages. Public availability and Export controls were not treated as a redistribution license.
+
+| Candidate | Observed reason not integrated |
+|---|---|
+| [Brown rabbit96e6105f](https://studio.tripo3d.ai/3d-model/gray-brown-rabbit-sitting-on-mossy-forest-floor-with-dried-leaves-96e6105f-e971-4fb9-9642-fd899006ccce) |Cute fur/readable silhouette; creator vxv3327;977,014 triangles, seated/fused-leg pose; no displayed reuse license or verified useful rig. |
+| [Tortoise30ef0795](https://studio.tripo3d.ai/3d-model/turtle-with-domed-shell-four-sturdy-limbs-beige-brown-color-rough-t-30ef0795-e04f-4bda-ad68-9d04fd1a43ca) |Creator archfer;947,700 triangles; GLB1k export offered for5credits, no displayed reuse license. |
+| [Fawn2929768c](https://studio.tripo3d.ai/3d-model/stylized-brown-deer-fawn-with-white-patch-markings-standing-in-a-fore-2929768c-32c6-4d64-8b9e-4f9e06628125) |946,012 triangles; recognizable famous animated-fawn likeness, excluded; no displayed reuse license. |
+| [Leaf f34daf45](https://studio.tripo3d.ai/3d-model/green-leaf-with-prominent-veins-and-curved-shape-f34daf45-8bca-4a29-b539-c57fcc81e8eb) |Creator orroque07;972,618 triangles; no displayed reuse license. |
+| Owned original raccoon3bc68067-2954-4d62-b535-93de36cb34ca |Strong quality,19,754 triangles, clean T-pose and rig workspace; clothed biped mismatches the natural rabbit/tortoise/deer family. No new job or download for this candidate. |
+
+## Authored environment and fonts
+
+- `src/world-art.ts`: original procedural meadow, soil grain, moss fibre noise, leaf veins, grass, low broad-leaf planting, small flowers, timber rails, tree trunks, stones, twig and dew. These are intentionally authored environment materials/props; they are not substitutes for the Tripo character pipeline.
+- Rebuilt garden stage0/1: open center, zero central obstacle props; stages2/3 and4 import the pure simulation's exact obstacle arrays, including reflected variants. After actual-capture refinement, stage0/1 has43 meshes plus one Points object and33 shadow casters; later stages44/34. Static meshes are batched per material, plants use two meshes per sway root, and moss/grass/flowers/rails are instanced. Central moss density/scale and border foliage were substantially reduced; ground striping was removed and small flowers added. The flat mud and water overlays were removed because they intersected uneven terrain. Actual full-slice rendering was checked in headed desktop and mobile browsers; VISUAL_REVIEW.md records the target comparison.
+- `public/fonts/NotoSansHebrew.ttf`: unmodified Noto Sans Hebrew,112,640bytes, copied from the user's existing licensed local game asset with its adjacent SIL Open Font License1.1 at `public/fonts/OFL.txt`. Copyright2022 The Noto Project Authors; upstream https://github.com/notofonts/hebrew . SHA256 `7ef36a2c3593758cdb622e1bdef4f84523e92fbc3ccc667438dd80ff54c2de88`.
+
+## Earlier access failures, resolved
+
+The initial old puffling text attempt stopped at75characters before its awaited Generate click: **no puffling job or debit occurred**. Repeated Chrome timeouts and later a precise Mac-locked report interrupted acquisition. After the human unlocked the Mac, Chrome background tab control using explicit browser ID1 recovered. No credentials, automatic-unlock bypass, duplicate job or purchase was used. Native Chrome sessions used the shared atomic lock and released it while processing/waiting; other crews' tabs and jobs were preserved.

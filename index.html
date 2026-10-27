@@ -1,1 +1,138 @@
-<!doctype html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><link rel="icon" href="./favicon.svg"><meta name="theme-color" content="#273d2a"><title>Critter Safari · ספארי היצורים</title></head><body><div id="app"><canvas id="game" aria-label="גן תלת ממדי — תנועה WASD, גרירה למבט, E מלכודת, לחיצה פיתיון, רווח הפעלה"></canvas><header id="hud"><div class="brand" dir="ltr"><span class="sprout">✦</span> CRITTER SAFARI <small>FIELD JOURNAL / <span id="count">01</span>—05</small></div><nav><button id="notes-btn">יומן <kbd>N</kbd></button><button id="help-btn">עזרה <kbd>H</kbd></button><button id="pause-btn" aria-label="השהיה">Ⅱ</button></nav></header><section id="contract" dir="ltr" lang="en"><small id="contract-label">FIELD CONTRACT 01</small><p id="instruction"></p></section><div id="asset-status"></div><div id="aim"><span></span></div><div id="aim-label"></div><div id="toast" role="status"></div><footer id="tools"><div class="toolset"><button id="trap-btn"><b>◎</b><span>מלכודת <kbd>E</kbd></span></button><button id="bait-btn"><b id="bait-icon">❧</b><span id="bait-text">עלה <kbd>Q</kbd></span></button><button id="pulse-btn"><b>◉</b><span>בועה <kbd>Space</kbd></span><i id="charge"></i></button></div><span class="controls">WASD תנועה · גרירה למבט · לחיצה לזריקה · R איפוס מלכודת</span></footer><div id="touch-move"><button data-move="forward" aria-label="קדימה">▲</button><button data-move="left" aria-label="שמאלה">◀</button><button data-move="back" aria-label="אחורה">▼</button><button data-move="right" aria-label="ימינה">▶</button></div><button id="touch-toss">זריקה</button><div id="modal" role="dialog" aria-modal="true"><article id="modal-body"></article></div></div><script type="module" src="/src/main.ts"></script></body></html>
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#395d35" />
+    <link rel="icon" href="./favicon.svg" />
+    <title>Critter Safari · ספארי היצורים</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas
+        id="game"
+        tabindex="0"
+        aria-label="קרחת היער — גררו מלכודת ומזון אל הדשא"
+      ></canvas>
+      <header>
+        <section id="contract" lang="en" dir="ltr">
+          <small>CRITTER SAFARI · <span id="chapter">FERN GARDEN</span></small>
+          <h1 id="instruction"></h1>
+        </section>
+        <div class="top-actions">
+          <span id="progress" dir="ltr" aria-label="התקדמות">1 / 5</span
+          ><button id="notes-btn" title="יומן ועזרה">יומן</button
+          ><button id="pause-btn" aria-label="השהיה והגדרות">Ⅱ</button>
+        </div>
+      </header>
+      <p id="action-prompt" role="status"></p>
+      <div id="loading" role="status">מכינים את קרחת היער…</div>
+      <div id="toast" role="status"></div>
+      <aside id="capture-card" hidden></aside>
+      <footer id="tray" aria-label="כלים ומזון">
+        <button
+          class="tool"
+          id="catcher-tool"
+          data-tool="catcher"
+          aria-label="מלכודת — גררו אל הדשא"
+        >
+          <svg viewBox="0 0 72 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="glass" x2="1" y2="1">
+                <stop stop-color="#d6f6e8" stop-opacity=".85" />
+                <stop offset="1" stop-color="#a9c1b8" stop-opacity=".2" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M12 48a24 24 0 0 1 48 0Z"
+              fill="url(#glass)"
+              stroke="#668a7b"
+              stroke-width="2"
+            />
+            <path
+              d="M21 32q7-15 20-15"
+              fill="none"
+              stroke="#fff9d9"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <ellipse
+              cx="36"
+              cy="48"
+              rx="27"
+              ry="7"
+              fill="#ae8b49"
+              stroke="#75532c"
+              stroke-width="2"
+            />
+            <ellipse cx="36" cy="46" rx="22" ry="4" fill="#d0b779" />
+            <circle
+              cx="12"
+              cy="44"
+              r="6"
+              fill="#c4a768"
+              stroke="#75532c"
+              stroke-width="2"
+            /></svg
+          ><span>מלכודת</span></button
+        ><button
+          class="tool"
+          id="leaf-tool"
+          data-tool="leaf"
+          aria-label="עלה — גררו אל הדשא"
+        >
+          <svg viewBox="0 0 72 64" aria-hidden="true">
+            <path
+              d="M14 52Q7 14 59 9Q62 51 14 52Z"
+              fill="#6d9846"
+              stroke="#456b31"
+              stroke-width="2"
+            />
+            <path
+              d="M13 54 53 17M27 42l-6-17M37 32l15 2M42 27l-2-11"
+              fill="none"
+              stroke="#c4d78b"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            /></svg
+          ><span>עלה</span></button
+        ><button
+          class="tool"
+          id="berry-tool"
+          data-tool="berry"
+          aria-label="פרי — גררו אל הדשא"
+        >
+          <svg viewBox="0 0 72 64" aria-hidden="true">
+            <path
+              d="M34 20q2-13 15-13"
+              fill="none"
+              stroke="#547537"
+              stroke-width="4"
+            />
+            <path d="M36 17q-13-14-20-4 4 11 20 4" fill="#739b48" />
+            <g fill="#9e4962" stroke="#78394b" stroke-width="1.5">
+              <circle cx="29" cy="30" r="9" />
+              <circle cx="43" cy="30" r="9" />
+              <circle cx="22" cy="42" r="9" />
+              <circle cx="36" cy="42" r="10" />
+              <circle cx="49" cy="42" r="9" />
+              <circle cx="29" cy="52" r="8" />
+              <circle cx="43" cy="52" r="8" />
+            </g>
+            <path
+              d="m23 28 4-3m12 13 4-3"
+              stroke="#e3a3af"
+              stroke-width="3"
+              stroke-linecap="round"
+            /></svg
+          ><span>פרי</span></button
+        ><small>גררו אל הדשא · אפשר גם לבחור ואז להקיש</small>
+      </footer>
+      <div id="drag-token" hidden></div>
+      <div id="modal" hidden role="dialog" aria-modal="true">
+        <article id="modal-body"></article>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

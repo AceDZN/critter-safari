@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { CLEARING_OBSTACLES, TRANSFER_OBSTACLES } from './simulation';
 
 export interface GardenObstacle { x: number; z: number; r: number }
 export interface GardenArt { obstacles: GardenObstacle[]; update(time: number, reducedMotion?: boolean): void; dispose(): void }
@@ -46,7 +47,7 @@ function organicTexture(kind: 'soil' | 'moss' | 'leaf', size: number, repeatX = 
       const center = Math.exp(-Math.pow((u - .5) * 88, 2));
       const side = Math.pow(Math.max(0, Math.cos((v + Math.abs(u - .5) * 1.8) * 92)), 22) * (1 - Math.abs(u - .5) * 1.8);
       const veins = center * .7 + side * .28;
-      r = 31 + broad * 23 + veins * 25; g = 67 + broad * 29 + veins * 30; b = 30 + fine * 16;
+      r = 47 + broad * 24 + veins * 20; g = 91 + broad * 34 + veins * 26; b = 35 + fine * 18;
       height = 105 + fine * 20 + veins * 90;
     }
     const i = (y * size + x) * 4;
@@ -64,7 +65,7 @@ function organicTexture(kind: 'soil' | 'moss' | 'leaf', size: number, repeatX = 
 }
 
 /** Author-created terrain and props. Characters remain local Tripo assets. */
-export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 1 = 0): GardenArt {
+export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 1 = 0, stage = 0): GardenArt {
   const group = new THREE.Group(); group.name = 'authored-terrarium'; scene.add(group);
   group.scale.x = variant === 1 ? -1 : 1;
   const random = rng(transfer ? 412 : 41);
@@ -99,7 +100,7 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   const mats = {
     soil: material(palette.soil), moss: material(palette.moss), leaf: material(palette.leaf),
     lightMoss: material(palette.lightMoss), youngLeaf: material(palette.youngLeaf), bark: material(palette.bark),
-    barkLight: material(0x987151), stone: material(palette.stone), stem: material(0x477b34),
+    barkLight: material(0x987151), stone: material(palette.stone), stem: material(0x477b34), flowerWhite: material(0xf4eedb), flowerGold: material(0xe9bd45), flowerLilac: material(0xa2a0d9),
     water: new THREE.MeshPhysicalMaterial({ color: 0x8bbca4, transparent: true, opacity: .53, roughness: .12, metalness: .08, clearcoat: 1 }),
     dew: new THREE.MeshPhysicalMaterial({ color: 0xc4f1df, transparent: true, opacity: .74, roughness: .05, metalness: .12, clearcoat: 1 }),
   };
@@ -110,25 +111,37 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   Object.assign(mats.soil, { color: new THREE.Color(0xffffff), map: soilTexture.color, bumpMap: soilTexture.height, bumpScale: .045, roughness: .98 });
   Object.assign(mats.moss, { color: new THREE.Color(0xffffff), map: mossTexture.color, bumpMap: mossTexture.height, bumpScale: .028, roughness: .98 });
   Object.assign(mats.lightMoss, { color: new THREE.Color(0xd1d7a3), map: mossTexture.color, bumpMap: mossTexture.height, bumpScale: .028, roughness: .98 });
-  Object.assign(mats.leaf, { color: new THREE.Color(0xc0d0ac), map: leafTexture.color, bumpMap: leafTexture.height, bumpScale: .022, roughness: .8 });
+  Object.assign(mats.leaf, { color: new THREE.Color(0xe4edcc), map: leafTexture.color, bumpMap: leafTexture.height, bumpScale: .022, roughness: .8 });
   Object.assign(mats.youngLeaf, { color: new THREE.Color(0xf1e6a1), map: leafTexture.color, bumpMap: leafTexture.height, bumpScale: .022, roughness: .82 });
+  // A single authored meadow map gives the fixed camera a green clearing and a soft dirt trail.
+  const meadowBytes = new Uint8Array(256 * 256 * 4);
+  for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+    const wx = (x / 255 - .5) * 20, wz = (y / 255 - .5) * 18;
+    let h = Math.imul(x + 17, 374761393) ^ Math.imul(y + 31, 668265263); h = Math.imul(h ^ h >>> 13, 1274126177); const grain = ((h ^ h >>> 16) >>> 0) / 4294967295 - .5;
+    const trail = Math.exp(-Math.pow((wx - Math.sin(wz * .7) * 1.35) / .67, 2));
+    const variation = Math.sin(wx * 1.4 + wz * .6) * 2 + grain * 5;
+    const i = (y * 256 + x) * 4;
+    meadowBytes[i] = 61 + variation + trail * 49; meadowBytes[i + 1] = 98 + variation - trail * 18; meadowBytes[i + 2] = 29 + variation * .4 + trail * 14; meadowBytes[i + 3] = 255;
+  }
+  const meadowMap = new THREE.DataTexture(meadowBytes, 256, 256, THREE.RGBAFormat); meadowMap.colorSpace = THREE.SRGBColorSpace; meadowMap.magFilter = THREE.LinearFilter; meadowMap.minFilter = THREE.LinearMipmapLinearFilter; meadowMap.generateMipmaps = true; meadowMap.needsUpdate = true; textures.push(meadowMap); mats.soil.map = meadowMap; mats.soil.bumpMap = null;
   function mesh(geo: THREE.BufferGeometry, mat: THREE.Material, x: number, y: number, z: number) {
     const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; group.add(m); return m;
   }
-  const groundGeo = new THREE.PlaneGeometry(31, 27, 64, 56); groundGeo.rotateX(-Math.PI / 2);
+  const groundGeo = new THREE.PlaneGeometry(20, 18, 48, 40); groundGeo.rotateX(-Math.PI / 2);
   const p = groundGeo.attributes.position;
   for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i), z = p.getZ(i), edge = Math.max(0, Math.max(Math.abs(x) - 7.9, Math.abs(z) - 6.9));
+    const x = p.getX(i), z = p.getZ(i), edge = Math.max(0, Math.max(Math.abs(x) - 5.8, Math.abs(z) - 4.2));
     p.setY(i, -.075 + Math.sin(x * .7) * Math.cos(z * .82) * .035 + edge * .22 + (random() - .5) * .035);
   }
   groundGeo.computeVertexNormals(); mesh(groundGeo, mats.soil, 0, 0, 0).castShadow = false;
-  // A distant timber edge and tree silhouette close the terrarium's horizon.
-  const fenceGeo = new THREE.BoxGeometry(.62, 3.5, .17);
-  const fence = new THREE.InstancedMesh(fenceGeo, mats.barkLight, 33);
+  // Low timber rails frame the open clearing instead of forming an overhead tunnel.
+  const fenceGeo = new THREE.BoxGeometry(.14, .85, .14);
+  const fence = new THREE.InstancedMesh(fenceGeo, mats.barkLight, 18);
   const fenceDummy = new THREE.Object3D();
-  for (let i = 0; i < 33; i++) { fenceDummy.position.set((i - 16) * .75, 1.8 + random() * .15, -11.8); fenceDummy.rotation.z = (random() - .5) * .035; fenceDummy.updateMatrix(); fence.setMatrixAt(i, fenceDummy.matrix); }
+  for (let i = 0; i < 18; i++) { const side = i < 9 ? -1 : 1; fenceDummy.position.set((i % 9 - 4) * 1.6, .37, side * 5.25); fenceDummy.rotation.z = (random() - .5) * .03; fenceDummy.updateMatrix(); fence.setMatrixAt(i, fenceDummy.matrix); }
   fence.castShadow = true; fence.receiveShadow = true; group.add(fence);
-  const tree = mesh(new THREE.CylinderGeometry(.72, 1.05, 11, 9), mats.bark, -9, 5.2, -9); tree.rotation.z = -.07;
+  for (const z of [-5.25, 5.25]) for (const y of [.23, .58]) mesh(new THREE.BoxGeometry(13.4, .075, .075), mats.barkLight, 0, y, z);
+  for (const x of [-7.5, 7.5]) { const tree = mesh(new THREE.CylinderGeometry(.32, .55, 6.8, 9), mats.bark, x, 3.1, -5.9); tree.rotation.z = x > 0 ? -.04 : .04; }
   const mossGeo = new THREE.SphereGeometry(1, 12, 8);
   const mossPositions = mossGeo.attributes.position;
   for (let i = 0; i < mossPositions.count; i++) {
@@ -137,20 +150,20 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     mossPositions.setXYZ(i, x * lobe, y * (1 + Math.sin(x * 11 + z * 8) * .1), z * lobe);
   }
   mossGeo.computeVertexNormals();
-  const moss = new THREE.InstancedMesh(mossGeo, mats.moss, 650); moss.receiveShadow = true; moss.castShadow = true;
+  const moss = new THREE.InstancedMesh(mossGeo, mats.moss, 220); moss.receiveShadow = true; moss.castShadow = true;
   const dummy = new THREE.Object3D(), color = new THREE.Color();
-  for (let i = 0; i < 650; i++) {
-    const x = (random() - .5) * 29, z = (random() - .5) * 25;
-    const radius = .1 + random() * .25; dummy.position.set(x, -.025, z); dummy.scale.set(radius, .095 + radius * .48, radius * (.7 + random() * .55)); dummy.rotation.y = random() * 6.28; dummy.updateMatrix(); moss.setMatrixAt(i, dummy.matrix);
+  for (let i = 0; i < 220; i++) {
+    const x = (random() - .5) * 17, z = (random() - .5) * 13;
+    const inCenter = Math.abs(x) < 3.5 && Math.abs(z) < 2.5; const radius = (.07 + random() * .13) * (inCenter ? (random() < .12 ? .2 : 0) : 1); dummy.position.set(x, -.025, z); dummy.scale.set(radius, radius ? .025 + radius * .3 : 0, radius * (.7 + random() * .55)); dummy.rotation.y = random() * 6.28; dummy.updateMatrix(); moss.setMatrixAt(i, dummy.matrix);
     color.setHSL(.23 + random() * .03, .06, .78 + random() * .18); moss.setColorAt(i, color);
   }
   group.add(moss);
   // Fine grass is instanced, leaving the observation clearing readable.
   const blade = new THREE.ConeGeometry(.045, .29, 3); blade.translate(0, .145, 0);
-  const grass = new THREE.InstancedMesh(blade, mats.youngLeaf, 850);
-  for (let i = 0; i < 850; i++) {
-    const x = (random() - .5) * 28, z = (random() - .5) * 24;
-    dummy.position.set(x, -.03, z); dummy.scale.setScalar(.5 + random()); dummy.rotation.set((random() - .5) * .5, random() * 6.28, (random() - .5) * .5); dummy.updateMatrix(); grass.setMatrixAt(i, dummy.matrix);
+  const grass = new THREE.InstancedMesh(blade, mats.youngLeaf, 500);
+  for (let i = 0; i < 500; i++) {
+    const x = (random() - .5) * 16, z = (random() - .5) * 12;
+    dummy.position.set(x, -.03, z); dummy.scale.setScalar((.3 + random() * .4) * (Math.abs(x) < 3.5 && Math.abs(z) < 2.5 ? .26 : 1)); dummy.rotation.set((random() - .5) * .5, random() * 6.28, (random() - .5) * .5); dummy.updateMatrix(); grass.setMatrixAt(i, dummy.matrix);
   }
   group.add(grass);
   const leafGeo = new THREE.SphereGeometry(1, 12, 8); leafGeo.scale(.48, .085, 1.25);
@@ -167,28 +180,39 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     batchMeshes(plantRoot);
     sway.push(plantRoot);
   }
-  for (let i = 0; i < 23; i++) {
-    const theta = i / 23 * Math.PI * 2;
-    plant(Math.sin(theta) * (9.6 + random() * 2), Math.cos(theta) * (8.4 + random() * 2), 1.25 + random() * 1.2, 5);
+  for (let i = 0; i < 14; i++) {
+    const theta = i / 14 * Math.PI * 2;
+    plant(Math.sin(theta) * (6.7 + random() * .6), Math.cos(theta) * (4.8 + random() * .5), .3 + random() * .18, 3);
   }
-  plant(-7, 2.8, 2.4, 4); plant(7.4, -.8, 2.6, 4); plant(-4.6, -7.7, 2.9, 5); plant(4.3, -8.2, 3.1, 5);
-  const obstacles: GardenObstacle[] = transfer ? [{x:-.7,z:1,r:.8},{x:1.7,z:-.1,r:.65},{x:-4.5,z:-1.7,r:.65}] : [{x:0,z:-.6,r:.65},{x:-4.6,z:-2.8,r:.65},{x:4.9,z:1.5,r:.7}];
+  // Restrained daisies and small woodland flowers brighten selected border pockets.
+  const petalParts: THREE.BufferGeometry[] = [];
+  for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2; const petal = new THREE.SphereGeometry(.055, 6, 4); petal.scale(1, .2, .6); petal.rotateY(-a); petal.translate(Math.cos(a) * .055, 0, Math.sin(a) * .055); petalParts.push(petal); }
+  const flowerGeo = mergeGeometries(petalParts, false)!; petalParts.forEach(g => g.dispose());
+  const flowerStems = new THREE.InstancedMesh(new THREE.CylinderGeometry(.008, .012, .23, 4), mats.stem, 42);
+  const flowerCenters = new THREE.InstancedMesh(new THREE.SphereGeometry(.027, 6, 4), mats.flowerGold, 42);
+  const flowerMeshes = [mats.flowerWhite, mats.flowerGold, mats.flowerLilac].map(mat => new THREE.InstancedMesh(flowerGeo, mat, 14));
+  for (let i = 0; i < 42; i++) {
+    const a = i / 42 * Math.PI * 2 + random() * .14, x = Math.sin(a) * (5.8 + random() * .55), z = Math.cos(a) * (4.05 + random() * .45), y = .16 + random() * .13;
+    dummy.position.set(x, y, z); dummy.rotation.set(0, random() * 6.28, 0); dummy.scale.setScalar(.8 + random() * .35); dummy.updateMatrix(); flowerMeshes[i % 3].setMatrixAt(Math.floor(i / 3), dummy.matrix);
+    dummy.position.y = y + .02; dummy.scale.setScalar(1); dummy.updateMatrix(); flowerCenters.setMatrixAt(i, dummy.matrix);
+    dummy.position.y = y - .115; dummy.scale.set(1, y / .23 * 1.4, 1); dummy.updateMatrix(); flowerStems.setMatrixAt(i, dummy.matrix);
+  }
+  group.add(flowerStems, flowerCenters, ...flowerMeshes);
+  const obstacles: GardenObstacle[] = stage < 2 ? [] : (transfer ? TRANSFER_OBSTACLES : CLEARING_OBSTACLES).map(o => ({...o}));
   for (const o of obstacles) {
     const rock = mesh(new THREE.IcosahedronGeometry(o.r, 1), mats.stone, o.x, .25, o.z); rock.scale.set(1, .58, .87); rock.rotation.set(.1, random() * 3, .2);
     for (let j = 0; j < 5; j++) { const m = mesh(mossGeo, mats.lightMoss, o.x + (random() - .5) * .8, .49, o.z + (random() - .5) * .6); m.scale.set(.2, .14, .17); }
   }
   // Fallen twig gives a local trap landmark without blocking the center lane.
-  const twig = new THREE.Group(); twig.position.set(transfer ? 2 : -1.8, .09, transfer ? -3.7 : -2.5); twig.rotation.y = -.48; group.add(twig);
+  const twig = new THREE.Group(); twig.position.set(-3.1, .12, -4.55); twig.rotation.y = -.48; group.add(twig);
   const wood = new THREE.Mesh(new THREE.CylinderGeometry(.13, .18, 2.5, 9), mats.bark); wood.rotation.z = Math.PI / 2; wood.castShadow = true; wood.receiveShadow = true; twig.add(wood);
   for (const side of [-1, 1]) { const end = new THREE.Mesh(new THREE.CylinderGeometry(.118, .118, .012, 12), mats.barkLight); end.rotation.z = Math.PI / 2; end.position.x = side * 1.253; twig.add(end); }
   const branch = new THREE.Mesh(new THREE.CylinderGeometry(.035, .065, .75, 6), mats.bark); branch.position.set(-.3, .17, .23); branch.rotation.x = 1; branch.rotation.z = .8; twig.add(branch);
-  // Water and muddy shortcut sit below the collider plane.
-  const mud = mesh(new THREE.CircleGeometry(1.9, 24), mats.bark, transfer ? -2.7 : 2.9, -.035, transfer ? 2.8 : 1.8); mud.rotation.x = -Math.PI / 2; mud.rotation.z = .5; mud.scale.set(.62, 1.5, 1); mud.castShadow = false;
-  const puddle = mesh(new THREE.CircleGeometry(1.1, 32), mats.water, transfer ? -4.5 : 4.6, -.025, transfer ? 2.6 : -.1); puddle.rotation.x = -Math.PI / 2; puddle.scale.set(1, .63, 1); puddle.castShadow = false;
+  // Earth is painted into the meadow texture; flat overlay disks clipped the uneven terrain.
   for (let i = 0; i < 45; i++) {
-    const x = (random() - .5) * 25, z = (random() - .5) * 22;
-    if (Math.abs(x) < 7.8 && Math.abs(z) < 6.8) continue;
-    const rock = mesh(new THREE.IcosahedronGeometry(.3 + random() * .7, 1), i % 3 ? mats.stone : mats.bark, x, .05 + random() * .12, z); rock.scale.y = .45; rock.rotation.set(random(), random(), random());
+    const x = (random() - .5) * 16, z = (random() - .5) * 12;
+    if (Math.abs(x) < 6.2 && Math.abs(z) < 4.5) continue;
+    const rock = mesh(new THREE.IcosahedronGeometry(.25 + random() * .3, 1), i % 3 ? mats.stone : mats.bark, x, .05 + random() * .12, z); rock.scale.y = .45; rock.rotation.set(random(), random(), random());
   }
   const dewGeo = new THREE.SphereGeometry(.045, 7, 5);
   for (let i = 0; i < 24; i++) { const theta = random() * Math.PI * 2; mesh(dewGeo, mats.dew, Math.sin(theta) * (7.5 + random() * 2), .14 + random() * .12, Math.cos(theta) * (6.4 + random() * 2)).castShadow = false; }
@@ -211,22 +235,40 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   };
 }
 
+export type CritterKind = 'rabbit' | 'deer' | 'tortoise';
+export const CRITTER_ASSETS: Record<CritterKind, { file: string; bytes: number; joints: number; clips: string[] } | null> = {
+  rabbit: { file: 'rabbit.glb', bytes: 1195884, joints: 31, clips: ['preset:quadruped:walk'] },
+  deer: { file: 'deer.glb', bytes: 1263100, joints: 35, clips: ['preset:quadruped:walk'] },
+  tortoise: { file: 'tortoise.glb', bytes: 1402120, joints: 32, clips: ['preset:quadruped:walk'] },
+};
+export const TRIPO_ASSETS_READY = Object.values(CRITTER_ASSETS).every(Boolean);
 const loader = new GLTFLoader();
-const critterCache = new Map<string, Promise<{scene: THREE.Group; animations: THREE.AnimationClip[]}>>();
-/** Fails explicitly until an acquired asset exists; never substitutes generated primitives. */
-export const TRIPO_ASSETS_READY = false;
-export async function loadCritter(kind: 'puffling' | 'hopper' | 'shellback'): Promise<CritterVisual | null> {
-  if (!TRIPO_ASSETS_READY) return null;
-  const url = `${import.meta.env.BASE_URL}models/${kind}.glb`;
+const critterCache = new Map<string, Promise<{ scene: THREE.Group; animations: THREE.AnimationClip[] }>>();
+function cachedCritter(kind: CritterKind) {
+  const asset = CRITTER_ASSETS[kind];
+  if (!asset) return null;
+  const url = `${import.meta.env.BASE_URL}models/${asset.file}`;
   if (!critterCache.has(url)) critterCache.set(url, loader.loadAsync(url));
-  const gltf = await critterCache.get(url)!;
-  const root = clone(gltf.scene) as THREE.Group;
-  const bounds = new THREE.Box3().setFromObject(root), size = bounds.getSize(new THREE.Vector3());
-  const targetHeight = kind === 'hopper' ? 1.25 : kind === 'shellback' ? .65 : .78;
-  root.scale.multiplyScalar(targetHeight / Math.max(size.y, .01));
-  const adjusted = new THREE.Box3().setFromObject(root); root.position.y -= adjusted.min.y;
-  root.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
-  const mixer = new THREE.AnimationMixer(root); const clips = gltf.animations;
-  if (clips.length) mixer.clipAction(clips.find(c => /idle|walk/i.test(c.name)) ?? clips[0]).play();
+  return critterCache.get(url)!;
+}
+/** Warm only acquired local assets; partial acquisition never requests phantom files. */
+export async function preloadCritters() {
+  return Promise.allSettled((Object.keys(CRITTER_ASSETS) as CritterKind[]).map(kind => cachedCritter(kind)).filter((p): p is NonNullable<typeof p> => p !== null));
+}
+/** Real skinned GLBs only. Individual kinds become usable as their exports are verified. */
+export async function loadCritter(kind: CritterKind): Promise<CritterVisual | null> {
+  const pending = cachedCritter(kind);
+  if (!pending) return null;
+  const gltf = await pending;
+  const model = clone(gltf.scene) as THREE.Group;
+  const root = new THREE.Group(); root.name = `${kind}-visual`; root.add(model);
+  const bounds = new THREE.Box3().setFromObject(model), size = bounds.getSize(new THREE.Vector3());
+  const targetHeight = kind === 'deer' ? 1.45 : kind === 'tortoise' ? .65 : 1.1;
+  model.scale.multiplyScalar(targetHeight / Math.max(size.y, .01));
+  const adjusted = new THREE.Box3().setFromObject(model), center = adjusted.getCenter(new THREE.Vector3());
+  model.position.x -= center.x; model.position.z -= center.z; model.position.y -= adjusted.min.y;
+  model.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
+  const mixer = new THREE.AnimationMixer(model), clips = gltf.animations;
+  if (clips.length) mixer.clipAction(clips.find(c => /walk/i.test(c.name)) ?? clips[0]).play();
   return { root, mixer, clips };
 }

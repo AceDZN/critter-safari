@@ -1,0 +1,127 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "playing",
+  "phase": "place-catcher",
+  "variant": 0,
+  "contract": 1,
+  "instruction": "Catch the rabbit that prefers leaves.",
+  "trap": null,
+  "baits": [],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -1.48,
+      "z": 0.39,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 2.4,
+      "z": -0.47,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "captureId": null,
+  "correct": false,
+  "attempts": 1,
+  "hints": 0,
+  "completed": 0,
+  "message": "החיה שוחררה. מזיזים מלכודת, בוחרים מזון, ומנסים שוב.",
+  "events": [
+    {
+      "type": "restart",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 1.1,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "retry",
+      "level": 1,
+      "time": 1.1,
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 2,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 3.125
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 3.125
+      }
+    ],
+    "animatedModels": 2
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 4,
+    "mode": "playing",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.43779999017715454,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 44,
+    "triangles": 104408,
+    "pixelRatio": 1
+  }
+}

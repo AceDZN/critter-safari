@@ -1,0 +1,174 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "paused",
+  "phase": "place-catcher",
+  "variant": 0,
+  "contract": 2,
+  "instruction": "Catch the rabbit that is smaller than Moss but faster than Reed.",
+  "trap": null,
+  "baits": [],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -2,
+      "z": -0.6,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 2,
+      "z": 0.7,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    },
+    {
+      "id": "reed",
+      "name": "Reed",
+      "archetype": "deer",
+      "x": 0,
+      "z": -1.5,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 1.25,
+      "size": 0.8,
+      "habit": "rests beside twigs",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "completed": 1,
+  "message": "",
+  "events": [
+    {
+      "type": "restart",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 1.1,
+      "id": "pip",
+      "assisted": false
+    },
+    {
+      "type": "retry",
+      "level": 1,
+      "time": 1.1,
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 3.1,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 3.1,
+      "assisted": false
+    },
+    {
+      "type": "capture",
+      "level": 1,
+      "time": 4.2,
+      "id": "moss",
+      "assisted": false
+    },
+    {
+      "type": "contract-complete",
+      "level": 1,
+      "time": 4.2,
+      "id": "moss",
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 3,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0
+      },
+      {
+        "id": "reed",
+        "skins": 1,
+        "bones": 35,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0
+      }
+    ],
+    "animatedModels": 3
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 3,
+    "mode": "paused",
+    "musicVolume": 0.56,
+    "effectsVolume": 0.72,
+    "muted": true,
+    "musicGain": 0.10425187647342682,
+    "masterGain": 0,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": true,
+    "reducedMotion": true
+  },
+  "render": {
+    "drawCalls": 50,
+    "triangles": 125112,
+    "pixelRatio": 1
+  }
+}

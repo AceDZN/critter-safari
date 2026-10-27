@@ -1,0 +1,128 @@
+{
+  "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+  "mode": "playing",
+  "phase": "watch",
+  "variant": 0,
+  "contract": 1,
+  "instruction": "Catch the rabbit that prefers leaves.",
+  "trap": {
+    "x": -1.7763568394002505e-15,
+    "z": -1.7763568394002505e-15,
+    "arming": 0.55,
+    "pop": 0
+  },
+  "baits": [
+    {
+      "id": 6,
+      "x": -1.7763568394002505e-15,
+      "z": -1.7763568394002505e-15,
+      "diet": "berry",
+      "age": 0,
+      "flight": 0.38
+    }
+  ],
+  "creatures": [
+    {
+      "id": "moss",
+      "name": "Moss",
+      "archetype": "rabbit",
+      "x": -2,
+      "z": 0,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "leaf",
+      "usualSpeed": 0.62,
+      "size": 1.1,
+      "habit": "rests by ferns",
+      "carrying": null
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "archetype": "rabbit",
+      "x": 2,
+      "z": 0,
+      "y": 0,
+      "mode": "wander",
+      "preferredBait": "berry",
+      "usualSpeed": 1.55,
+      "size": 0.7,
+      "habit": "circles pebbles",
+      "carrying": null
+    }
+  ],
+  "obstacles": [],
+  "captureId": null,
+  "correct": false,
+  "attempts": 0,
+  "hints": 0,
+  "completed": 0,
+  "message": "הם בדרך! אפשר להוסיף פיתיון שיסיח חיה מתחרה.",
+  "events": [
+    {
+      "type": "restart",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "place-trap",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    },
+    {
+      "type": "bait",
+      "level": 1,
+      "time": 0,
+      "assisted": false
+    }
+  ],
+  "heldTool": null,
+  "planning": false,
+  "ready": true,
+  "art": {
+    "tripoReady": true,
+    "models": 2,
+    "rigs": [
+      {
+        "id": "moss",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0
+      },
+      {
+        "id": "pip",
+        "skins": 1,
+        "bones": 31,
+        "clip": "preset:quadruped:walk",
+        "mixerTime": 0
+      }
+    ],
+    "animatedModels": 2
+  },
+  "audio": {
+    "context": "running",
+    "loaded": 6,
+    "musicVoices": 1,
+    "activeEffects": 3,
+    "mode": "playing",
+    "musicVolume": 0.55,
+    "effectsVolume": 0.72,
+    "muted": false,
+    "musicGain": 0.5106948018074036,
+    "masterGain": 0.8999999761581421,
+    "loopSeconds": 57.6,
+    "error": ""
+  },
+  "settings": {
+    "muted": false,
+    "reducedMotion": false
+  },
+  "render": {
+    "drawCalls": 54,
+    "triangles": 108954,
+    "pixelRatio": 1
+  }
+}

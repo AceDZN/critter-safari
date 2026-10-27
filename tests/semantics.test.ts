@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLEARING_CREATURES, CONTRACTS, TRANSFER_CREATURES, type Contract, type CreatureSpec } from '../src/content';
+import { CLEARING_CREATURES, COMPARISON_CREATURES, CONTRACTS, INTRO_CREATURES, TRANSFER_CREATURES, type Contract, type CreatureSpec } from '../src/content';
 import { acceptsCapture, selectCandidates, validateContract } from '../src/semantics';
 
 // Hand-authored answer oracle. This does not compute expected answers using the selector.
@@ -39,9 +39,10 @@ test('all five original English fixtures have exactly the hand-authored target',
 });
 
 test('the same scene requires different decisions, all archetypes are targets', () => {
-  assert.ok(CONTRACTS.slice(0, 4).every((c) => c.creatures === CLEARING_CREATURES));
-  assert.notEqual(validateContract(CONTRACTS[1]!), validateContract(CONTRACTS[3]!));
-  assert.deepEqual(new Set(ORACLE.map(([id, target]) => CONTRACTS.find((c) => c.id === id)!.creatures.find((c) => c.id === target)!.archetype)), new Set(['puffling', 'shellback', 'hopper']));
+  assert.equal(CONTRACTS[2]!.creatures, CLEARING_CREATURES);
+  assert.equal(CONTRACTS[3]!.creatures, CLEARING_CREATURES);
+  assert.notEqual(validateContract(CONTRACTS[2]!), validateContract(CONTRACTS[3]!));
+  assert.deepEqual(new Set(ORACLE.map(([id, target]) => CONTRACTS.find((c) => c.id === id)!.creatures.find((c) => c.id === target)!.archetype)), new Set(['rabbit', 'tortoise', 'deer']));
 });
 
 test('bounded extremes exclude faster/slower outside-set distractors', () => {
@@ -59,14 +60,14 @@ test('strict comparisons reject equal endpoints and reject one-condition near mi
   assert.equal(acceptsCapture(CONTRACTS[2]!, 'reed'), false);
   assert.equal(acceptsCapture(CONTRACTS[2]!, 'pebble'), false); // speed is between; diet fails
   assert.equal(acceptsCapture(CONTRACTS[1]!, 'nib'), false); // small/fast; archetype fails
-  assert.equal(acceptsCapture(CONTRACTS[1]!, 'moss'), false); // puffling; speed and strict size fail
+  assert.equal(acceptsCapture(CONTRACTS[1]!, 'moss'), false); // rabbit; speed and strict size fail
 });
 
 test('ties, empty and ambiguous targets fail authoring instead of arbitrary selection', () => {
   const tied = CLEARING_CREATURES.map((c) => c.id === 'tumble' ? { ...c, usualSpeed: 1.25 } : { ...c });
   assert.throws(() => validateContract({ ...CONTRACTS[3]!, creatures: tied }), /found 2/);
   assert.throws(() => validateContract(withContract({ rule: { all: [{ kind: 'trait', trait: 'diet', value: 'stone' }] } })), /found 0/);
-  assert.throws(() => validateContract(withContract({ rule: { all: [{ kind: 'trait', trait: 'archetype', value: 'puffling' }] } })), /found 2/);
+  assert.throws(() => validateContract(withContract({ rule: { all: [{ kind: 'trait', trait: 'archetype', value: 'rabbit' }] } })), /found 2/);
   assert.throws(() => validateContract(withContract({ rule: { all: [], extreme: { measure: 'size', direction: 'min' } }, creatures: [] })), /found 0/);
 });
 
@@ -99,6 +100,35 @@ test('transfer uses new names, changed diet/size assignments and no solution hin
   assert.equal(transfer.helpHe, '');
   assert.ok(transfer.creatures.every((c) => !CLEARING_CREATURES.some((old) => old.id === c.id || old.name === c.name)));
   assert.notDeepEqual(transfer.creatures.map((c) => c.spawn), CLEARING_CREATURES.map((c) => c.spawn));
-  assert.equal(transfer.creatures.find((c) => c.id === 'echo')!.archetype, 'shellback');
+  assert.equal(transfer.creatures.find((c) => c.id === 'echo')!.archetype, 'tortoise');
   assert.equal(validateContract(transfer), 'brin');
+});
+
+
+test('onboarding grows from two rabbits to three candidates before six-actor comparisons', () => {
+  assert.equal(CONTRACTS[0]!.instruction, 'Catch the rabbit that prefers leaves.');
+  assert.equal(CONTRACTS[0]!.creatures, INTRO_CREATURES);
+  assert.deepEqual(INTRO_CREATURES.map((c) => [c.id, c.archetype, c.diet]), [['moss', 'rabbit', 'leaf'], ['pip', 'rabbit', 'berry']]);
+  assert.equal(CONTRACTS[1]!.creatures, COMPARISON_CREATURES);
+  assert.deepEqual(COMPARISON_CREATURES.map((c) => c.id), ['moss', 'pip', 'reed']);
+  assert.deepEqual(CONTRACTS.map((c) => c.creatures.length), [2, 3, 6, 6, 6]);
+});
+
+test('all authored spawn points fit the rebuilt fixed-camera world bounds', () => {
+  for (const contract of CONTRACTS) for (const c of contract.creatures) {
+    assert.ok(c.spawn[0] > -5.5 && c.spawn[0] < 5.5, `${c.id} x fits`);
+    assert.ok(c.spawn[1] > -3.8 && c.spawn[1] < 3.8, `${c.id} z fits`);
+  }
+});
+
+test('preferences describe individuals: a species does not determine preferred bait', () => {
+  for (const archetype of ['rabbit', 'deer', 'tortoise']) {
+    const members = CLEARING_CREATURES.filter((c) => c.archetype === archetype);
+    assert.deepEqual(new Set(members.map((c) => c.diet)), new Set(['leaf', 'berry']));
+  }
+  const berryRabbits = TRANSFER_CREATURES.filter((c) => c.archetype === 'rabbit' && c.diet === 'berry');
+  assert.deepEqual(berryRabbits.map((c) => c.id), ['brin', 'coda']);
+  assert.equal(validateContract(CONTRACTS[4]!), 'brin');
+  assert.equal(acceptsCapture(CONTRACTS[4]!, 'dune'), false, 'the berry-preferring tortoise is not the slowest individual');
+  for (const contract of CONTRACTS) assert.doesNotMatch(contract.instruction, /eats|eater/);
 });

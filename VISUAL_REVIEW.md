@@ -1,30 +1,35 @@
-# Visual review
+# Rebuild visual review — 27 October 2026
 
-## Targets before implementation
+## Fresh mockups before implementation
 
-Built-in image_gen produced two separate1672×941 concept views. The lead inspected target1 before gameplay source, and target2 before renderer work. Exact prompts and mode are under docs/visual-targets. Target1 establishes low first-person view, sunlit broad leaves, room to circle, bubble trap by twig, airborne lure and three natural creature silhouettes. Target2 establishes a captured puffling, escaping bait carrier and recoverable reset opportunity. Neither is a real capture.
+The user's feedback rejected the first-person flow and diagnostic creatures. Fresh built-in imagegen concepts were generated and inspected **before rebuilding gameplay**: first placement, a softer real-time style revision, and consequence/recovery. Exact prompts are in `docs/visual-targets/rebuild/prompts.md`; lead inspection is recorded beside them. The initial photoreal detail was rejected as an implementation target. The recovery concept's misplaced Moss tag above a tortoise was explicitly rejected as semantic truth.
 
-## Concept versus actual gameplay
+The adopted direction is a sunny, open woodland diorama with a fixed elevated camera, recognizable animals, cream contract, one Hebrew action prompt and a tangible three-item tray. Actual rendering is real Three.js geometry with local skinned GLBs, lighting, shadows, picking, authored collisions and skeletal animation.
 
-The comparisons use actual headed browser gameplay at the target viewport. Current creature geometry is explicitly diagnostic, with the Tripo art requirement open.
+## Concept versus actual, same desktop viewport
 
-| Concept target | Actual gameplay |
+| Rebuild concept | Actual rebuilt gameplay |
 |---|---|
-| ![First lure concept](docs/visual-targets/01-first-lure.png) | ![Actual first lure](docs/actual-captures/contract-1-lure.png) |
-| ![Recovery concept](docs/visual-targets/02-recovery.png) | ![Actual bounded-set capture](docs/actual-captures/contract-4-capture.png) |
+| ![Placement target](docs/visual-targets/rebuild/01-placement.png) | ![Actual initial clearing](docs/actual-captures/rebuild/01-first-view.png) |
+| ![Recovery target](docs/visual-targets/rebuild/02-recovery.png) | ![Actual wrong Pip capture](docs/actual-captures/rebuild/03-wrong-capture.png) |
 
-## Findings and fixes
+The first actual frame intentionally starts with only two rabbits. The later scene expands to six animals across rabbit, tortoise and deer families, keeping the same gestures. The concept images are targets, not screenshots of a shipped build.
 
-Lead and independent reviewer inspected first-view, lure, wrong catch, release, correct capture, transfer and completion frames. The real scene supplies eye-height depth, actual space to circle, matching solid stone landmarks, a twig, bubble ring/enclosure, a visible bait arc and a brass/wood gadget. The compact LTR parchment contract and Hebrew controls remain readable; captured feedback preserves the world instead of covering it with a full-screen grading popup.
+## Findings and changes
 
-The first actual build showed flat mustard soil, broad flattened moss polygons, overly large nearby name badges and gadget framing. Fixes: authored granular brown soil/roughness/bump, leaf veins, moss texture and smaller raised clumps; smaller constant-screen name badges; a compact gadget; capture actor pulled to the authoritative trap center; default aim brought inside trap range. Original pre-fix capture is retained separately below. The mobile journal initially clipped names from RTL scroll origin; LTR wrapper plus sticky names fixes that reading defect.
+- Replaced diagnostic silhouettes with three original Tripo animals after gallery inspection. Sculpted fur, long ears, patterned shell and a coherent small deer silhouette are now present, with real quadruped rigs and acquired Walk clips.
+- Removed walking/aiming/pulse requirements. The fixed camera puts trap placement and lure response in one view. Holding a tray item pauses planning; the landing ghost agrees with valid world/UI regions.
+- Opened the center and removed terrain-intersecting overlays that made jagged bands. Reduced moss/plant density and retained low perimeter rails, selective flowers and exact obstacle props. Contract1/2 have no central obstacle props.
+- Brought the first pair closer, corrected label colour space/tone mapping and made preference facts readable. The first action needs no notes modal. Size differences are visible without encoding the answer in colour.
+- Kept a compact transparent bubble and one release/continue card. Final mobile checks found stale caught-state guidance and overlapping unrelated labels; the prompt now matches the recovery action, the card names the individual, and other labels hide while caught.
+- Explicit LTR English, progress counts and range controls sit within the Hebrew interface. Touch capture/release/retry at390×844 and desktop progression through the transfer were visually inspected.
 
-| Before material refinement | Latest actual view |
-|---|---|
-| ![Pre-fix actual](docs/actual-captures/before-material-fix.png) | ![Actual first view](docs/actual-captures/02-first-view.png) |
+![Actual six-animal scene, Tumble captured](docs/actual-captures/rebuild/contract-3-capture.png)
 
-Lead and art owner inspected the refreshed1672×941 gameplay views plus390×844 mobile capture. Brown granular soil and raised textured moss now read clearly, and the smaller gadget leaves more world visible. Compact labels help scene readability, though nearby labels can still overlap. The target comparison remains an explicit partial match, with the required character pipeline open.
+## Remaining differences
 
-## Honest remainder
+This is a stylized real-time implementation. It has simpler grass, flatter terrain, harder shadows and less detailed vegetation than the concept; it does not match cinematic fur, dense foliage, soft depth of field or every HUD position. The first level's camera is closer than later levels to teach the gestures. The bubble is larger relative to animals during review, and the mobile recovery card occupies part of the world to preserve readable feedback and a usable button.
 
-The gap to concept art is still substantial. Required natural creature silhouettes, fur/shell detail and squash/body animation require actual acquired Tripo models and rigs/clips; none was obtained after browser controls timed out. Diagnostic geometry is labeled and cannot meet that acceptance gate. The environment is stylized authored geometry with procedural textures, without the target's dense photoreal surface detail or soft cinematic depth of field. The canopy is much darker and denser than the translucent sunlit target; bubble enclosure/rings are simpler and larger in close capture views. Mobile's success panel occupies a substantial part of the world while preserving the contract, creature and release/advance action. The target2 net icon is outside the specified two-tool scope; actual tools remain bait and reusable bubble trap. No final target-fidelity or completed character-art claim is made.
+The acquired clips supply locomotion only. Stationary, planning and caught animals freeze their current gait pose; separate breathing, idle and capture skeletal performances have not been authored. The trap animation, bait arc, carried food and capture pop are local object effects. No exact visual-fidelity, learner-fun or learning-effectiveness claim is made.
+
+Earlier targets and captures outside the `rebuild/` directories document the rejected first-person prototype and are not evidence of this version's current appearance or controls.

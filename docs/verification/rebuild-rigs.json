@@ -1,0 +1,56 @@
+[
+  {
+    "file": "public/models/rabbit.glb",
+    "bytes": 1195884,
+    "sha256": "a374444210a92c13801841c55d837be650e86a0ae508df0a7f33bb8fae11207c",
+    "skins": 1,
+    "joints": 31,
+    "weightedPrimitives": 1,
+    "triangles": 19404,
+    "clips": [
+      {
+        "name": "preset:quadruped:walk",
+        "duration": 2.5833332538604736,
+        "channels": 93,
+        "varyingSkeletalChannels": 15,
+        "rootXZRange": 2.408806487608217e-11
+      }
+    ]
+  },
+  {
+    "file": "public/models/tortoise.glb",
+    "bytes": 1402120,
+    "sha256": "c20319f24e571d897130553ae05321ea1c10dde65a0c343d9dec17b14d3ea990",
+    "skins": 1,
+    "joints": 32,
+    "weightedPrimitives": 1,
+    "triangles": 19034,
+    "clips": [
+      {
+        "name": "preset:quadruped:walk",
+        "duration": 2.5833332538604736,
+        "channels": 96,
+        "varyingSkeletalChannels": 17,
+        "rootXZRange": 5.199618513529458e-12
+      }
+    ]
+  },
+  {
+    "file": "public/models/deer.glb",
+    "bytes": 1263100,
+    "sha256": "23ef02815dad1b7a772e3483d6d0df84f9dddac0fb17517da4c45fd23020286b",
+    "skins": 1,
+    "joints": 35,
+    "weightedPrimitives": 1,
+    "triangles": 19478,
+    "clips": [
+      {
+        "name": "preset:quadruped:walk",
+        "duration": 2.5833332538604736,
+        "channels": 105,
+        "varyingSkeletalChannels": 18,
+        "rootXZRange": 2.276623334296346e-11
+      }
+    ]
+  }
+]

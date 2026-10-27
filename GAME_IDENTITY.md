@@ -1,24 +1,27 @@
 # Critter Safari — ספארי היצורים
 
-A tiny, sunlit wilderness becomes a hands-on capture puzzle. Read a field contract, observe the inhabitants, place a bubble snare, toss suitable bait, move out of their path, and trigger the trap at the right moment.
+A bright woodland toy: tempt the animal described in English into a bubble trap, watch the plan unfold, and bring a new friend to camp.
 
-## Sixty-second loop
-Read safely with time paused → inspect comparable field-note measurements → walk and circle a twig/stone → place a reusable trap → lure a creature through its capture radius → fire the bubble → release a mistaken catch or relocate a correct catch and take the next contract. Five escalating authored contracts form a finite slice. There is no answer selection panel.
+## The current loop
 
-## Failure and recovery
-A poor lure is ignored; an obstructed throw stops at terrain; an early pulse misses; a wrong catch is released with a short Hebrew explanation of the relevant phrase. Reset is immediate. Movement and bait affect current motion; English speed always means usual unbaited speed on the same surface. Reading, translation and notes pause simulation without penalty.
+The entire clearing is visible from a fixed elevated camera. Drag the trap onto clear grass, then drop a leaf or berry. Animals with that individual preference notice and approach; the first animal entering the ring is caught automatically. Other feeders can steal the snack or arrive first. Move the trap or use a second food drop to distract a rival. A mistaken catch is released with one button and retried in the same scene.
 
-## Visual thesis
-Warm daylight through giant broad leaves, velvety moss and rounded soil form a miniature terrarium with playful creature silhouettes, transparent dew and a brass/wood field gadget.
+The old first-person prototype required walking, camera aim, range, bait selection and pulse timing. The human rejected that flow as confusing and boring. The 26–27 October rebuild replaces it with two visible world gestures and a tap-to-select/tap-to-place alternative. It does not use tap-creature answer buttons or target snapping.
 
-## Camera and layout
-Creature-eye first person, drag-to-look and keyboard walking; optional fullscreen. A single full-bleed Three canvas dominates. The English contract is LTR in a quiet parchment band; Hebrew help/menus are RTL. A minimal two-tool tray and aim marker support action. Touch has a movement pad, camera drag and large trap/bait/pulse buttons.
+## First useful action
 
-## Content plan
-Start: one short Hebrew objective and Play. During play: contract, field notes, tool state. Paused help: controls and on-demand vocabulary. Capture feedback: small recoverable message. Finish: collected creatures and replay.
+Open directly on two recognizable rabbits and the English preference clause. Both rabbits have neutral, readable name/preference facts. One short Hebrew prompt asks for a trap drop, then changes to food placement. There is no title wall or mandatory journal before play. Holding an object pauses planning; dropping it resumes the animals. The first real-model browser check placed the trap in about1.9 seconds through normal inputs; this is automated evidence, not a learner usability study.
 
-## Interaction thesis
-Bait flies on a readable arc and changes real agent goals; creatures visibly accelerate toward suitable food. A bubble pulse expands, catches and lifts a creature; a failed pulse dissipates quickly. Leaves and dew move gently unless reduced motion is enabled. Recoil, footstep/bait/pulse audio and warm particles reward each action.
+## Five contracts
 
-## Implementation responsibility
-Lead: simulation, controls, rendering integration, browser verification and Git. Art owner: real Tripo assets, rigs/clips, environment art. Independent reviewer: English rules, authored fixtures, unique-target proof and independent tests.
+Actor counts grow2→3→6→6→6. Identification/preference becomes size versus pace, two constraints, a bounded superlative in the same scene with a different target, then new names/traits/terrain for transfer. Size, species, appearance, current bait speed and usual unbaited pace remain separate. Two verified reflected layouts vary surface routes without changing semantic truth.
+
+## Visual and audio direction
+
+Open sunlit meadow, warm earth path, restrained low foliage, small flowers and clear animal silhouettes. Real original Pro Tripo rabbit/tortoise/deer GLBs use weighted skeletons and in-place Walk clips. The camera frames the first two animals more closely and expands for larger groups; portrait uses the same direct gestures with a responsive view. No procedural character stand-ins remain.
+
+A restrained cream English contract, current Hebrew action cue, three tangible tray items and a small capture/release card support the world. Reading, help, settings and capture review preserve state. An original woodland waltz and five matching musical cues replace the former chirps. Music/effects levels are independent; global mute, reduced motion, restart and fullscreen remain available.
+
+## Verification bar
+
+Semantic fixtures and independent physical plans establish unique targets and tool solvability. Browser tests must use real pointer/touch/keyboard input, observe lure travel and recovery, exercise all five contracts, and inspect actual screenshots against the fresh mockups. No test injects wins. A fun or learning claim requires human evidence beyond automated checks.

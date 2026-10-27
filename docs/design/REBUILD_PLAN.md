@@ -29,7 +29,7 @@ Competing feeders can steal bait or reach the catcher first. A second food drop 
 4. Same scene as3, different English target from a bounded superlative.
 5. New names, trait assignments and terrain; same two gestures; no solution hint.
 
-Exact fixtures and independent oracles will be reauthored after the visual gate. Comparison truth remains based on usual unbaited speed on the same surface. Field notes/translation pause the world and remain optional before the first action. Do not make a target the only capturable creature or assign a fixed correct color.
+Exact fixtures and independent oracles were reauthored after the visual gate and pass the current test suite. Comparison truth remains based on usual unbaited speed on the same surface. Field notes/translation pause the world and remain optional before the first action. Do not make a target the only capturable creature or assign a fixed correct color.
 
 ## Visual direction and mockups
 

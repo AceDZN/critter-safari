@@ -1,41 +1,43 @@
-# Playtest record
+# Rebuilt slice verification — 27 October 2026
 
-26 October 2026. Playable prototype verification, with the required Tripo character pipeline still open.
+This record applies to the fixed elevated-camera rebuild, with real local Tripo animals and automatic capture. The earlier first-person prototype and its captures are historical. The user's rejection of its controls and creature art motivated this rebuild.
 
-## Independent rules and tool tests
+## Rules and physical simulation
 
-`npm test`: 25 passing tests. Independent numeric fixture tables establish unique targets, bounded sets, near misses, strict equality/tie rejection, missing references, invalid authoring and invariance under current movement modifiers. Ten authored physical plans (five contracts × two reflected layouts) walk through movement inputs, place a trap, toss matching bait, observe more than .9 ground units of lure-driven travel and pulse the correct capture. No actor positions, capture result or win state are assigned by tests. Unit tests select authored contracts to isolate scenarios; browser progression below runs them in order.
+`npm test`: **32 passing tests**. Independent numeric truth tables establish the five unique answers, bounded subsets, strict comparisons, ties, missing references, invalid authoring, near misses and invariance under temporary movement modifiers. Ten authored physical plans (five contracts × two reflected layouts) place a trap and food, observe actual lure-driven travel and catch the intended animal automatically. Tests do not assign capture/win states or move actors into the trap. Unit tests select authored contracts to isolate scenarios; the browser sequence progresses in order.
 
-Recovery tests catch real wrong Pip in contract1, release it, clear bait, restore charge and capture Moss on retry. Pause/notes/help freeze actor motion, flight, clock and recharge. Tests cover obstacles/LOS/range/cooldown/reset, wrong diet and restart. A direct ordinary ground-speed test matches the journal's0.62 for Moss. Capture pulls the authoritative actor to the trap center and exposes its lifted y=.35 position, matching the enclosure on screen. Restart begins a fresh local event history so completion counts refer to one safari.
+Physical tests also cover a wrong Pip catch, release and Moss retry; bait preference; invalid placement; body/obstacle clearance and detours; ordinary unbaited pace; planning/reading pause and trap arming; and restart. A separate regression checks that notes/help/settings opened during a capture return to that same capture/recovery state.
 
-## Desktop browser
+## Actual desktop production UI
 
-A headed Playwright process using installed Chromium1148 completed a normal-input sequence at1672×941:
+`npm run build` passes. `npm run test:browser`, using headed Chromium at 1672×941 against production preview4232, passed all five contracts through normal pointer drags, timed simulation advancement and actual lure/capture consequences. It also passed completion/restart, wrong catch/release/correct retry, notes during recovery, notes freezing, keyboard music level, mute and reduced motion. No JS errors or HTTP failures were reported. Evidence: `docs/verification/rebuild-desktop.json`; PNG/JSON pairs under `docs/actual-captures/rebuild/`.
 
-1. Start and read field notes; move/drag aim; place trap and throw berry bait; catch Pip during contract1 and observe a recoverable mistake.
-2. Release, lure Moss with leaves and capture correctly; advance through all five contracts using keyboard movement, pointer aiming, tool inputs and ordinary lure/capture timing. The fifth contract changes names, diets and obstacles.
-3. Reach the completed journal; restart; open vocabulary help and verify four seconds of manual advancement leave creatures unchanged; toggle mute and reduced motion in pause.
+The script reads observable state and a read-only world-to-screen projection, and advances time with the documented hook. It never assigns the runtime level, answer, actor position or win. The captured-state assertions check that the prompt describes release/continue, the card names the caught animal, and tools are disabled during review.
 
-The script reads `render_game_to_text` and uses `advanceTime` to step time; it never assigns a win, target capture, actor position or runtime level. The first run logged one resource404; an explicit local favicon was then added. The final stable build was rerun through the same full sequence after material, camera, name-label, capture-center, favicon and restart fixes: **passed, zero console errors and zero reported HTTP failures**. The latest captures replace the original gameplay views; pre-material-fix images are retained separately.
+Actual first-view, lure, wrong catch, release, correct rabbit/tortoise/deer catches, changed-context transfer, notes, settings and completion frames were inspected. The latest captures show the final prompt/name fixes. A prior RTL range-slider assertion exposed ambiguous direction; explicit LTR sliders now let ArrowRight increase the level.
 
-Screenshots/state are separately saved under docs/actual-captures. The independent reviewer inspected journal, wrong catch/release, correct capture, changed-context lure, completion and help. English and field-note values match original fixtures; no target beacon or answer panel appears. Automated plans know the fixtures: these are mechanical checks, not evidence that an unfamiliar learner finds the game fun or learns from it.
+## Independent visible UI, touch and keyboard
+
+The independent reviewer first inspected only the screenshot and visible DOM, before reading simulation state. At1280×800 it identified the trap tray and the instruction to drag it to the grass, and placed it on the first attempt without opening notes. This is an informed-agent assessment, not an unfamiliar learner study.
+
+At390×844, actual CDP touch drags placed a trap and berries, caught wrong Pip, opened and returned from notes to the same recovery, released it, and caught Moss with leaves on retry. The document width matched390px. Holding a selected item froze planning. Keyboard Enter selected without dropping, arrows moved in screen space, and a second Enter placed the trap. No JS/HTTP errors occurred.
+
+Two real findings were fixed and independently rechecked on the final production build: the caught-state prompt now describes the available next action, and the capture card names the animal while unrelated labels hide. Final mobile wrong/correct captures were visually inspected. Evidence: `docs/verification/rebuild-review.json` and `reviewer-final-mobile-*` frames.
 
 ## Required develop-web-game client
 
-Ran the installed `web_game_playwright_client.js` repeatedly after renderer changes. Initial localhost navigation exceeded its30s timeout. Explicit IPv4 preview produced an actual1280×720 intro screenshot/state, which lead and reviewer inspected. The stable optimized build then passed a complete client journal capture with no errors (`work/client-final`), inspected by lead. A longer mouse/tool action sequence hit its5s click-stability boundary and slow per-frame software rendering; that exact process was terminated, and is not counted as successful gameplay evidence. Headed normal-input desktop verification above supplies actual gameplay captures.
+The installed `web_game_playwright_client.js` ran against5232 after the rebuild. It selected the trap tool and clicked the ground via its action burst. The inspected1280×720 screenshot/state showed an actual placed trap, phase `drop-food`, two real skinned rabbits with31 bones each, and one decoded local music loop. No error file was produced. Copies are retained as `docs/verification/rebuild-required-client.json` and `docs/actual-captures/rebuild/required-client.png`. This verifies tap-select/tap-ground placement; the full desktop and touch sequences above verify consequences.
 
-Environment optimization reduced495 meshes/205 casters to66 meshes/59 casters plus one Points object. Redundant render work stops while paused/reading/manual stepping. Observed renderer counts and any frame-time sample are reported below; no broad hardware claim is inferred from this shared host.
+## Models and soundtrack
 
-## Mobile regression
+All three GLBs contain weighted skins and useful in-place skeletal Walk clips, not whole-object substitutes. `scripts/inspect-models.py` verifies hashes, joints, varying bone tracks and in-place root motion; output is in `docs/verification/rebuild-rigs.json`. Runtime actuals confirm model appearance and locomotion. Walk progression freezes during stationary/held/reading/caught states; a separate idle clip is not claimed.
 
-Initial390×844 touch entry reached field notes, but Playwright locator.tap timed out awaiting acknowledgement. The screenshot exposed an actual RTL-scroll issue: names were initially clipped. Fixed by explicit LTR scrolling and a sticky name column. The independent follow-up used real CDP touch input on headed Chromium with its default GPU. It passed movement, drag-to-look, trap placement, berry→leaf bait switching, throwing, observed lure travel and a correct Moss capture. No script errors or HTTP failures. The prior forced-software run stalled input acknowledgement; default GPU completed the sequence. Saved and inspected `mobile-01-journal`, `mobile-02-lure` and `mobile-03-capture` PNG/JSON pairs. Document width390 matched viewport390; the384px table scrolls in a322px pane, with names initially visible and sticky.
+The original57.6-second instrumental score and matching short effects replace the perceived noise background. The model-ready runtime audit checks gesture unlock, six decoded local buffers, one music voice across repeated notes/resume/restart, independent keyboard levels, mute, help freezing, fullscreen round trip, the blur event handler and restart. Automated tab activation did not change native focus/visibility in this run, so a native focus transition is not claimed as verified. Evidence and the scoped frame sample are in `docs/verification/rebuild-runtime.json`. AUDIO.md documents original composition, sample rights and rendering.
 
-## Open acceptance
+## Measured scope and remaining evaluation
 
-Actual Tripo GLBs, skeletal rigs and animation clips are absent due to the external browser-control timeout in ASSETS.md. They cannot be verified by browser tests. No production deployment or student learning/fun validation has been made.
+Static `dist/` contains15 files totaling **5,815,626 bytes**, including **3,861,104 bytes** of models and **1,178,987 bytes** of audio. Each model is below3MB. The runtime audit recorded89 active frame intervals after20 warmup frames at1672×941/DPR1 with two real rabbits: median8.3ms,95th percentile9.3ms,43 draw calls and104,072 triangles. This is a brief callback sample on the shared Mac, not a sustained student-device benchmark. Automated first trap placement took about two seconds in the earlier rebuilt UI check; it is not a learner completion-time estimate.
 
-## Final measured checkpoint
+The game is mechanically verified and ready for the user's playthrough. Automated and informed-agent checks do not establish fun, intuitive controls for a new learner, a6–10-minute learner duration, or learning gains. No production deployment was made. Dev5232 and preview4232 remain running.
 
-Static dist bytes:750,486 across HTML, JS, CSS, local font/license and favicon (required GLBs are absent). Vite reports JS623.44kB raw/165.35kB gzip. A brief headed default-GPU sample at1672×941, DPR1 recorded80 post-warm-up animation-frame intervals: median8.3ms,95th percentile10.2ms,131 draw calls and154,256 triangles. These are observed callback intervals on this shared host, not a sustained hardware benchmark or a claim for student devices.
-
-The actual game was also opened in the app browser pane, entered through the journal into playing mode using UI controls, and marked as a deliverable. `iab-deliverable.png` records that visible result. Dev5232 and preview4232 remain running.
+The final game was opened in a fresh in-app browser tab, a trap was placed through visible tap-select/tap-ground controls, and the food-drop prompt was verified. The tab is marked as the deliverable; `iab-deliverable.png` records it.

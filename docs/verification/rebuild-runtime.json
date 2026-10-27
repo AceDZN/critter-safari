@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-27",
+  "scope": "Production preview; two-actor initial scene; default GPU on shared Mac; 89 active requestAnimationFrame intervals after 20 warmup frames. Callback timing is not a sustained device benchmark.",
+  "performance": {
+    "samples": 89,
+    "medianMs": 8.3,
+    "p95Ms": 9.3,
+    "drawCalls": 43,
+    "triangles": 104072,
+    "pixelRatio": 1
+  },
+  "firstTrapDragMs": 389,
+  "checks": {
+    "gestureAudio": true,
+    "oneLoopAcrossNotesAndRestart": true,
+    "independentKeyboardLevels": true,
+    "mute": true,
+    "helpFreeze": true,
+    "fullscreenRoundTrip": true,
+    "blurEventHandlerPauses": true,
+    "nativeFocusTransition": "Not verified: automated tab activation did not change this window focus/visibility.",
+    "restart": true
+  },
+  "errors": [],
+  "http": [],
+  "observations": [
+    {
+      "label": "playing-after-gesture",
+      "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+      "mode": "playing",
+      "phase": "drop-food",
+      "variant": 1,
+      "contract": 1,
+      "instruction": "Catch the rabbit that prefers leaves.",
+      "trap": {
+        "x": -1.7763568394002505e-15,
+        "z": -1.7763568394002505e-15,
+        "arming": 0.05000000000000005,
+        "pop": 0
+      },
+      "baits": [],
+      "creatures": [
+        {
+          "id": "moss",
+          "name": "Moss",
+          "archetype": "rabbit",
+          "x": 1.77,
+          "z": 0.53,
+          "y": 0,
+          "mode": "wander",
+          "preferredBait": "leaf",
+          "usualSpeed": 0.62,
+          "size": 1.1,
+          "habit": "rests by ferns",
+          "carrying": null
+        },
+        {
+          "id": "pip",
+          "name": "Pip",
+          "archetype": "rabbit",
+          "x": -2.63,
+          "z": -0.25,
+          "y": 0,
+          "mode": "wander",
+          "preferredBait": "berry",
+          "usualSpeed": 1.55,
+          "size": 0.7,
+          "habit": "circles pebbles",
+          "carrying": null
+        }
+      ],
+      "obstacles": [],
+      "captureId": null,
+      "correct": false,
+      "attempts": 0,
+      "hints": 0,
+      "completed": 0,
+      "message": "מעולה! עכשיו גררו עלה או פרי אל השטח.",
+      "events": [
+        {
+          "type": "place-trap",
+          "level": 1,
+          "time": 1,
+          "assisted": false
+        }
+      ],
+      "heldTool": null,
+      "planning": false,
+      "ready": true,
+      "art": {
+        "tripoReady": true,
+        "models": 2,
+        "rigs": [
+          {
+            "id": "moss",
+            "skins": 1,
+            "bones": 31,
+            "clip": "preset:quadruped:walk",
+            "mixerTime": 1.102
+          },
+          {
+            "id": "pip",
+            "skins": 1,
+            "bones": 31,
+            "clip": "preset:quadruped:walk",
+            "mixerTime": 1.011
+          }
+        ],
+        "animatedModels": 2
+      },
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 1,
+        "mode": "playing",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0.5084190368652344,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      },
+      "settings": {
+        "muted": false,
+        "reducedMotion": false
+      },
+      "render": {
+        "drawCalls": 47,
+        "triangles": 107892,
+        "pixelRatio": 1
+      }
+    },
+    {
+      "label": "after-help-fullscreen-focus-restart",
+      "coordinateSystem": "ground x east, z south, y up; fixed camera; units metres",
+      "mode": "playing",
+      "phase": "place-catcher",
+      "variant": 1,
+      "contract": 1,
+      "instruction": "Catch the rabbit that prefers leaves.",
+      "trap": null,
+      "baits": [],
+      "creatures": [
+        {
+          "id": "moss",
+          "name": "Moss",
+          "archetype": "rabbit",
+          "x": 2,
+          "z": 0,
+          "y": 0,
+          "mode": "wander",
+          "preferredBait": "leaf",
+          "usualSpeed": 0.62,
+          "size": 1.1,
+          "habit": "rests by ferns",
+          "carrying": null
+        },
+        {
+          "id": "pip",
+          "name": "Pip",
+          "archetype": "rabbit",
+          "x": -2,
+          "z": 0,
+          "y": 0,
+          "mode": "wander",
+          "preferredBait": "berry",
+          "usualSpeed": 1.55,
+          "size": 0.7,
+          "habit": "circles pebbles",
+          "carrying": null
+        }
+      ],
+      "obstacles": [],
+      "captureId": null,
+      "correct": false,
+      "attempts": 0,
+      "hints": 0,
+      "completed": 0,
+      "message": "",
+      "events": [
+        {
+          "type": "restart",
+          "level": 1,
+          "time": 0,
+          "assisted": false
+        }
+      ],
+      "heldTool": null,
+      "planning": false,
+      "ready": true,
+      "art": {
+        "tripoReady": true,
+        "models": 2,
+        "rigs": [
+          {
+            "id": "moss",
+            "skins": 1,
+            "bones": 31,
+            "clip": "preset:quadruped:walk",
+            "mixerTime": 1.519
+          },
+          {
+            "id": "pip",
+            "skins": 1,
+            "bones": 31,
+            "clip": "preset:quadruped:walk",
+            "mixerTime": 1.169
+          }
+        ],
+        "animatedModels": 2
+      },
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 1,
+        "effectsVolume": 0.4,
+        "muted": false,
+        "musicGain": 0.6420527696609497,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      },
+      "settings": {
+        "muted": false,
+        "reducedMotion": false
+      },
+      "render": {
+        "drawCalls": 43,
+        "triangles": 104072,
+        "pixelRatio": 1
+      }
+    }
+  ]
+}

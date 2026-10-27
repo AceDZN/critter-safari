@@ -4,167 +4,182 @@ import { SafariSimulation, distance, type Point } from '../src/simulation';
 import type { Diet } from '../src/content';
 
 const DT = 1 / 60;
-const idle = (sim: SafariSimulation, seconds: number) => {
+function idle(sim: SafariSimulation, seconds: number) {
   for (let frame = 0; frame < Math.ceil(seconds / DT); frame++) sim.update(DT);
-};
-
-/** Drive through ordinary movement inputs; no actor, trap or capture state assignment. */
-function walk(sim: SafariSimulation, waypoints: readonly Point[]) {
-  for (const point of waypoints) {
-    let frames = 0;
-    while (distance(sim.player, point) > 0.075 && frames++ < 900) {
-      const dx = point.x - sim.player.x, dz = point.z - sim.player.z;
-      const length = Math.hypot(dx, dz);
-      sim.update(DT, { forward: -dz / length, strafe: dx / length, turn: 0 });
-    }
-    assert.ok(distance(sim.player, point) < 0.09, `reachable walking waypoint ${JSON.stringify(point)}; got ${JSON.stringify(sim.player)}`);
-  }
 }
 
-// Independent physical plans: target IDs come from the hand-authored answer table,
-// never from selectCandidates/validateContract. Offsets are relative to observed
-// current positions, as a player placing a lure beside a wandering animal would do.
+// Independent authored physical plans. IDs come from the curriculum oracle, not
+// selectCandidates/validateContract. Calls mirror only ordinary trap/food drops.
 const PLANS = [
-  { level: 0, id: 'moss', diet: 'leaf', via: [{ x: -2.5, z: 3 }], offset: { x: -1.8, z: 0 } },
-  { level: 1, id: 'pip', diet: 'berry', via: [{ x: 2.8, z: 3 }], offset: { x: 1.6, z: -1.2 } },
-  { level: 2, id: 'tumble', diet: 'leaf', via: [{ x: 3.4, z: 3 }, { x: 3.4, z: 0 }], offset: { x: 1.8, z: 0 } },
-  { level: 3, id: 'reed', diet: 'leaf', via: [{ x: -2, z: 3 }, { x: -2, z: -1.5 }], offset: { x: 0, z: -2 } },
-  { level: 4, id: 'brin', diet: 'berry', via: [{ x: 4, z: 4 }, { x: 4, z: -1 }], offset: { x: 0, z: -2 } },
+  { level: 0, id: 'moss', diet: 'leaf', trap: { x: 0, z: 0 } },
+  { level: 1, id: 'pip', diet: 'berry', trap: { x: 0, z: 1.3 } },
+  { level: 2, id: 'tumble', diet: 'leaf', trap: { x: 1.6, z: -2.2 } },
+  { level: 3, id: 'reed', diet: 'leaf', trap: { x: -2, z: -2.1 } },
+  { level: 4, id: 'brin', diet: 'berry', trap: { x: 4, z: -2.4 } },
 ] as const;
-type Plan = { level: number; id: string; diet: Diet; via: readonly Point[]; offset: Point };
+interface Plan { level: number; id: string; diet: Diet; trap: Point }
+const reflected = (point: Point, variant: 0 | 1): Point => ({ x: point.x * (variant ? -1 : 1), z: point.z });
 
-function lureAndCapture(sim: SafariSimulation, plan: Plan) {
-  walk(sim, plan.via);
+function dropAndCapture(sim: SafariSimulation, plan: Plan) {
+  const point = reflected(plan.trap, sim.variant);
   const target = sim.actors.find((actor) => actor.spec.id === plan.id)!;
-  const trapPoint = { x: target.x + plan.offset.x, z: target.z + plan.offset.z };
-  const startingDistance = distance(target, trapPoint);
-  assert.ok(startingDistance > 1.7, 'the actor begins outside the capture bubble');
-  assert.equal(sim.place(trapPoint), true, `place reachable trap for ${plan.id}: ${sim.message}`);
-  sim.diet = plan.diet; // Corresponds to the normal bait-type control.
-  assert.equal(sim.toss(trapPoint), true, `toss reachable lure for ${plan.id}: ${sim.message}`);
-  let sawLured = false;
-  for (let frame = 0; frame < 60 * 10; frame++) {
+  assert.ok(target, `independent fixture target ${plan.id} exists`);
+  const startDistance = distance(target, point);
+  assert.ok(startDistance > 1, 'the target begins outside the capture ring');
+  assert.equal(sim.place(point), true, `clear trap drop for ${plan.id}: ${sim.message}`);
+  assert.equal(sim.phase(), 'drop-food');
+  assert.equal(sim.toss(point, plan.diet), true, `food drop for ${plan.id}: ${sim.message}`);
+  assert.equal(sim.phase(), 'watch');
+  let sawLured = false, nearestBeforeCapture = startDistance;
+  for (let frame = 0; frame < 60 * 20 && sim.mode === 'playing'; frame++) {
     sim.update(DT);
-    if (target.mode === 'lured' || target.mode === 'eating') sawLured = true;
-    const nearest = sim.actors.filter((actor) => actor.mode !== 'caught').sort((a, b) => distance(a, trapPoint) - distance(b, trapPoint))[0];
-    if (sawLured && distance(target, trapPoint) < 0.75 && nearest?.spec.id === plan.id) {
-      assert.equal(sim.pulse(), true, `normal pulse catches ${plan.id}`);
-      assert.equal(sim.captureId, plan.id);
-      assert.ok(startingDistance - distance(target, trapPoint) > 0.9, 'the lure caused meaningful physical travel');
-      assert.ok(sim.events.some((event) => event.type === 'bait'));
-      return;
+    if (target.mode === 'lured' || target.mode === 'eating') {
+      sawLured = true;
+      nearestBeforeCapture = Math.min(nearestBeforeCapture, distance(target, point));
     }
   }
-  assert.fail(`No achievable lure/capture for ${plan.id}; ${JSON.stringify(sim.text())}`);
+  assert.equal(sim.mode, 'caught', `auto bubble must complete without pulse/camera/player input: ${JSON.stringify(sim.text())}`);
+  assert.equal(sim.captureId, plan.id, `the intended animal must arrive first: ${JSON.stringify(sim.text())}`);
+  assert.ok(sawLured, 'preferred food changes actual movement before capture');
+  assert.ok(startDistance - nearestBeforeCapture > 0.15, 'the lure produces travel before capture-centering, not just a visual snap');
+  assert.ok(sim.events.some((event) => event.type === 'bait'));
 }
 
-for (const variant of [0, 1] as const) for (const basePlan of PLANS) {
-  const sign = variant === 1 ? -1 : 1;
-  const plan = { ...basePlan, via: basePlan.via.map((p) => ({ x: p.x * sign, z: p.z })), offset: { x: basePlan.offset.x * sign, z: basePlan.offset.z } };
-  test(`variant ${variant}, contract ${plan.level + 1}: independently authored target can be lured and captured with normal tools`, () => {
+for (const variant of [0, 1] as const) for (const plan of PLANS) {
+  test(`variant ${variant}, contract ${plan.level + 1}: two ordinary drops lure and auto-capture the independent target`, () => {
     const sim = new SafariSimulation(variant);
-    sim.load(plan.level); // Authored scenario selection only; never browser success injection.
-    sim.start();
-    lureAndCapture(sim, plan);
+    sim.load(plan.level); // Authored unit scenario selection, never browser win injection.
+    dropAndCapture(sim, plan);
     assert.equal(sim.correct, true);
     assert.equal(sim.attempts, 1);
     sim.next();
-    assert.equal(sim.mode, plan.level === 4 ? 'complete' : 'notes');
+    assert.equal(sim.mode, plan.level === 4 ? 'complete' : 'playing');
+    assert.equal(sim.completed, plan.level + 1);
   });
 }
 
-test('wrong capture releases safely, clears bait and resets charge before a correct retry', () => {
+test('first useful action starts directly in the world, with only two candidate rabbits', () => {
   const sim = new SafariSimulation();
-  sim.start();
-  lureAndCapture(sim, { ...PLANS[1], level: 0 }); // Pip is a real, capturable wrong animal in contract 1.
+  assert.equal(sim.mode, 'playing');
+  assert.equal(sim.phase(), 'place-catcher');
+  assert.equal(sim.actors.length, 2);
+  assert.ok(sim.actors.every((actor) => actor.spec.archetype === 'rabbit'));
+  assert.equal(sim.place({ x: 0, z: 0 }), true);
+  assert.equal(sim.phase(), 'drop-food');
+  assert.match(sim.message, /גררו/);
+});
+
+test('the wrong rabbit is genuinely capturable, release returns the trap to its tray, and a correct retry works', () => {
+  const sim = new SafariSimulation();
+  dropAndCapture(sim, { level: 0, id: 'pip', diet: 'berry', trap: { x: 0, z: 0 } });
   assert.equal(sim.correct, false);
-  assert.equal(sim.mode, 'caught');
-  assert.match(sim.message, /eats leaves/);
+  assert.match(sim.message, /prefers leaves/);
   sim.next();
   assert.equal(sim.level, 0, 'wrong capture cannot advance the contract');
   sim.release();
   assert.equal(sim.mode, 'playing');
   assert.equal(sim.captureId, null);
+  assert.equal(sim.trap, null);
   assert.equal(sim.baits.length, 0);
-  assert.equal(sim.trap?.charge, 1);
+  assert.equal(sim.phase(), 'place-catcher');
   assert.equal(sim.actors.find((actor) => actor.spec.id === 'pip')!.mode, 'escape');
-  assert.ok(sim.events.some((event) => event.type === 'retry'));
-  lureAndCapture(sim, PLANS[0]);
+  idle(sim, 2); // Real release travel clears the trap area; no actor repositioning.
+  dropAndCapture(sim, PLANS[0]);
   assert.equal(sim.correct, true);
   assert.equal(sim.attempts, 2);
+  assert.ok(sim.events.some((event) => event.type === 'retry'));
 });
 
-test('reading, help and pause freeze movement, lure flight, cooldown and clock', () => {
+test('notes, vocabulary help and pause freeze animal travel, bait flight, arming and clock', () => {
   for (const panel of ['notes', 'help', 'paused'] as const) {
     const sim = new SafariSimulation();
-    sim.start();
-    assert.equal(sim.place({ x: 0, z: 3 }), true);
-    assert.equal(sim.toss({ x: 0, z: 3 }), true);
-    sim.pulse(); // Empty pulse begins an ordinary recharge.
+    assert.equal(sim.place({ x: 0, z: 0 }), true);
+    assert.equal(sim.toss({ x: 0, z: 0 }, 'leaf'), true);
     sim.open(panel);
-    const before = JSON.stringify(sim.text());
+    const before = JSON.stringify({ time: sim.time, world: sim.text() });
     idle(sim, 5);
-    assert.equal(JSON.stringify(sim.text()), before);
+    assert.equal(JSON.stringify({ time: sim.time, world: sim.text() }), before);
     if (panel === 'help') assert.equal(sim.hints, 1);
-    sim.start();
+    sim.resume();
     idle(sim, 0.1);
+    assert.equal(sim.mode, 'playing');
     assert.ok(sim.time > 0);
+    assert.ok(sim.trap!.arming < 0.55);
   }
 });
 
-test('range, collision, line of sight, pulse cooldown and trap reset have consequences', () => {
+test('a drop must land on clear grass, with room for the whole trap and no animal beneath it', () => {
   const sim = new SafariSimulation();
-  sim.start();
-  assert.equal(sim.place({ x: 0, z: -3 }), false, 'remote placement fails');
-  assert.equal(sim.toss({ x: 7, z: -5 }), false, 'remote toss fails');
-  walk(sim, [{ x: 0, z: 2 }]);
-  assert.equal(sim.place({ x: 0, z: -2 }), false, 'the central stone blocks placement line of sight');
-  assert.equal(sim.toss({ x: 0, z: -2 }), false, 'the central stone blocks a throw');
-  for (let i = 0; i < 180; i++) sim.update(DT, { forward: 1, strafe: 0, turn: 0 });
-  assert.ok(sim.player.z > 0.3, 'walking cannot cross the central solid stone');
-  assert.equal(sim.place({ x: 0, z: 3 }), true);
-  assert.equal(sim.pulse(), false, 'empty trap misses');
-  assert.equal(sim.trap?.charge, 0);
-  assert.equal(sim.pulse(), false, 'a second immediate pulse cannot fire');
-  idle(sim, 1);
-  assert.equal(sim.trap?.charge, 1);
+  assert.equal(sim.place({ x: 6, z: 0 }), false, 'outside the arena');
+  assert.equal(sim.place({ x: 4.8, z: 0 }), false, 'trap radius crosses the garden edge');
+  assert.equal(sim.place({ x: -2, z: 0 }), false, 'cannot drop directly onto Moss');
+  assert.equal(sim.toss({ x: 6, z: 0 }, 'leaf'), false, 'bait also respects the arena edge');
+  sim.load(2);
+  assert.equal(sim.place({ x: 0.15, z: -0.3 }), false, 'solid central stone');
+  assert.equal(sim.toss({ x: 0.15, z: -0.3 }, 'leaf'), false, 'bait cannot be hidden inside a stone');
+  assert.equal(sim.place({ x: 1.6, z: -2.2 }), true);
+  assert.equal(sim.toss({ x: 1.6, z: -2.2 }, 'leaf'), true);
   sim.resetTrap();
   assert.equal(sim.trap, null);
   assert.equal(sim.baits.length, 0);
+  assert.equal(sim.phase(), 'place-catcher');
 });
 
-test('wrong diet does not lure the target; restart returns an intact first contract', () => {
+test('an individual does not follow its non-preferred lure, while the other rabbit reacts', () => {
   const sim = new SafariSimulation();
-  sim.start();
-  walk(sim, PLANS[0].via);
   const moss = sim.actors.find((actor) => actor.spec.id === 'moss')!;
-  const point = { x: moss.x - 1.8, z: moss.z };
-  sim.diet = 'berry';
-  assert.equal(sim.toss(point), true);
-  for (let frame = 0; frame < 180; frame++) {
+  const pip = sim.actors.find((actor) => actor.spec.id === 'pip')!;
+  assert.equal(sim.toss({ x: 0, z: 0 }, 'berry'), true);
+  let pipReacted = false;
+  for (let frame = 0; frame < 120; frame++) {
     sim.update(DT);
     assert.notEqual(moss.mode, 'lured');
     assert.notEqual(moss.mode, 'eating');
+    if (pip.mode === 'lured' || pip.mode === 'eating') pipReacted = true;
   }
-  sim.open('help');
-  sim.restart();
-  assert.equal(sim.mode, 'intro');
-  assert.equal(sim.level, 0);
-  assert.equal(sim.trap, null);
-  assert.equal(sim.baits.length, 0);
-  assert.equal(sim.attempts, 0);
-  assert.equal(sim.hints, 0);
-  assert.equal(sim.captureId, null);
-  assert.ok(sim.actors.every((actor) => actor.mode === 'wander'));
+  assert.equal(pipReacted, true);
 });
 
-
-test('field-note usual speed equals ordinary unbaited travel on an unobstructed path', () => {
+test('a blocked approach takes a physical detour instead of crossing the central stone', () => {
   const sim = new SafariSimulation();
-  sim.start();
+  sim.load(2);
+  const nib = sim.actors.find((actor) => actor.spec.id === 'nib')!;
+  const rock = { x: 0.15, z: -0.3, r: 0.62 }; // Independent authored collider fixture.
+  assert.equal(sim.toss({ x: -1.8, z: -1.2 }, 'berry'), true);
+  let lured = false, reachedFarSide = false;
+  for (let frame = 0; frame < 360; frame++) {
+    sim.update(DT);
+    assert.ok(distance(nib, rock) >= 0.82 - 1e-5, 'Nib body stays outside the solid stone');
+    if (nib.mode === 'lured') lured = true;
+    if (lured && nib.x < -1) reachedFarSide = true;
+  }
+  assert.equal(lured, true);
+  assert.equal(reachedFarSide, true, 'bait on the opposite side remains physically achievable');
+});
+
+test('field-note usual pace equals ordinary unbaited motion on clear level ground', () => {
+  const sim = new SafariSimulation();
   const moss = sim.actors.find((actor) => actor.spec.id === 'moss')!;
   const before = { x: moss.x, z: moss.z };
   sim.update(DT);
   assert.equal(moss.mode, 'wander');
   assert.ok(Math.abs(distance(before, moss) - 0.62 * DT) < 1e-9);
+});
+
+test('restart produces a fresh first task, clears prior evidence and requires new drops', () => {
+  const sim = new SafariSimulation();
+  dropAndCapture(sim, PLANS[0]);
+  sim.next();
+  sim.open('help');
+  sim.restart();
+  assert.equal(sim.mode, 'playing');
+  assert.equal(sim.level, 0);
+  assert.equal(sim.completed, 0);
+  assert.equal(sim.trap, null);
+  assert.equal(sim.baits.length, 0);
+  assert.equal(sim.attempts, 0);
+  assert.equal(sim.hints, 0);
+  assert.equal(sim.captureId, null);
+  assert.equal(sim.actors.length, 2);
+  assert.deepEqual(sim.events.map((event) => event.type), ['restart']);
 });

@@ -1,0 +1,99 @@
+{
+  "assessment": "Informed-agent visible-UI walkthrough, not an unfamiliar learner study or validation of fun.",
+  "initialStateReadBeforeUsefulAction": false,
+  "checks": {
+    "firstDragPlaced": true,
+    "desktopAutoCapture": true,
+    "desktopSawLure": true,
+    "mobileOverflow": {
+      "viewport": 390,
+      "body": 390
+    },
+    "mobilePlanningFreeze": true,
+    "mobileTouchTrap": true,
+    "mobileWrongCapture": true,
+    "mobileNotesReturnToRecovery": true,
+    "mobileOneButtonRelease": true,
+    "mobileCorrectRetry": true,
+    "keyboardEnterOnlySelects": true,
+    "keyboardScreenDirections": true,
+    "keyboardSecondEnterDrops": true
+  },
+  "errors": [],
+  "failed": [],
+  "visibleOnlyAssessment": {
+    "viewport": [
+      1280,
+      800
+    ],
+    "observedContract": "Catch the rabbit that prefers leaves.",
+    "observedFirstPrompt": "גררו את המלכודת אל הדשא",
+    "preferenceEvidence": "Two readable name/fact labels: Pip prefers berries; Moss prefers leaves.",
+    "firstAction": "Dragged visible trap toy from tray to visually clear grass at screen coordinate [640,420].",
+    "attemptsBeforeUsefulDrop": 1,
+    "observedNextPrompt": "ועכשיו גררו עלה או פרי אל השטח",
+    "journalNeededBeforeFirstAction": false,
+    "interpretation": "The next two gestures were apparent to this informed reviewer from visible UI. No claim about an unfamiliar learner population or engagement."
+  },
+  "findings": [
+    {
+      "priority": 2,
+      "status": "fixed-and-verified",
+      "issue": "The top action prompt still says the animals are coming and suggests moving the trap/distracting a rival while a capture freezes the world.",
+      "evidence": "reviewer-desktop-capture.png; reviewer-mobile-wrong-capture.png",
+      "recommendation": "Use a captured-specific next-action prompt matching the capture-card button.",
+      "resolution": "Verified in the production preview at 390×844 through normal touch drags, wrong capture, one-button release, and correct retry. Final screenshots name the captured animal, retain only its world label, and show the matching next-action prompt.",
+      "finalEvidence": [
+        "reviewer-final-mobile-wrong-capture.png",
+        "reviewer-final-mobile-correct-capture.png"
+      ]
+    },
+    {
+      "priority": 2,
+      "status": "fixed-and-verified",
+      "issue": "On mobile caught Pip, the nearby Moss preference label overlaps the bubble and can obscure who was captured; the wrong-capture card does not name Pip.",
+      "evidence": "reviewer-mobile-wrong-capture.png",
+      "recommendation": "Name the captured individual in recovery feedback; suppress or separate other labels during a capture.",
+      "resolution": "Verified in the production preview at 390×844 through normal touch drags, wrong capture, one-button release, and correct retry. Final screenshots name the captured animal, retain only its world label, and show the matching next-action prompt.",
+      "finalEvidence": [
+        "reviewer-final-mobile-wrong-capture.png",
+        "reviewer-final-mobile-correct-capture.png"
+      ]
+    }
+  ],
+  "finalProductionTargetedRecheck": {
+    "url": "http://127.0.0.1:4232",
+    "viewport": [
+      390,
+      844
+    ],
+    "normalTouchDrags": true,
+    "wrongCapturePromptAndName": {
+      "prompt": "לחצו על ׳שחרור וניסיון נוסף׳ כדי לנסות שוב",
+      "card": "RELEASE & TRY AGAIN\nPip בתוך הבועה\n\nprefers leaves פירושו מעדיף עלים. לשני הארנבים העדפות פיתיון שונות.\n\nשחרור וניסיון נוסף ←",
+      "name": "Pip",
+      "button": "שחרור וניסיון נוסף ←"
+    },
+    "correctCapturePromptAndName": {
+      "prompt": "הצלחתם! לחצו על ׳עוד משימה׳ כדי להמשיך",
+      "card": "SAFE & SOUND\nMoss בדרך למחנה!\n\nבדיוק החיה שמתאימה לתיאור.\n\nעוד משימה ←",
+      "name": "Moss",
+      "button": "עוד משימה ←"
+    },
+    "releaseAndRetry": true,
+    "errors": [],
+    "failed": [],
+    "date": "2026-10-27",
+    "visualInspection": {
+      "wrongCaptureOnlyCaughtLabelVisible": true,
+      "correctCaptureOnlyCaughtLabelVisible": true,
+      "capturedIdentityClearInBubbleAndCard": true,
+      "wrongPromptMatchesReleaseButton": true,
+      "correctPromptMatchesContinueButton": true,
+      "captures": [
+        "reviewer-final-mobile-wrong-capture.png",
+        "reviewer-final-mobile-correct-capture.png"
+      ]
+    }
+  }
+}

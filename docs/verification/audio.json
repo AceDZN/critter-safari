@@ -1,0 +1,401 @@
+{
+  "passed": true,
+  "verified": {
+    "gestureUnlock": true,
+    "decodedBuffers": 6,
+    "loopSeconds": 57.6,
+    "oneMusicVoiceAcrossRepeatedResumeAndRestart": true,
+    "playingGainPositive": true,
+    "readingAndPauseFadeToZero": true,
+    "globalMuteAndRestore": true,
+    "independentPointerSliders": true,
+    "effectsFinishAndDisconnect": true,
+    "normalWrongCaptureReleaseAndCorrectCapture": true,
+    "captureDuckMultiplier": 0.22
+  },
+  "keyboardRangeWorks": false,
+  "maxActiveEffects": 12,
+  "errors": [],
+  "failed": [],
+  "observations": [
+    {
+      "label": "before-user-gesture",
+      "gameMode": "intro",
+      "audio": {
+        "context": "locked",
+        "loaded": 0,
+        "musicVoices": 0,
+        "activeEffects": 0,
+        "mode": "intro",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0,
+        "loopSeconds": 0,
+        "error": ""
+      }
+    },
+    {
+      "label": "initial-reading",
+      "gameMode": "notes",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "notes",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "playing",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0.550000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "reading-repeat-0",
+      "gameMode": "notes",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "notes",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "resume-repeat-0",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0.550000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "reading-repeat-1",
+      "gameMode": "notes",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "notes",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "resume-repeat-1",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0.550000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "reading-repeat-2",
+      "gameMode": "notes",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "notes",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "resume-repeat-2",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0.550000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "paused",
+      "gameMode": "paused",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "paused",
+        "musicVolume": 0.55,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "music-slider",
+      "gameMode": "paused",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "paused",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.72,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "effects-slider",
+      "gameMode": "paused",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "paused",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "muted",
+      "gameMode": "paused",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "paused",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": true,
+        "musicGain": 0,
+        "masterGain": 0,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "unmuted",
+      "gameMode": "paused",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "paused",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "custom-levels-playing",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.2800000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "effect-burst-finished",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.2800000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "capture-pip",
+      "gameMode": "caught",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 2,
+        "mode": "caught",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.06159999966621399,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "released-playing",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 1,
+        "mode": "playing",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.2800000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "capture-moss",
+      "gameMode": "caught",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 2,
+        "mode": "caught",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.06159999966621399,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "capture-effects-finished",
+      "gameMode": "caught",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "caught",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.06159999966621399,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    },
+    {
+      "label": "restart-playing",
+      "gameMode": "playing",
+      "audio": {
+        "context": "running",
+        "loaded": 6,
+        "musicVoices": 1,
+        "activeEffects": 0,
+        "mode": "playing",
+        "musicVolume": 0.28,
+        "effectsVolume": 0.41,
+        "muted": false,
+        "musicGain": 0.2800000011920929,
+        "masterGain": 0.8999999761581421,
+        "loopSeconds": 57.6,
+        "error": ""
+      }
+    }
+  ],
+  "scope": "Historical audio-engine check before final fixed-camera production build. Current integration: rebuild-runtime.json and rebuild-desktop.json."
+}
