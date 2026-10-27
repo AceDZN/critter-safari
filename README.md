@@ -1,5 +1,7 @@
 # Critter Safari — ספארי היצורים
 
+[Play in Workbook](https://english-games.workbook.co.il/critter-safari)
+
 A real3D woodland capture game for Hebrew-speaking grade-7/8 English learners. Read a short contract, drag a bubble trap onto the grass, and drop suitable food. Creatures follow the lure; the first one entering the ring is caught automatically.
 
 The rebuild replaces the rejected first-person prototype's movement/aim/pulse controls with **two direct world gestures**. It opens on two rabbits with an always-visible preference/pace/size roster and one Hebrew action prompt. Wrong animals remain capturable, with one-button release and retry. English changes whom to catch; placement and competing feeders change what actually happens.

@@ -1,0 +1,58 @@
+{
+  "base": "https://english-games.workbook.co.il",
+  "homeCard": true,
+  "detail": true,
+  "lessons": [
+    "https://english.workbook.co.il/grade-8/chapter-11",
+    "https://english.workbook.co.il/grade-7/chapter-3",
+    "https://english.workbook.co.il/grade-8/chapter-3",
+    "https://english.workbook.co.il/grade-8/chapter-11/relative-clauses-reference",
+    "https://english.workbook.co.il/grade-7/chapter-3/compare-two-places",
+    "https://english.workbook.co.il/grade-8/chapter-3/extremes-and-fair-comparisons"
+  ],
+  "deepLink": 5,
+  "iframe": "https://english-games.workbook.co.il/play/critter-safari/2026-10-27/index.html?level=5",
+  "capture": "brin",
+  "messages": [
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "ready"
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 5
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 5,
+      "durationMs": 1508
+    }
+  ],
+  "phone": {
+    "width": 390,
+    "contract": 3,
+    "models": 6
+  },
+  "errors": [],
+  "failed": [
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    },
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    }
+  ],
+  "notes": [
+    "Non-game HTTP failures retained for review"
+  ]
+}
