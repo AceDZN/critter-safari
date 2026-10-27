@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "level": 1,
+      "models": 2,
+      "capture": "moss",
+      "messages": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 1
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 1,
+          "durationMs": 2141
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "models": 3,
+      "capture": "pip",
+      "messages": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 2
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 2,
+          "durationMs": 1108
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "models": 6,
+      "capture": "tumble",
+      "messages": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 3
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 3,
+          "durationMs": 867
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "models": 6,
+      "capture": "reed",
+      "messages": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 4
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 4,
+          "durationMs": 1007
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "models": 6,
+      "capture": "brin",
+      "messages": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 5
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 5,
+          "durationMs": 1458
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

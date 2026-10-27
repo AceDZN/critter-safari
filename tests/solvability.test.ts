@@ -54,7 +54,8 @@ for (const variant of [0, 1] as const) for (const plan of PLANS) {
     assert.equal(sim.attempts, 1);
     sim.next();
     assert.equal(sim.mode, plan.level === 4 ? 'complete' : 'playing');
-    assert.equal(sim.completed, plan.level + 1);
+    assert.equal(sim.completed, 1);
+    assert.deepEqual(sim.completedLevels, [plan.level + 1]);
   });
 }
 

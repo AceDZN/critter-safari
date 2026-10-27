@@ -1,0 +1,10 @@
+{
+  "loadMs": 536,
+  "firstReadyMs": 348,
+  "desktopFiveContracts": true,
+  "wrongRecovery": true,
+  "notesFreeze": true,
+  "keyboardVolume": true,
+  "errors": [],
+  "http": []
+}

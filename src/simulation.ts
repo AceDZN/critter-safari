@@ -170,6 +170,8 @@ export class SafariSimulation {
   attempts = 0;
   hints = 0;
   completed = 0;
+  private finishedContracts = new Set<number>();
+  get completedLevels() { return [...this.finishedContracts].map(level => level + 1); }
   private baitId = 0;
   events: Array<{
     type: string;
@@ -318,7 +320,8 @@ export class SafariSimulation {
   next() {
     if (this.mode !== "caught" || !this.correct) return;
     this.noteEvent("contract-complete", this.captureId!);
-    this.completed = this.level + 1;
+    this.finishedContracts.add(this.level);
+    this.completed = this.finishedContracts.size;
     if (this.level === CONTRACTS.length - 1) {
       this.mode = "complete";
       return;
@@ -335,6 +338,7 @@ export class SafariSimulation {
   restart() {
     this.events = [];
     this.completed = 0;
+    this.finishedContracts.clear();
     this.load(0);
     this.noteEvent("restart");
   }
@@ -528,6 +532,7 @@ export class SafariSimulation {
       attempts: this.attempts,
       hints: this.hints,
       completed: this.completed,
+      completedLevels: this.completedLevels,
       message: this.message,
       events: this.events.slice(-12),
     };

@@ -6,7 +6,7 @@ The rebuild replaces the rejected first-person prototype's movement/aim/pulse co
 
 ## Run
 
-Node22.12+ recommended. `npm ci`, then `npm run dev` at http://localhost:5232 (strict port). `npm run build` creates static `dist/`; `npm run preview` serves http://localhost:4232 (strict port). Dependencies and lockfile are pinned. Relative Vite base, local models/font/audio; no backend, accounts, analytics, runtime AI, microphone or API keys.
+Node22.12+ recommended. `npm ci`, then `npm run dev` at http://localhost:5232 (strict port). `npm run build` creates static `dist/`; `npm run preview` serves http://localhost:4232 (strict port). Dependencies and lockfile are pinned. Relative Vite base, local models/font/audio; no backend, accounts, runtime AI, microphone or API keys. Standalone play sends no analytics; inside Workbook, a scoped parent bridge reports readiness and contract progress to the existing player.
 
 ## Controls
 
@@ -31,10 +31,12 @@ Three original private Pro Tripo models were generated after existing gallery ca
 
 ## Verification
 
-`npm test` runs36 independent semantic/physical/state tests, including all five captures in both reflected layouts, mistakes, recovery, pause, collision detours and preserved capture reading. `npm run test:browser` is the normal-input browser sequence; install Playwright Chromium with `npx playwright install chromium` if needed. `CRITTER_BROWSER_PATH` may select an installed Chromium binary, and `CRITTER_HEADLESS=1` enables headless.
+`npm test` runs40 independent semantic/physical/state/host tests, including all five captures in both reflected layouts, mistakes, recovery, pause, collision detours and preserved capture reading. `npm run test:browser` is the normal-input browser sequence; install Playwright Chromium with `npx playwright install chromium` if needed. `CRITTER_BROWSER_PATH` may select an installed Chromium binary, and `CRITTER_HEADLESS=1` enables headless.
 
 PLAYTEST.md and VISUAL_REVIEW.md distinguish the rebuilt slice's actual desktop/touch evidence and remaining visual differences from historical prototype captures. Fresh built-in imagegen concepts/prompts are in docs/visual-targets/rebuild; actual frames are separately under docs/actual-captures/rebuild. Automated plans establish solvability and input behavior; they do not establish fun or learning gains.
 
-## Static Vercel preparation
+## Workbook release
 
-Framework Vite; build command `npm run build`; output directory `dist`. No server or environment variables required. Prepared for static hosting; no production deployment has been requested or made. Main receives working checkpoints, without force pushes.
+The English games app in `AceDZN/acedzn-tools` hosts the static build through its existing same-origin R2 rewrite. `?level=1` through `?level=5` open the corresponding contract. The bridge emits ready after actual models render, then one start and one successful completion per contract. Wrong captures, notes and retries do not report success. Direct entry counts only contracts actually completed. See workbook/README.md and docs/verification/workbook-host.json.
+
+Build command `npm run build`; output directory `dist`; relative Vite assets require no game environment variables. The human approved release to the existing Workbook games app on27 October2026. Main receives working checkpoints, without force pushes.

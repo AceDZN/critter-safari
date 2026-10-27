@@ -9,12 +9,17 @@ import {
   type CritterVisual,
 } from "./world-art";
 import { SafariAudio } from "./audio";
+import { initHost, parseLevelParam, postToHost, WorkbookSession } from "./host";
 import "./style.css";
+initHost("critter-safari");
 const $ = <T extends HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const game = new SafariSimulation(Math.random() < 0.5 ? 0 : 1),
   soundtrack = new SafariAudio(),
   canvas = $<HTMLCanvasElement>("game");
+const requestedLevel = parseLevelParam(location.search, CONTRACTS.length);
+if (requestedLevel !== null) game.load(requestedLevel);
+const workbookSession = new WorkbookSession(postToHost);
 let renderer: THREE.WebGLRenderer;
 try {
   renderer = new THREE.WebGLRenderer({
@@ -57,6 +62,7 @@ let garden = createGarden(scene, false, game.variant, 0),
   shownLevel = -1,
   assetVersion = 0,
   ready = false,
+  hasRenderedModels = false,
   dirty = true,
   lastMode = "",
   lastMessage = "",
@@ -145,6 +151,7 @@ const contactGeometry = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 async function buildAnimals() {
   const version = ++assetVersion;
   ready = false;
+  hasRenderedModels = false;
   $("loading").hidden = false;
   $("loading").textContent = "החיות מגיעות לקרחת היער…";
   for (const view of views.values()) {
@@ -237,6 +244,7 @@ async function buildAnimals() {
     $("loading").textContent =
       "המודלים החדשים עדיין בהכנה. המשחק לא מציג יצורי דמה.";
     console.error("Critter models unavailable", error);
+    postToHost({ type: "error", message: "Required critter models could not be loaded." });
   }
 }
 const catcher = new THREE.Group();
@@ -527,7 +535,7 @@ function modalHTML() {
   if (game.mode === "help")
     return `<div class="eyebrow">PAUSED / LITTLE FIELD GUIDE</div><h2>מלכודת, פיתיון, בועה!</h2><p>גררו את המלכודת אל דשא פנוי, ואז גררו עלה או פרי לשטח. החיות שמעדיפות את המזון יתקרבו. הראשונה שנכנסת למלכודת נלכדת אוטומטית.</p><p>${c.helpHe || "קראו את התיאור החדש ובדקו את הנתונים החדשים ביומן."}</p><div class="glossary">${GLOSSARY.map(([en, he]) => `<div><b dir="ltr" lang="en">${en}</b><span>${he}</span></div>`).join("")}</div><p class="fine">אפשר לבחור כלי ואז להקיש על הדשא. במקלדת: Enter לבחירה, חיצים למיקום, Enter להנחה. אין צורך ללכת או לכוון מצלמה.</p><div class="actions"><button id="resume-btn" class="primary">מנסים בשטח ←</button><button id="help-notes" class="quiet">פתיחת יומן</button></div>`;
   if (game.mode === "complete")
-    return `<div class="eyebrow">FIVE LITTLE ADVENTURES</div><h2>מחנה מלא חברים חדשים!</h2><div class="stamp-row">${CONTRACTS.map(() => "<span>✦</span>").join("")}</div><p>כל חמש המשימות הושלמו, כולל קרחת היער עם השמות וההרגלים החדשים.</p><div class="actions"><button id="restart-btn" class="primary">עוד ספארי ←</button></div>`;
+    return `<div class="eyebrow">LITTLE WOODLAND ADVENTURES</div><h2>החברים הגיעו למחנה!</h2><div class="stamp-row">${game.completedLevels.map(() => "<span>✦</span>").join("")}</div><p>${game.completed === CONTRACTS.length ? "כל חמש המשימות הושלמו, כולל קרחת היער עם השמות וההרגלים החדשים." : `${game.completed === 1 ? "משימה אחת הושלמה" : `${game.completed} משימות הושלמו`} במסע הזה. אפשר להתחיל ספארי מלא מהמשימה הראשונה.`}</p><div class="actions"><button id="restart-btn" class="primary">עוד ספארי ←</button></div>`;
   return `<div class="eyebrow">THE CLEARING IS PAUSED</div><h2>הפסקה קטנה</h2><p>החיות מחכות. חוזרים כשמוכנים.</p><div class="actions"><button id="resume-btn" class="primary">ממשיכים ←</button><button id="restart-btn" class="quiet">מסע חדש</button><button id="settings-help" class="quiet">איך משחקים?</button></div><div class="toggle-row"><button id="mute-btn" class="quiet">${soundtrack.muted ? "צליל כבוי" : "צליל פעיל"}</button><button id="motion-btn" class="quiet">${reduced ? "תנועה מופחתת" : "תנועה מלאה"}</button><button id="full-btn" class="quiet">מסך מלא</button></div><div class="audio-levels"><label for="music-volume">מוזיקה <output id="music-value">${Math.round(soundtrack.musicVolume * 100)}%</output></label><input id="music-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.musicVolume * 100}" aria-label="עוצמת מוזיקה"><label for="effects-volume">אפקטים <output id="effects-value">${Math.round(soundtrack.effectsVolume * 100)}%</output></label><input id="effects-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.effectsVolume * 100}" aria-label="עוצמת אפקטים"></div>`;
 }
 function bind(id: string, fn: () => void) {
@@ -638,6 +646,7 @@ function sync() {
       if (game.mode === "paused" || game.mode === "complete")
         bind("restart-btn", () => {
           game.restart();
+          workbookSession.restart();
           lastCapture = "";
           sync();
         });
@@ -674,6 +683,7 @@ function sync() {
       }
     }
   }
+  syncWorkbook();
 }
 bind("notes-btn", () => {
   game.open("notes");
@@ -942,7 +952,17 @@ function draw(dt = 0) {
   }
   placementBoundary.visible = held !== null && game.mode === "playing";
   renderer.render(scene, camera);
+  hasRenderedModels = ready;
+  syncWorkbook();
   dirty = false;
+}
+function syncWorkbook() {
+  workbookSession.sync({
+    ready: ready && hasRenderedModels,
+    level: game.level + 1,
+    complete: game.mode === "caught" && game.correct,
+    durationMs: game.time * 1000,
+  });
 }
 let lastStamp = performance.now(),
   syncAge = 0;
