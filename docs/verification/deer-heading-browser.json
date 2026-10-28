@@ -1,0 +1,58 @@
+{
+  "url": "http://localhost:4232/?level=4",
+  "patrol": {
+    "frames": 1842,
+    "moving": 1841,
+    "minBodyDot": 0.991636555564236,
+    "minHeadingDot": 0.9999999999999997,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.991636555564236,
+      "headingDot": 0.9999999999999999,
+      "dx": 0.0028693722265375476,
+      "dz": 0.011394261846454201,
+      "headingYaw": 0.24669658115852694,
+      "modelYaw": 1.5707963267948966
+    },
+    "variants": []
+  },
+  "approach": {
+    "frames": 721,
+    "moving": 576,
+    "minBodyDot": 0.9916429065852327,
+    "minHeadingDot": 0.9999999999999997,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.9916429065852327,
+      "headingDot": 0.9999999999999998,
+      "dx": 0.001934374677731096,
+      "dz": 0.009556186195660565,
+      "headingYaw": 0.1997225491473925,
+      "modelYaw": 1.5707963267948966
+    },
+    "variants": []
+  },
+  "manual": {
+    "moving": 120,
+    "minBodyDot": 0.9916512712649695
+  },
+  "capture": {
+    "level": 3,
+    "id": "reed",
+    "variant": 1,
+    "correct": true,
+    "firstCaptureHeadingPreserved": true,
+    "caughtGaitFrozen": true,
+    "nextLevel": 4
+  },
+  "pausedPreserved": true,
+  "errors": [],
+  "httpErrors": [],
+  "variantNote": "Capture variant is recorded separately. Patrol reflection was not preserved in this initial local report; final live runner records it explicitly."
+}

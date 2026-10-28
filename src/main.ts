@@ -3,6 +3,7 @@ import { SafariSimulation, distance, BOUNDS, TRAP_RADIUS, CALM_RADIUS, CALM_SECO
 import { CONTRACTS, CHAPTERS, GLOSSARY, type Archetype } from "./content";
 import { habitatForLevel } from "./habitats";
 import { SafariProgression } from "./progression";
+import { travelHeading } from "./locomotion";
 import {
   createGarden,
   loadCritter,
@@ -192,6 +193,7 @@ async function buildAnimals() {
       if (!visual) continue;
       const root = new THREE.Group(),
         heading = new THREE.Group();
+      heading.rotation.y = actor.angle;
       heading.add(visual.root);
       const contact = new THREE.Mesh(contactGeometry, contactMaterial);
       contact.position.y = .003;
@@ -1032,12 +1034,10 @@ function draw(dt = 0) {
       actor.mode === "caught" ? 0.12 : 0,
       actor.z,
     );
-    const turn = Math.atan2(
-      Math.sin(actor.angle - view.heading.rotation.y),
-      Math.cos(actor.angle - view.heading.rotation.y),
-    );
-    view.heading.rotation.y +=
-      turn * (reduced || dt === 0 ? 1 : Math.min(1, dt * 9));
+    // Translation and facing share the same displacement. Independent yaw easing
+    // made real-frame turns slide sideways/backward; zero-time test redraws hid it.
+    if (actor.mode !== "caught")
+      view.heading.rotation.y = travelHeading(view.last, actor, view.heading.rotation.y);
     view.tag.scale.set(
       (pxWorld * (innerWidth < 700 ? 68 : 86)) / actor.spec.size,
       (pxWorld * (innerWidth < 700 ? 20 : 25)) / actor.spec.size,
@@ -1149,6 +1149,18 @@ function advance(ms: number) {
   sync();
   draw(total / 1000);
 }
+function measuredDeerFacing(visual: CritterVisual) {
+  if (visual.root.name !== "deer-visual") return undefined;
+  const head = visual.root.getObjectByName("tripoHead_0");
+  const leftHip = visual.root.getObjectByName("tripo1_Left_Limb_0");
+  const rightHip = visual.root.getObjectByName("tripo1_Right_Limb_0");
+  if (!head || !leftHip || !rightHip) return undefined;
+  const forward = head.getWorldPosition(new THREE.Vector3()).sub(
+    leftHip.getWorldPosition(new THREE.Vector3()).add(rightHip.getWorldPosition(new THREE.Vector3())).multiplyScalar(.5),
+  );
+  forward.y = 0; forward.normalize();
+  return { x: forward.x, z: forward.z };
+}
 Object.assign(window, {
   render_game_to_text: () =>
     JSON.stringify({
@@ -1167,6 +1179,10 @@ Object.assign(window, {
           clip: v.lastClip,
           mixerTime: +v.visual.mixer.time.toFixed(3),
           playbackRate: +v.playbackRate.toFixed(3),
+          headingYaw: v.heading.rotation.y,
+          modelYaw: v.visual.root.rotation.y,
+          position: { x: v.root.position.x, z: v.root.position.z },
+          bodyForward: measuredDeerFacing(v.visual),
         })),
         animatedModels: [...views.values()].filter(
           (v) => v.visual.clips.length > 0,

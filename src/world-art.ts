@@ -484,9 +484,17 @@ export async function loadCritter(kind: CritterKind): Promise<CritterVisual | nu
   const pending = cachedCritter(kind);
   if (!pending) return null;
   const [gltf, rabbitGaits] = await Promise.all([pending, kind === 'rabbit' ? cachedRabbitGaits() : Promise.resolve(null)]);
+  return createCritterVisual(gltf, kind, rabbitGaits);
+}
+
+/** Assemble the same acquired rig for runtime and actual-model verification. */
+export function createCritterVisual(gltf: CritterSource, kind: CritterKind, rabbitGaits: RabbitGaits | null = null): CritterVisual {
   const grounding = groundedClips(gltf, kind, rabbitGaits);
   const model = clone(gltf.scene) as THREE.Group;
   const root = new THREE.Group(); root.name = `${kind}-visual`; root.add(model);
+  // The acquired deer is authored facing -X. Locomotion and carried food use +Z.
+  // Correct the unanimated wrapper so the imported bone tracks cannot undo it.
+  if (kind === 'deer') root.rotation.y = Math.PI / 2;
   normalizeCritter(model, kind);
   model.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
   const mixer = new THREE.AnimationMixer(model), clips = grounding.clips;

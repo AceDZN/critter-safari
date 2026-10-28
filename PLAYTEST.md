@@ -1,3 +1,12 @@
+## Deer facing correction — 28 October 2026
+
+The human's live level 4 screenshots exposed two defects missed by the earlier campaign tests. The acquired deer is authored facing -X while simulation heading uses +Z; its measured root has no animated turn that could explain the mismatch. A deer-only +pi/2 yaw on the unanimated visual wrapper corrects anatomy and gait together. Rabbit/tortoise orientations and every GLB/limb clip remain unchanged. Independently easing display yaw while translating caused additional backward/sideways frames at sharp corners. The display now faces its actual rendered displacement, keeps its facing when stationary, and ignores capture-centering teleports.
+
+All 125 tests and TypeScript/static build pass. Six new tests use the actual 35-joint deer, 257 off-key Walk poses in eight directions, 30 seconds at 60 FPS in both level 4 reflections and mixed frame durations. Actual anatomical forward stays within 7.5 degrees of travel. A normal-clock built-game check samples patrol and food motion without advanceTime, then pause/resume, small public fixed-frame steps, a genuine level 3 deer capture and Next. First caught-frame heading and frozen gait are asserted. In the final local run, 1,841 translating patrol frames and 576 approach frames had no backward or sideways-facing sample; minimum anatomical forward dot was 0.99163. The existing required game client also placed trap/leaf and made a genuine wrong-deer capture on level 4; its state and screenshot were inspected. No JS/HTTP errors occurred in those runs.
+
+Evidence is in docs/verification/deer-heading-*.json, tests/heading.test.ts, scripts/check-heading-browser.mjs and docs/actual-captures/heading. Exact frame sampling is verification of this motion, not a general device performance claim. Source rules, all 50 levels, saved progress and lesson mappings are unchanged. Workbook publication follows this frozen-build check.
+
+
 # Current50-level campaign —28 October2026
 
 The previous five-contract checks below are historical. Current source has50 sequential levels and63 capture objectives, with no grade picker or grade gate.
