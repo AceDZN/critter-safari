@@ -1,0 +1,71 @@
+{
+  "url": "http://localhost:4117/critter-safari/play?level=4",
+  "release": "2026-10-28-2",
+  "variant": 1,
+  "patrol": {
+    "frames": 1710,
+    "moving": 1709,
+    "minBodyDot": 0.9916452736911653,
+    "minHeadingDot": 0.9999999999999997,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.9916452736911653,
+      "headingDot": 1,
+      "dx": -0.0020978110003445904,
+      "dz": 0.008237061915927324,
+      "headingYaw": -0.2493780477257894,
+      "modelYaw": 1.5707963267948966
+    },
+    "modes": {
+      "wander": 1709
+    }
+  },
+  "approach": {
+    "frames": 699,
+    "moving": 559,
+    "minBodyDot": 0.9916465771211651,
+    "minHeadingDot": 0.9999999999999998,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.9916465771211651,
+      "headingDot": 1.0000000000000002,
+      "dx": -0.010837806834002435,
+      "dz": 0.0008986478892589744,
+      "headingYaw": -1.4880677042878299,
+      "modelYaw": 1.5707963267948966
+    },
+    "modes": {
+      "wander": 500,
+      "lured": 32,
+      "escape": 27
+    }
+  },
+  "manual": {
+    "moving": 120,
+    "minBodyDot": 0.9916578789937482
+  },
+  "capture": {
+    "level": 3,
+    "id": "reed",
+    "variant": 0,
+    "correct": true,
+    "firstCaptureHeadingPreserved": true,
+    "caughtGaitFrozen": true,
+    "nextLevel": 4
+  },
+  "wrongRelease": {
+    "mode": "playing",
+    "actorMode": "escape",
+    "forwardDot": 0.994192436487701
+  },
+  "pausedPreserved": true,
+  "errors": [],
+  "httpErrors": [],
+  "gameHttpErrors": []
+}

@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 const base=process.env.CRITTER_APP_ORIGIN||'http://localhost:4117', version=process.env.CRITTER_RELEASE_VERSION||'2026-10-28';
-const label=base.includes('localhost')?'local':'production',out=`work/campaign/workbook-${label}`;await fs.mkdir(out,{recursive:true});
+const label=base.includes('localhost')?'local':'production',out=process.env.CRITTER_WORKBOOK_OUT||`work/campaign/workbook-${label}`;await fs.mkdir(out,{recursive:true});
 const plans=JSON.parse(await fs.readFile('docs/verification/campaign-workbook-plans.json','utf8'));
 const browser=await chromium.launch({headless:false,args:['--mute-audio'],...(process.env.CRITTER_BROWSER_PATH?{executablePath:process.env.CRITTER_BROWSER_PATH}:{})});
 const context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1,hasTouch:true});

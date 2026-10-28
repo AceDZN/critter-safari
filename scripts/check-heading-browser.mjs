@@ -10,6 +10,13 @@ const page=await context.newPage(),errors=[],httpErrors=[];
 page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)httpErrors.push({url:r.url(),status:r.status()})});
 let frame;
 const state=async()=>JSON.parse(await frame.evaluate(()=>window.render_game_to_text()));
+async function selectGameFrame(){
+ if(new URL(page.url()).pathname.endsWith('/critter-safari/play')){
+  const iframe=page.locator('iframe[title="ספארי היצורים"]');await iframe.waitFor({state:'visible'});const handle=await iframe.elementHandle();frame=await handle.contentFrame();assert.ok(frame);
+ }else frame=page.mainFrame();
+ await frame.waitForFunction(()=>typeof window.render_game_to_text==='function'&&JSON.parse(window.render_game_to_text()).ready,null,{timeout:120000});
+}
+
 async function monitor(duration){return frame.evaluate(duration=>new Promise(resolve=>{
  const last=new Map(),result={frames:0,moving:0,minBodyDot:1,minHeadingDot:1,backward:0,sideways:0,worst:null,modes:{}};const start=performance.now();
  function sample(){
@@ -27,8 +34,8 @@ async function monitor(duration){return frame.evaluate(duration=>new Promise(res
  }requestAnimationFrame(sample);
 }),duration)}
 try{
- console.log('Opening actual game:',base);await page.goto(base);frame=page.frames().find(f=>f.url().includes('/play/critter-safari/'))||page.mainFrame();
- await frame.waitForFunction(()=>typeof window.render_game_to_text==='function'&&JSON.parse(window.render_game_to_text()).ready,null,{timeout:120000});await frame.evaluate(()=>document.fonts.ready);
+ console.log('Opening actual game:',base);await page.goto(base);const consent=page.getByRole('button',{name:/חיוניות בלבד/});await consent.waitFor({state:'visible',timeout:4000}).then(()=>consent.click()).catch(()=>{});await selectGameFrame();
+ await frame.waitForFunction(()=>typeof window.render_game_to_text==='function'&&JSON.parse(window.render_game_to_text()).ready,null,{timeout:120000});await frame.evaluate(()=>document.fonts.ready);if(process.env.CRITTER_RELEASE_VERSION)assert.ok(frame.url().includes(`/play/critter-safari/${process.env.CRITTER_RELEASE_VERSION}/`),'Actual Workbook iframe uses the expected immutable release');
  if((await state()).mode==='paused')await frame.locator('#resume-btn').click();
  const patrolVariant=(await state()).variant;await page.screenshot({path:`${out}/01-patrol.png`});console.log('Sampling ordinary requestAnimationFrame patrol, without advanceTime');
  const patrolPromise=monitor(16000);
@@ -44,7 +51,7 @@ try{
  // be mistaken for a new travel direction on the first caught frame.
  await page.addInitScript(()=>{if(window===window.top&&document.querySelector('iframe'))return;const timer=setInterval(()=>{if(typeof window.advanceTime==='function'){window.advanceTime(0);clearInterval(timer)}},1)});
  const captureUrl=new URL(base);captureUrl.searchParams.set('level','3');await page.goto(captureUrl.href);
- frame=page.frames().find(f=>f.url().includes('/play/critter-safari/'))||page.mainFrame();await frame.waitForFunction(()=>typeof window.render_game_to_text==='function'&&JSON.parse(window.render_game_to_text()).ready,null,{timeout:120000});await frame.evaluate(()=>window.advanceTime(0));
+ await selectGameFrame();await frame.evaluate(()=>window.advanceTime(0));
  const captureInitial=await state();assert.equal(captureInitial.elapsedSeconds,0);
  const plans=JSON.parse(await fs.readFile('docs/verification/campaign-physical-plans.json','utf8')),plan=plans.find(p=>p.level===3&&p.variant===captureInitial.variant),stage=plan.stages[0];
  assert.equal(captureInitial.creatures.find(a=>a.id===stage.id).archetype,'deer');
@@ -56,6 +63,14 @@ try{
  await frame.evaluate(()=>window.advanceTime(1000));const held=(await state()).art.rigs.find(r=>r.id===stage.id);assert.equal(held.headingYaw,caughtRig.headingYaw);assert.equal(held.mixerTime,caughtRig.mixerTime);await page.screenshot({path:`${out}/06-deer-capture.png`});
  await frame.locator('#capture-btn').click();await frame.waitForFunction(()=>JSON.parse(window.render_game_to_text()).ready);await frame.evaluate(()=>window.advanceTime(1000/60));assert.equal((await state()).contract,4);
  const capture={level:3,id:stage.id,variant:captureInitial.variant,correct:true,firstCaptureHeadingPreserved:true,caughtGaitFrozen:true,nextLevel:4};
- assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);await fs.writeFile(`${out}/results.json`,JSON.stringify({url:base,variant:patrolVariant,patrol,approach,manual,capture,pausedPreserved:true,errors,httpErrors},null,2));console.log('Actual deer facing follows real-clock patrol, food approach, pause/resume and fixed-frame updates.');
+
+ const reed=(await state()).art.rigs.find(r=>r.id==='reed'),wrongPoint={x:reed.position.x+1.12,z:reed.position.z};
+ for(const tool of ['catcher','leaf']){await frame.locator(`#${tool}-tool`).click();const c=await frame.locator('#game').boundingBox(),p=await frame.evaluate(p=>window.worldToScreen(p),wrongPoint);await page.mouse.click(c.x+p.x,c.y+p.y);await frame.evaluate(()=>window.advanceTime(0))}
+ for(let i=0;i<1200&&(await state()).mode==='playing';i++)await frame.evaluate(()=>window.advanceTime(1000/60));
+ const wrong=await state();assert.equal(wrong.captureId,'reed');assert.equal(wrong.correct,false);await frame.locator('#capture-btn').click();const beforeRelease=(await state()).art.rigs.find(r=>r.id==='reed');let released;
+ for(let i=0;i<30;i++){await frame.evaluate(()=>window.advanceTime(1000/60));const s=await state(),r=s.art.rigs.find(r=>r.id==='reed'),dx=r.position.x-beforeRelease.position.x,dz=r.position.z-beforeRelease.position.z,d=Math.hypot(dx,dz);if(d>.0001){released={mode:s.mode,actorMode:s.creatures.find(a=>a.id==='reed').mode,forwardDot:(r.bodyForward.x*dx+r.bodyForward.z*dz)/d};break}}
+ assert.ok(released);assert.equal(released.mode,'playing');assert.equal(released.actorMode,'escape');assert.ok(released.forwardDot>.98);await page.screenshot({path:`${out}/07-wrong-release.png`});
+ const gameUrl=new URL(frame.url()),gamePrefix=gameUrl.origin+gameUrl.pathname.slice(0,gameUrl.pathname.lastIndexOf('/')+1),gameHttpErrors=httpErrors.filter(e=>e.url.startsWith(gamePrefix));
+ assert.deepEqual(errors,[]);assert.deepEqual(gameHttpErrors,[]);await fs.writeFile(`${out}/results.json`,JSON.stringify({url:base,release:process.env.CRITTER_RELEASE_VERSION,variant:patrolVariant,patrol,approach,manual,capture,wrongRelease:released,pausedPreserved:true,errors,httpErrors,gameHttpErrors},null,2));await fs.rm(`${out}/failure.json`,{force:true});await fs.rm(`${out}/failure.png`,{force:true});console.log('Actual deer facing follows real-clock patrol, food approach, pause/resume, correct capture/Next, wrong capture/release and fixed-frame updates.');
 }catch(e){await page.screenshot({path:`${out}/failure.png`}).catch(()=>{});await fs.writeFile(`${out}/failure.json`,JSON.stringify({state:await state().catch(()=>null),errors,httpErrors,error:String(e)},null,2));throw e}
 finally{await browser.close()}

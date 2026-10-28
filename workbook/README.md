@@ -17,3 +17,6 @@ All 22 public objects / 7,236,867 bytes match the frozen tested bundle by SHA-25
 
 
 Production deployment `dpl_7jSff3XvnbKTKFeQKGcp3tdyc2kJ` is READY with the public `english-games.workbook.co.il` alias on the merge commit above. The live site passes 50 catalog levels, 11 lesson sources, all three level 50 captures and both level 39 rescues through touch, with one final-only completion event per level and truthful local saves. No JavaScript or game-bundle HTTP errors occurred; the existing Clerk client returned two non-blocking 403 responses. Account sign-in was not tested. `docs/verification/campaign-workbook-production.json` and `campaign-workbook-deployment.json` retain the evidence.
+
+
+The deer-facing hotfix is immutable release `2026-10-28-2`, game source `9314b9f`, with the same 50 levels and progress schema. All 22 public files match the tested bundle by SHA-256. The production-built local Workbook player passes real-frame patrol/food facing, pause, correct capture/Next, wrong capture/release and portrait late-level captures. See `docs/verification/deer-heading-*`. Catalog PR: https://github.com/AceDZN/acedzn-tools/pull/372. Production rollout is checked after merge.
