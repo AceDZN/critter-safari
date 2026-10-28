@@ -1,0 +1,235 @@
+{
+  "base": "https://english-games.workbook.co.il",
+  "version": "2026-10-28",
+  "catalogLevels": 50,
+  "lessons": [
+    "https://english.workbook.co.il/grade-8/chapter-11/relative-clauses-reference",
+    "https://english.workbook.co.il/grade-7/chapter-3/compare-two-places",
+    "https://english.workbook.co.il/grade-7/chapter-1/be-statements-and-questions",
+    "https://english.workbook.co.il/grade-7/chapter-10/present-simple-rules",
+    "https://english.workbook.co.il/grade-8/chapter-3/extremes-and-fair-comparisons",
+    "https://english.workbook.co.il/grade-9/chapter-11/comparatives-and-superlatives-reference",
+    "https://english.workbook.co.il/grade-9/chapter-11/relative-clauses-reference",
+    "https://english.workbook.co.il/grade-8/chapter-9/tracking-reference-and-connections",
+    "https://english.workbook.co.il/grade-9/chapter-4/a-rule-and-its-exception",
+    "https://english.workbook.co.il/grade-9/chapter-11/conditionals-reference",
+    "https://english.workbook.co.il/grade-9/chapter-12/reading-comprehension-and-evidence-reference"
+  ],
+  "desktop": {
+    "level": 50,
+    "variant": 1,
+    "captures": [
+      "alder",
+      "drift",
+      "bramble"
+    ],
+    "messages": [
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "ready"
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-start",
+        "level": 50
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-complete",
+        "level": 50,
+        "durationMs": 2050
+      }
+    ]
+  },
+  "phone": {
+    "level": 39,
+    "variant": 1,
+    "captures": [
+      "alba",
+      "coda"
+    ],
+    "messages": [
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "ready"
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-start",
+        "level": 39
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-complete",
+        "level": 39,
+        "durationMs": 1783
+      }
+    ]
+  },
+  "actions": [
+    {
+      "level": 50,
+      "objective": 1,
+      "tool": "catcher",
+      "point": {
+        "x": 5.123,
+        "z": -2.397
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 1042.6223597062065,
+        "y": 556.540394992571
+      }
+    },
+    {
+      "level": 50,
+      "objective": 1,
+      "tool": "berry",
+      "point": {
+        "x": 5.123,
+        "z": -2.397
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 1042.6223597062065,
+        "y": 556.540394992571
+      }
+    },
+    {
+      "level": 50,
+      "objective": 2,
+      "tool": "catcher",
+      "point": {
+        "x": -3.0916995381720174,
+        "z": 0.5666528869742556
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 327.9122326524041,
+        "y": 522.1958228339336
+      }
+    },
+    {
+      "level": 50,
+      "objective": 2,
+      "tool": "leaf",
+      "point": {
+        "x": -3.0916995381720174,
+        "z": 0.5666528869742556
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 327.9122326524041,
+        "y": 522.1958228339336
+      }
+    },
+    {
+      "level": 50,
+      "objective": 3,
+      "tool": "catcher",
+      "point": {
+        "x": 2.284612983045788,
+        "z": 1.2587732946298398
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 702.6228034643808,
+        "y": 640.0069805900157
+      }
+    },
+    {
+      "level": 50,
+      "objective": 3,
+      "tool": "leaf",
+      "point": {
+        "x": 2.284612983045788,
+        "z": 1.2587732946298398
+      },
+      "input": "mouse",
+      "screen": {
+        "x": 702.6228034643808,
+        "y": 640.0069805900157
+      }
+    },
+    {
+      "level": 39,
+      "objective": 1,
+      "tool": "catcher",
+      "point": {
+        "x": 5.123,
+        "z": -2.397
+      },
+      "input": "touch",
+      "screen": {
+        "x": 288.33274832067104,
+        "y": 526.3079793651882
+      }
+    },
+    {
+      "level": 39,
+      "objective": 1,
+      "tool": "leaf",
+      "point": {
+        "x": 5.123,
+        "z": -2.397
+      },
+      "input": "touch",
+      "screen": {
+        "x": 288.33274832067104,
+        "y": 526.3079793651882
+      }
+    },
+    {
+      "level": 39,
+      "objective": 2,
+      "tool": "catcher",
+      "point": {
+        "x": 1.0817246176696211,
+        "z": -2.6181591083253557
+      },
+      "input": "touch",
+      "screen": {
+        "x": 265.0361059127602,
+        "y": 468.20785388691166
+      }
+    },
+    {
+      "level": 39,
+      "objective": 2,
+      "tool": "berry",
+      "point": {
+        "x": 1.0817246176696211,
+        "z": -2.6181591083253557
+      },
+      "input": "touch",
+      "screen": {
+        "x": 265.0361059127602,
+        "y": 468.20785388691166
+      }
+    }
+  ],
+  "errors": [],
+  "gameFailures": [],
+  "nonGameHttpFailures": [
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    },
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    }
+  ]
+}

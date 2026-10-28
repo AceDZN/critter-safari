@@ -30,18 +30,18 @@ export function replay(plan: LevelPlan, count = plan.stages.length) {
   }
   return sim;
 }
-function candidatePoints(sim: SafariSimulation, id: string) {
+function candidatePoints(sim: SafariSimulation, id: string, offset = 0) {
   const actor = sim.actors.find(a=>a.spec.id===id)!;
   const rivals=sim.actors.filter(a=>a.spec.id!==id&&a.mode!=="rescued"&&a.spec.diet===actor.spec.diet);
   const points: Point[]=[];
   for(const radius of [1.12,1.5,2,2.7])for(let i=0;i<16;i++)points.push({x:actor.x+Math.sin(i/16*Math.PI*2)*radius,z:actor.z+Math.cos(i/16*Math.PI*2)*radius});
   for(let x=-5.4;x<=5.4;x+=1.2)for(let z=-3.6;z<=3.6;z+=1.2)points.push({x,z});
   const score=(p:Point)=>Math.min(20,...rivals.map(a=>distance(a,p)/a.spec.usualSpeed))-distance(actor,p)/actor.spec.usualSpeed;
-  return points.filter(p=>!sim.placementIssue(p)&&distance(actor,p)>.95).sort((a,b)=>score(b)-score(a));
+  return points.map(p=>({x:p.x+offset,z:p.z+offset})).filter(p=>!sim.placementIssue(p)&&distance(actor,p)>.95).sort((a,b)=>score(b)-score(a));
 }
-function solveStage(plan: LevelPlan, id: string): StagePlan {
+export function solveStage(plan: LevelPlan, id: string, offset = 0): StagePlan {
   const initial = replay(plan), target=initial.actors.find(a=>a.spec.id===id)!;
-  const points=candidatePoints(initial,id), diet=target.spec.diet;
+  const points=candidatePoints(initial,id,offset), diet=target.spec.diet;
   const candidates: Action[][] = points.slice(0,40).map(point=>[{tool:"catcher",point},{tool:diet,point}]);
   const rivals=initial.actors.filter(a=>a.spec.id!==id&&a.mode!=="rescued"&&a.spec.diet===diet).sort((a,b)=>b.spec.usualSpeed-a.spec.usualSpeed);
   if(initial.toolkit.feeder)for(const rival of rivals)for(const point of points.slice(0,16)) {
