@@ -1,0 +1,80 @@
+{
+  "url": "https://english-games.workbook.co.il/critter-safari/play?level=4",
+  "release": "2026-10-28-2",
+  "variant": 0,
+  "patrol": {
+    "frames": 1725,
+    "moving": 1724,
+    "minBodyDot": 0.991663577602803,
+    "minHeadingDot": 0.9999999999999997,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.991663577602803,
+      "headingDot": 1,
+      "dx": 0.010121972366074178,
+      "dz": -0.0002475892170390459,
+      "headingYaw": 1.5952520204732914,
+      "modelYaw": 1.5707963267948966
+    },
+    "modes": {
+      "wander": 1724
+    }
+  },
+  "approach": {
+    "frames": 598,
+    "moving": 476,
+    "minBodyDot": 0.9916483180023509,
+    "minHeadingDot": 0.9999999999999998,
+    "backward": 0,
+    "sideways": 0,
+    "worst": {
+      "id": "reed",
+      "mode": "wander",
+      "bodyDot": 0.9916483180023509,
+      "headingDot": 0.9999999999999999,
+      "dx": -0.010433397029212477,
+      "dz": -0.004531539631404069,
+      "headingYaw": -1.9805431379544156,
+      "modelYaw": 1.5707963267948966
+    },
+    "modes": {
+      "wander": 427,
+      "lured": 41,
+      "escape": 8
+    }
+  },
+  "manual": {
+    "moving": 120,
+    "minBodyDot": 0.9916675363510485
+  },
+  "capture": {
+    "level": 3,
+    "id": "reed",
+    "variant": 0,
+    "correct": true,
+    "firstCaptureHeadingPreserved": true,
+    "caughtGaitFrozen": true,
+    "nextLevel": 4
+  },
+  "wrongRelease": {
+    "mode": "playing",
+    "actorMode": "escape",
+    "forwardDot": 0.994192436487701
+  },
+  "pausedPreserved": true,
+  "errors": [],
+  "httpErrors": [
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    },
+    {
+      "url": "https://clerk.workbook.co.il/v1/client?__clerk_api_version=2025-11-10&_clerk_js_version=5.128.0",
+      "status": 403
+    }
+  ],
+  "gameHttpErrors": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "dpl_7uqKNARoMweUijW5eTXnC1ft366N",
+  "state": "READY",
+  "url": "acedzn-workbook-english-games-9euduspe7-acedzns-projects.vercel.app",
+  "aliases": [
+    "english-games.workbook.co.il",
+    "acedzn-workbook-english-games.vercel.app",
+    "acedzn-workbook-english-games-acedzns-projects.vercel.app",
+    "acedzn-workbook-english-games-git-main-acedzns-projects.vercel.app"
+  ],
+  "sha": "cb0006c908cc54efa679ef50986c367c21ab9faf",
+  "gameRelease": "2026-10-28-2",
+  "gameCommit": "9314b9f",
+  "hotfixPullRequest": "https://github.com/AceDZN/acedzn-tools/pull/372",
+  "hotfixMerge": "c22373b9d13bebfcaeb78492fb7ececc40547979",
+  "method": "Automatic Git deployment from newer main retaining the merged correction"
+}
