@@ -1,0 +1,1188 @@
+{
+  "fiftyEarned": true,
+  "buildHash": "8a955ccbf5eecb7eb85aa8cb5193a8265603c3631cc1378bf0d94a180987a0be",
+  "checks": [
+    {
+      "level": 1,
+      "variant": 1,
+      "rescues": [
+        "moss"
+      ],
+      "highestUnlocked": 2
+    },
+    {
+      "level": 2,
+      "variant": 1,
+      "rescues": [
+        "pebble"
+      ],
+      "highestUnlocked": 3
+    },
+    {
+      "level": 3,
+      "variant": 1,
+      "rescues": [
+        "reed"
+      ],
+      "highestUnlocked": 4
+    },
+    {
+      "level": 4,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 5
+    },
+    {
+      "level": 5,
+      "variant": 1,
+      "rescues": [
+        "glint"
+      ],
+      "highestUnlocked": 6
+    },
+    {
+      "level": 6,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 7
+    },
+    {
+      "level": 7,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 8
+    },
+    {
+      "level": 8,
+      "variant": 1,
+      "rescues": [
+        "moss"
+      ],
+      "highestUnlocked": 9
+    },
+    {
+      "level": 9,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 10
+    },
+    {
+      "level": 10,
+      "variant": 1,
+      "rescues": [
+        "brin"
+      ],
+      "highestUnlocked": 11
+    },
+    {
+      "level": 11,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 12
+    },
+    {
+      "level": 12,
+      "variant": 1,
+      "rescues": [
+        "tumble"
+      ],
+      "highestUnlocked": 13
+    },
+    {
+      "level": 13,
+      "variant": 1,
+      "rescues": [
+        "reed"
+      ],
+      "highestUnlocked": 14
+    },
+    {
+      "level": 14,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 15
+    },
+    {
+      "level": 15,
+      "variant": 1,
+      "rescues": [
+        "fizz"
+      ],
+      "highestUnlocked": 16
+    },
+    {
+      "level": 16,
+      "variant": 1,
+      "rescues": [
+        "pebble"
+      ],
+      "highestUnlocked": 17
+    },
+    {
+      "level": 17,
+      "variant": 1,
+      "rescues": [
+        "tumble"
+      ],
+      "highestUnlocked": 18
+    },
+    {
+      "level": 18,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 19
+    },
+    {
+      "level": 19,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 20
+    },
+    {
+      "level": 20,
+      "variant": 1,
+      "rescues": [
+        "coda"
+      ],
+      "highestUnlocked": 21
+    },
+    {
+      "level": 21,
+      "variant": 1,
+      "rescues": [
+        "reed"
+      ],
+      "highestUnlocked": 22
+    },
+    {
+      "level": 22,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 23
+    },
+    {
+      "level": 23,
+      "variant": 1,
+      "rescues": [
+        "tumble"
+      ],
+      "highestUnlocked": 24
+    },
+    {
+      "level": 24,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 25
+    },
+    {
+      "level": 25,
+      "variant": 1,
+      "rescues": [
+        "brin"
+      ],
+      "highestUnlocked": 26
+    },
+    {
+      "level": 26,
+      "variant": 1,
+      "rescues": [
+        "fern"
+      ],
+      "highestUnlocked": 27
+    },
+    {
+      "level": 27,
+      "variant": 1,
+      "rescues": [
+        "iris"
+      ],
+      "highestUnlocked": 28
+    },
+    {
+      "level": 28,
+      "variant": 1,
+      "rescues": [
+        "fern"
+      ],
+      "highestUnlocked": 29
+    },
+    {
+      "level": 29,
+      "variant": 1,
+      "rescues": [
+        "juniper"
+      ],
+      "highestUnlocked": 30
+    },
+    {
+      "level": 30,
+      "variant": 1,
+      "rescues": [
+        "mica"
+      ],
+      "highestUnlocked": 31
+    },
+    {
+      "level": 31,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 32
+    },
+    {
+      "level": 32,
+      "variant": 1,
+      "rescues": [
+        "tumble"
+      ],
+      "highestUnlocked": 33
+    },
+    {
+      "level": 33,
+      "variant": 1,
+      "rescues": [
+        "pebble"
+      ],
+      "highestUnlocked": 34
+    },
+    {
+      "level": 34,
+      "variant": 1,
+      "rescues": [
+        "nib"
+      ],
+      "highestUnlocked": 35
+    },
+    {
+      "level": 35,
+      "variant": 1,
+      "rescues": [
+        "alba"
+      ],
+      "highestUnlocked": 36
+    },
+    {
+      "level": 36,
+      "variant": 1,
+      "rescues": [
+        "reed",
+        "tumble"
+      ],
+      "highestUnlocked": 37
+    },
+    {
+      "level": 37,
+      "variant": 1,
+      "rescues": [
+        "nib",
+        "pip"
+      ],
+      "highestUnlocked": 38
+    },
+    {
+      "level": 38,
+      "variant": 1,
+      "rescues": [
+        "glint",
+        "fern"
+      ],
+      "highestUnlocked": 39
+    },
+    {
+      "level": 39,
+      "variant": 1,
+      "rescues": [
+        "alba",
+        "coda"
+      ],
+      "highestUnlocked": 40
+    },
+    {
+      "level": 40,
+      "variant": 1,
+      "rescues": [
+        "lark",
+        "quill",
+        "nori"
+      ],
+      "highestUnlocked": 41
+    },
+    {
+      "level": 41,
+      "variant": 1,
+      "rescues": [
+        "tumble"
+      ],
+      "highestUnlocked": 42
+    },
+    {
+      "level": 42,
+      "variant": 1,
+      "rescues": [
+        "pip"
+      ],
+      "highestUnlocked": 43
+    },
+    {
+      "level": 43,
+      "variant": 1,
+      "rescues": [
+        "brin"
+      ],
+      "highestUnlocked": 44
+    },
+    {
+      "level": 44,
+      "variant": 1,
+      "rescues": [
+        "juniper"
+      ],
+      "highestUnlocked": 45
+    },
+    {
+      "level": 45,
+      "variant": 1,
+      "rescues": [
+        "coda"
+      ],
+      "highestUnlocked": 46
+    },
+    {
+      "level": 46,
+      "variant": 1,
+      "rescues": [
+        "iris",
+        "glint"
+      ],
+      "highestUnlocked": 47
+    },
+    {
+      "level": 47,
+      "variant": 1,
+      "rescues": [
+        "alba",
+        "coda"
+      ],
+      "highestUnlocked": 48
+    },
+    {
+      "level": 48,
+      "variant": 1,
+      "rescues": [
+        "pebble",
+        "tumble"
+      ],
+      "highestUnlocked": 49
+    },
+    {
+      "level": 49,
+      "variant": 1,
+      "rescues": [
+        "juniper",
+        "hush",
+        "iris"
+      ],
+      "highestUnlocked": 50
+    },
+    {
+      "level": 50,
+      "variant": 1,
+      "rescues": [
+        "alder",
+        "drift",
+        "bramble"
+      ],
+      "highestUnlocked": 50
+    }
+  ],
+  "messages": [
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "ready"
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 1
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 1,
+      "durationMs": 842
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 2
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 2,
+      "durationMs": 967
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 3
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 3,
+      "durationMs": 650
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 4
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 4,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 5
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 5,
+      "durationMs": 917
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 6
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 6,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 7
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 7,
+      "durationMs": 1400
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 8
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 8,
+      "durationMs": 992
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 9
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 9,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 10
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 10,
+      "durationMs": 600
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 11
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 11,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 12
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 12,
+      "durationMs": 575
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 13
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 13,
+      "durationMs": 2542
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 14
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 14,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 15
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 15,
+      "durationMs": 1083
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 16
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 16,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 17
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 17,
+      "durationMs": 575
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 18
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 18,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 19
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 19,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 20
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 20,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 21
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 21,
+      "durationMs": 2542
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 22
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 22,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 23
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 23,
+      "durationMs": 575
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 24
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 24,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 25
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 25,
+      "durationMs": 600
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 26
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 26,
+      "durationMs": 817
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 27
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 27,
+      "durationMs": 633
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 28
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 28,
+      "durationMs": 817
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 29
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 29,
+      "durationMs": 675
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 30
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 30,
+      "durationMs": 592
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 31
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 31,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 32
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 32,
+      "durationMs": 675
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 33
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 33,
+      "durationMs": 558
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 34
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 34,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 35
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 35,
+      "durationMs": 817
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 36
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 36,
+      "durationMs": 10192
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 37
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 37,
+      "durationMs": 3983
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 38
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 38,
+      "durationMs": 1508
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 39
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 39,
+      "durationMs": 1783
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 40
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 40,
+      "durationMs": 5117
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 41
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 41,
+      "durationMs": 575
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 42
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 42,
+      "durationMs": 875
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 43
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 43,
+      "durationMs": 600
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 44
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 44,
+      "durationMs": 675
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 45
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 45,
+      "durationMs": 650
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 46
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 46,
+      "durationMs": 1475
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 47
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 47,
+      "durationMs": 1783
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 48
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 48,
+      "durationMs": 1525
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 49
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 49,
+      "durationMs": 4975
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-start",
+      "level": 50
+    },
+    {
+      "source": "workbook-game",
+      "version": 1,
+      "slug": "critter-safari",
+      "type": "level-complete",
+      "level": 50,
+      "durationMs": 2058
+    }
+  ],
+  "replay": true,
+  "retryPreserves": true,
+  "reloadResumes": true,
+  "directFinal": {
+    "completed": [
+      50
+    ],
+    "highestUnlocked": 1
+  },
+  "errors": [],
+  "httpErrors": []
+}

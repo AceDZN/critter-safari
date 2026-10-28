@@ -1,3 +1,19 @@
+# Current campaign target/actual review —28 October2026
+
+Both new built-in imagegen targets were generated and inspected before implementation (docs/visual-targets/campaign/PROMPTS.md). Actual views are separate under docs/actual-captures/campaign.
+
+The functional journal exposes ten chapters/fifty stops, visible earned/current/locked states, resume/replay and local progress. It uses real HTML controls over the paused3D scene. The mockup's illustrated habitat thumbnails, leather binding and flanking animals are simplified to a restrained parchment journal; the mockup itself is never used as the interface.
+
+The later gameplay target is implemented as ten real habitat arrangements, additional owned foliage, a reusable feeding bowl and a temporary calming patch, plus genuine2–3-rescue references whose original facts remain visible. The fixed camera, actual local weighted animal rigs and four-paw rabbit clips remain. No primitive creature substitute or new model generation was introduced.
+
+Independent art review of the actual11/26/39/49 frames found boulders consistent with collision arrays, readable center lanes, visible imported bushes/cypresses/flowers and no obvious grounding or animal-pose regression. Snapshot render counters were46–51 calls/157,644–189,383 triangles before the final small label-guide refinement; these are scoped render snapshots, not FPS claims. Geometry/disposal checks separately cover all10 habitats and both reflections.
+
+Honest fidelity remainder: ground cover and smooth boulders are simpler than the dense lush concept; the exterior pond reads as a pale basin; the data roster is a plain functional comparison list rather than illustrated cards. Clear traversable ground is preserved. Phone occlusion/help-focus issues identified from real screenshots were corrected. Independent final screenshot/input review passes: all6 animals/facts/five tools fit, names are separated with unobtrusive leader lines, help begins at its heading and both reflected late-level captures work. The long glossary still puts the return button below the fold; scrolling reaches it. No blocking visual issue remains in inspected views.
+
+---
+
+# Historical rebuild comparisons
+
 # Rebuild visual review — 27 October 2026
 
 ## Fresh mockups before implementation

@@ -1,3 +1,21 @@
+# Current50-level campaign —28 October2026
+
+The previous five-contract checks below are historical. Current source has50 sequential levels and63 capture objectives, with no grade picker or grade gate.
+
+-119 independent semantic/physical/state/tool/progression/host tests pass, plus TypeScript/static build. Test concurrency is bounded to avoid competing compiler workers on the shared host.
+-100 independently matched level/layout witnesses complete126 actual captures through public place/food/feeder/calming/update/next APIs. No actor positions, clocks, completion flags or win states are assigned. The test-only handwritten oracle never ships in runtime.
+-The final built bundle was frozen for one fresh normal-input browser1→50 journey: all63 captures,50 start events,50 final-only completion events and one ready event. All50 levels were earned in order; the map shows50 genuine stamps. Replay2, retry-current and reload/resume retain all earned progress.
+-A separate fresh context completes all3 objectives of direct50, emits ready/start50/complete50 and saves only[50] with frontier1. This never claims49 skipped successes. The final manifest SHA-256 is8a955ccbf5eecb7eb85aa8cb5193a8265603c3631cc1378bf0d94a180987a0be (index-jx_oyVQf.js). There are zero game JS/HTTP errors in this run.
+-Initial diagnostic fresh-page fixtures started after roughly0.4–0.6s of natural patrol, making later fixed trap points stale. The final test calls the public advanceTime(0) hook as soon as it exists to establish reproducible test time, then uses real controls and natural update/capture logic. The refused drops correctly enforced animal clearance. This is not a capture/actor/storage/win injection.
+-Independent touch26 verifies feeder placement/foodfill, calming/cooldown, all5 tools, all6 fact rows, help/map pause and keyboard placement. Screenshot review found toast/panel/label occlusion and help opening at the glossary bottom; these were corrected with measured panel bounds, compact facts, label separation and top-of-help focus. Final corrected-build touch review passed on390×844: six facts/three columns, all five tools, touch feeder/food/calming, cooldown, help/map pause, keyboard placement and actual two-stage39 captures in both reflections. Previously occluded placement points now work. Help opens at the heading; its return button still requires scrolling after the long glossary. Fifteen final images were inspected, with zero JS/HTTP errors or failures. The mandatory skill client also passed trap/leaf input on the frozen build; screenshot and state were inspected.
+-All11 exact lesson URLs returned200 with the expected H1 and no Next404 fallback.
+
+Evidence: docs/verification/campaign-browser.json, campaign-physical-plans.json, campaign-source-pages.json and actual frames under docs/actual-captures/campaign. Automated checks establish behavior and the earned campaign, not learner enjoyment, learning gains, productive grammar, complete grade coverage or account sign-in.
+
+---
+
+# Historical five-contract verification
+
 # Rebuilt slice verification — 27 October 2026
 
 This record applies to the fixed elevated-camera rebuild, with real local Tripo animals and automatic capture. The earlier first-person prototype and its captures are historical. The user's rejection of its controls and creature art motivated this rebuild.

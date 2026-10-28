@@ -1,9 +1,5 @@
-# Workbook poster provenance
+# Campaign poster
 
-Actual corrected gameplay capture: `../docs/actual-captures/refinements/contract-3-lure.png` (1672×941). Shows contract3 with rabbit, tortoise and deer families, active catcher/lure and the animal facts panel.
+Actual final-build gameplay, captured natively as JPEG from the game app element at1600×900, quality90. The browser first genuinely earned all50 levels, then used unlocked replay26 and normal trap, leaf, feeder/berry and calming gestures. No generated pixels, compositing, repainting or fake UI.
 
-The poster is a centered aspect-fit resize/crop to1600×900, converted to RGB and JPEG quality90 (progressive, 4:4:4). No generated imagery, retouching, compositing or overlays were added.
-
-- Source SHA256: `4e8d4c6f69f6f6d73b3bc98b2e63b305caea8750d0c23c33e906a78c1ccf91c1`
-- Poster bytes: 271746
-- Poster SHA256: `510873efb17ee0372b60a8472d068710ef855d7d16822cd0e11e11d621bd28b3`
+Source: scripts/playtest-campaign.mjs; matching PNG: docs/actual-captures/campaign/poster.png. Bytes: 212085; SHA-256: `3949bcabcf03445aea87c4473b49fadecb9e9cf64e4c0c9473bc04d3d460e462`. Bundle: index-jx_oyVQf.js.

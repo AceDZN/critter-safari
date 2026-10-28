@@ -1,0 +1,330 @@
+{
+  "kind": "Independent automated input review; not a novice study or fun/learning validation.",
+  "base": "http://127.0.0.1:4232",
+  "clockPolicy": "Public advanceTime(0) at earliest availability; preset physical witnesses begin at t=0.",
+  "checks": {
+    "direct50": {
+      "captures": [
+        "alder",
+        "drift",
+        "bramble"
+      ],
+      "events": [
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "ready"
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-start",
+          "level": 50
+        },
+        {
+          "source": "workbook-game",
+          "version": 1,
+          "slug": "critter-safari",
+          "type": "level-complete",
+          "level": 50,
+          "durationMs": 2058
+        }
+      ],
+      "completed": [
+        50
+      ],
+      "highestUnlocked": 1,
+      "stored": {
+        "version": 1,
+        "currentLevel": 50,
+        "completed": {
+          "50": {
+            "attempts": 3,
+            "hints": 0,
+            "seconds": 2.0583333333333305,
+            "rescues": 3
+          }
+        }
+      }
+    },
+    "mobile26": {
+      "sixFacts": true,
+      "threeColumnFacts": true,
+      "fiveVisibleTools": true,
+      "actualTouchDrags": [
+        "feeder",
+        "berry",
+        "calm"
+      ],
+      "filledFeeder": true,
+      "topBowlGuidance": true,
+      "bottomToastHidden": true,
+      "cooldown": true,
+      "helpStartsAtHeading": true,
+      "helpFreeze": true,
+      "mapFreeze": true,
+      "keyboardSelectThenDrop": true,
+      "grassPoint": {
+        "x": -3,
+        "z": 0
+      }
+    },
+    "mobile39": {
+      "variants": [
+        {
+          "variant": 1,
+          "actualTouchCaptures": [
+            "alba",
+            "coda"
+          ],
+          "rescuedReferenceVisible": true,
+          "isolatedCompletion": true
+        },
+        {
+          "variant": 0,
+          "actualTouchCaptures": [
+            "alba",
+            "coda"
+          ],
+          "rescuedReferenceVisible": true,
+          "isolatedCompletion": true
+        }
+      ],
+      "randomSessions": [
+        1,
+        0
+      ],
+      "bothReflections": true
+    }
+  },
+  "focus": [
+    {
+      "label": "open-50-desktop-hosted",
+      "mode": "playing",
+      "hasFocus": false,
+      "visibility": "visible",
+      "resumed": false
+    },
+    {
+      "label": "open-26-mobile-direct",
+      "mode": "playing",
+      "hasFocus": true,
+      "visibility": "visible",
+      "resumed": false
+    },
+    {
+      "label": "open-39-mobile-direct",
+      "mode": "playing",
+      "hasFocus": true,
+      "visibility": "visible",
+      "resumed": false
+    },
+    {
+      "label": "open-39-mobile-direct",
+      "mode": "playing",
+      "hasFocus": true,
+      "visibility": "visible",
+      "resumed": false
+    }
+  ],
+  "actions": [
+    {
+      "contract": 50,
+      "objective": 1,
+      "tool": "catcher",
+      "point": {
+        "x": 5.12,
+        "z": -2.4
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 50,
+      "objective": 1,
+      "tool": "berry",
+      "point": {
+        "x": 5.12,
+        "z": -2.4
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 50,
+      "objective": 2,
+      "tool": "catcher",
+      "point": {
+        "x": -3.0946995381720175,
+        "z": 0.5636528869742556
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 50,
+      "objective": 2,
+      "tool": "leaf",
+      "point": {
+        "x": -3.0946995381720175,
+        "z": 0.5636528869742556
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 50,
+      "objective": 3,
+      "tool": "catcher",
+      "point": {
+        "x": 2.2537825432864538,
+        "z": 1.2483598371112004
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 50,
+      "objective": 3,
+      "tool": "leaf",
+      "point": {
+        "x": 2.2537825432864538,
+        "z": 1.2483598371112004
+      },
+      "input": "mouse drag"
+    },
+    {
+      "contract": 26,
+      "objective": 1,
+      "tool": "feeder",
+      "point": {
+        "x": -3,
+        "z": 0
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 26,
+      "objective": 1,
+      "tool": "berry",
+      "point": {
+        "x": -3,
+        "z": 0
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 26,
+      "objective": 1,
+      "tool": "calm",
+      "point": {
+        "x": -3,
+        "z": 0
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 1,
+      "tool": "catcher",
+      "point": {
+        "x": 5.12,
+        "z": -2.4
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 1,
+      "tool": "leaf",
+      "point": {
+        "x": 5.12,
+        "z": -2.4
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 2,
+      "tool": "catcher",
+      "point": {
+        "x": 1.0787246176696212,
+        "z": -2.621159108325356
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 2,
+      "tool": "berry",
+      "point": {
+        "x": 1.0787246176696212,
+        "z": -2.621159108325356
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 1,
+      "tool": "catcher",
+      "point": {
+        "x": -5.12,
+        "z": -2.4
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 1,
+      "tool": "leaf",
+      "point": {
+        "x": -5.12,
+        "z": -2.4
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 2,
+      "tool": "catcher",
+      "point": {
+        "x": -1.2447456177561984,
+        "z": -2.626642956396171
+      },
+      "input": "CDP touch drag"
+    },
+    {
+      "contract": 39,
+      "objective": 2,
+      "tool": "berry",
+      "point": {
+        "x": -1.2447456177561984,
+        "z": -2.626642956396171
+      },
+      "input": "CDP touch drag"
+    }
+  ],
+  "errors": [],
+  "httpErrors": [],
+  "failures": [],
+  "bundle": "index-jx_oyVQf.js",
+  "visualReview": {
+    "basis": "Agent inspection of final screenshots; not an unfamiliar learner study, learning-gain test or every-pose gait review.",
+    "inspected": [
+      "mobile26-opening.png",
+      "mobile26-filled-feeder.png",
+      "mobile26-calming.png",
+      "mobile26-help.png",
+      "mobile26-map.png",
+      "mobile26-keyboard-positioning.png",
+      "mobile26-keyboard-trap.png",
+      "mobile39-variant-1-opening.png",
+      "mobile39-variant-1-rescued-reference.png",
+      "mobile39-variant-1-second-capture.png",
+      "mobile39-variant-0-opening.png",
+      "mobile39-variant-0-rescued-reference.png",
+      "mobile39-variant-0-second-capture.png",
+      "direct50-opening.png",
+      "direct50-complete.png"
+    ],
+    "disposition": "No blocking issue in inspected final views. Bottom toast no longer covers animals; labels are separated with visible leaders; six neutral factual cards fit in three columns; the reflected mobile drop and both genuine rescue sequences work; help begins at its heading.",
+    "remaining": "The mobile help return action is below the long glossary and requires scrolling; the harness scrolls it into view before the actual touch. Compact fact text is inspectable in these captures, but human readability/usability is not established."
+  }
+}

@@ -13,6 +13,7 @@ const executablePath = process.env.CRITTER_BROWSER_PATH || '/Users/acedzn/Librar
 const plans = JSON.parse(await fs.readFile('docs/verification/campaign-physical-plans.json', 'utf8'));
 await fs.mkdir(out, { recursive: true });
 const report = { kind: 'Independent automated input review; not a novice study or fun/learning validation.', base, clockPolicy: freezeStartup ? 'Public advanceTime(0) at earliest availability; preset physical witnesses begin at t=0.' : 'Live startup, then public advanceTime(0) after ready; may invalidate a t=0 witness.', checks: {}, focus: [], actions: [], errors: [], httpErrors: [], failures: [] };
+report.bundle = (await (await fetch(base)).text()).match(/index-[A-Za-z0-9_-]+\.js/)?.[0];
 const wrapper = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://127.0.0.1');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -43,6 +44,7 @@ async function click(selector, touch = false) {
   const locator = frame.locator(selector);
   assert.equal(await locator.isVisible(), true, `${selector} must be visible before input`);
   assert.equal(await locator.isEnabled(), true, `${selector} must be enabled before input`);
+  await locator.scrollIntoViewIfNeeded();
   const b = await locator.boundingBox(); assert.ok(b);
   if (touch) await page.touchscreen.tap(b.x + b.width / 2, b.y + b.height / 2);
   else await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
@@ -214,8 +216,13 @@ async function mobileTools() {
     const b = await frame.locator(`#${tool}-tool`).boundingBox(); assert.ok(b && b.x >= 0 && b.x + b.width <= 391 && b.y >= 0 && b.y + b.height <= 845);
   }
   await save('mobile26-opening');
+  assert.equal(await frame.locator('#toast').isVisible(), false, 'duplicate bottom toast is hidden on phones');
+  const factBoxes = await frame.locator('#animal-facts li').evaluateAll(rows => rows.map(row => ({ x: row.getBoundingClientRect().x, y: row.getBoundingClientRect().y })));
+  assert.ok(factBoxes[0].x < factBoxes[1].x && factBoxes[1].x < factBoxes[2].x);
+  assert.ok(Math.abs(factBoxes[0].y - factBoxes[2].y) < 2, 'six factual cards use three columns');
   const p = await grassPoint();
   await drag('feeder', p, true);
+  assert.match(await frame.locator('#action-prompt').innerText(), /מלא|מזון|עלה|פרי/, 'essential empty-bowl guidance stays in the visible top cue');
   await drag('berry', p, true);
   let s = await state(); assert.equal(s.feeder.diet, 'berry'); assert.ok(s.feeder.remaining > 0);
   await save('mobile26-filled-feeder');
@@ -224,6 +231,9 @@ async function mobileTools() {
   await save('mobile26-calming');
   await click('#notes-btn', true); assert.equal((await state()).mode, 'notes');
   await click('#help-btn', true); assert.equal((await state()).mode, 'help');
+  await page.waitForTimeout(100);
+  const helpHeading = await frame.locator('#modal h2').boundingBox();
+  assert.ok(helpHeading && helpHeading.y >= 0 && helpHeading.y + helpHeading.height < 844, 'help opens with its heading visible, rather than at the glossary bottom');
   const paused = await state(); await step(2000);
   s = await state(); assert.deepEqual(s.creatures, paused.creatures); assert.deepEqual(s.feeder, paused.feeder); assert.deepEqual(s.calm, paused.calm); assert.equal(s.calmCooldown, paused.calmCooldown);
   await save('mobile26-help'); await click('#resume-btn', true); assert.equal((await state()).mode, 'playing');
@@ -238,24 +248,33 @@ async function mobileTools() {
   await page.keyboard.press('ArrowRight'); await page.keyboard.press('Enter'); await step(0);
   s = await state(); assert.ok(s.trap, `keyboard drop succeeds: ${s.message}`); assert.equal(s.heldTool, null);
   await save('mobile26-keyboard-trap');
-  report.checks.mobile26 = { sixFacts: true, fiveVisibleTools: true, actualTouchDrags: ['feeder', 'berry', 'calm'], filledFeeder: true, cooldown: true, helpFreeze: true, mapFreeze: true, keyboardSelectThenDrop: true, grassPoint: p };
+  report.checks.mobile26 = { sixFacts: true, threeColumnFacts: true, fiveVisibleTools: true, actualTouchDrags: ['feeder', 'berry', 'calm'], filledFeeder: true, topBowlGuidance: true, bottomToastHidden: true, cooldown: true, helpStartsAtHeading: true, helpFreeze: true, mapFreeze: true, keyboardSelectThenDrop: true, grassPoint: p };
   console.log('MOBILE26_PASS');
 }
 async function mobileReference() {
+  const variants = [], randomSessions = [];
+  for (let attempt = 0; attempt < 12 && variants.length < 2; attempt++) {
   await open(39, true); await facts();
-  const initial = await state(), plan = plans.find(p => p.level === 39 && p.variant === initial.variant); assert.ok(plan);
-  await save('mobile39-opening');
-  await capture(plan.stages[0], 'mobile39-first-capture', true);
+  const initial = await state();
+  randomSessions.push(initial.variant);
+  if (variants.some(v => v.variant === initial.variant)) continue;
+  const prefix = `mobile39-variant-${initial.variant}`;
+  const plan = plans.find(p => p.level === 39 && p.variant === initial.variant); assert.ok(plan);
+  await save(`${prefix}-opening`);
+  await capture(plan.stages[0], `${prefix}-first-capture`, true);
   assert.equal((await state()).levelCleared, false);
   await click('#capture-btn', true); await step(0);
   let s = await state(); assert.equal(s.mode, 'playing'); assert.equal(s.objective, 2); assert.deepEqual(s.rescuedIds, ['alba']);
   assert.match(await frame.locator('#instruction').innerText(), /deer you rescued/);
   assert.match(await frame.locator('[data-creature="alba"]').innerText(), /rescued/);
-  await facts(); await save('mobile39-rescued-reference');
-  await capture(plan.stages[1], 'mobile39-second-capture', true);
+  await facts(); await save(`${prefix}-rescued-reference`);
+  await capture(plan.stages[1], `${prefix}-second-capture`, true);
   s = await state(); assert.equal(s.levelCleared, true); assert.deepEqual(s.campaign.completed, [39]); assert.equal(s.campaign.highestUnlocked, 1);
-  report.checks.mobile39 = { actualTouchCaptures: plan.stages.map(s => s.id), rescuedReferenceVisible: true, isolatedCompletion: true };
-  console.log('MOBILE39_PASS');
+  variants.push({ variant: initial.variant, actualTouchCaptures: plan.stages.map(s => s.id), rescuedReferenceVisible: true, isolatedCompletion: true });
+  console.log(`MOBILE39_VARIANT_${initial.variant}_PASS`);
+  }
+  assert.equal(variants.length, 2, `fresh random sessions did not exercise both reflections: ${randomSessions}`);
+  report.checks.mobile39 = { variants, randomSessions, bothReflections: true };
 }
 try {
   for (const [name, action] of [['direct50', directFinal], ['mobile26', mobileTools], ['mobile39', mobileReference]]) {
