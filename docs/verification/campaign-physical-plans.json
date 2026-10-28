@@ -1,0 +1,3122 @@
+[
+  {
+    "level": 1,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "moss",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 50
+      }
+    ]
+  },
+  {
+    "level": 2,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 3,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 39
+      }
+    ]
+  },
+  {
+    "level": 4,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 5,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 6,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 7,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.4,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 81
+      }
+    ]
+  },
+  {
+    "level": 8,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "moss",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 59
+      }
+    ]
+  },
+  {
+    "level": 9,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 10,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 62
+      }
+    ]
+  },
+  {
+    "level": 11,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          }
+        ],
+        "ticks": 71
+      }
+    ]
+  },
+  {
+    "level": 12,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 47
+      }
+    ]
+  },
+  {
+    "level": 13,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 149
+      }
+    ]
+  },
+  {
+    "level": 14,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      }
+    ]
+  },
+  {
+    "level": 15,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "fizz",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.6000000000000001,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -0.6000000000000001,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 46
+      }
+    ]
+  },
+  {
+    "level": 16,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 63
+      }
+    ]
+  },
+  {
+    "level": 17,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 47
+      }
+    ]
+  },
+  {
+    "level": 18,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          }
+        ],
+        "ticks": 71
+      }
+    ]
+  },
+  {
+    "level": 19,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      }
+    ]
+  },
+  {
+    "level": 20,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 44
+      }
+    ]
+  },
+  {
+    "level": 21,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 149
+      }
+    ]
+  },
+  {
+    "level": 22,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      }
+    ]
+  },
+  {
+    "level": 23,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 47
+      }
+    ]
+  },
+  {
+    "level": 24,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          }
+        ],
+        "ticks": 71
+      }
+    ]
+  },
+  {
+    "level": 25,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 62
+      }
+    ]
+  },
+  {
+    "level": 26,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 27,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 28,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 29,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 30,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "mica",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          }
+        ],
+        "ticks": 55
+      }
+    ]
+  },
+  {
+    "level": 31,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      }
+    ]
+  },
+  {
+    "level": 32,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          }
+        ],
+        "ticks": 41
+      }
+    ]
+  },
+  {
+    "level": 33,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 63
+      }
+    ]
+  },
+  {
+    "level": 34,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      }
+    ]
+  },
+  {
+    "level": 35,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 36,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 149
+      },
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 295
+      }
+    ]
+  },
+  {
+    "level": 37,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.414213562373095,
+              "z": -3.814213562373095
+            }
+          }
+        ],
+        "ticks": 60
+      },
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": -3.6
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.4,
+              "z": -3.6
+            }
+          }
+        ],
+        "ticks": 169
+      }
+    ]
+  },
+  {
+    "level": 38,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 57
+      },
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -4.865079690234779,
+              "z": -2.365831006887499
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -4.865079690234779,
+              "z": -2.365831006887499
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 39,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.2447456177561984,
+              "z": -2.626642956396171
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.2447456177561984,
+              "z": -2.626642956396171
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 40,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "lark",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 51
+      },
+      {
+        "id": "quill",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 241
+      },
+      {
+        "id": "nori",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.2849458562220943,
+              "z": -1.6641057385123608
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.2849458562220943,
+              "z": -1.6641057385123608
+            }
+          }
+        ],
+        "ticks": 56
+      }
+    ]
+  },
+  {
+    "level": 41,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -0.4286054442489004,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 47
+      }
+    ]
+  },
+  {
+    "level": 42,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.847759065022573,
+              "z": 2.16536686473018
+            }
+          }
+        ],
+        "ticks": 71
+      }
+    ]
+  },
+  {
+    "level": 43,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 62
+      }
+    ]
+  },
+  {
+    "level": 44,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 45,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          }
+        ],
+        "ticks": 38
+      }
+    ]
+  },
+  {
+    "level": 46,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          }
+        ],
+        "ticks": 34
+      },
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -2.2732279618903113,
+              "z": 0.7555875143536857
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -2.2732279618903113,
+              "z": 0.7555875143536857
+            }
+          }
+        ],
+        "ticks": 36
+      }
+    ]
+  },
+  {
+    "level": 47,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.2447456177561984,
+              "z": -2.626642956396171
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.2447456177561984,
+              "z": -2.626642956396171
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 48,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.0347450764126414,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 63
+      },
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.2423239901114356,
+              "z": -2.210426053408915
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -1.2423239901114356,
+              "z": -2.210426053408915
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 49,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.5,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 57
+      },
+      {
+        "id": "hush",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": -2.4000000000000004
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.4,
+              "z": -2.4000000000000004
+            }
+          }
+        ],
+        "ticks": 162
+      },
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.38310466575534,
+              "z": 1.4940774733211795
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.38310466575534,
+              "z": 1.4940774733211795
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 50,
+    "variant": 0,
+    "stages": [
+      {
+        "id": "alder",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "drift",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.2090485234582715,
+              "z": 0.5627661035203411
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 3.2090485234582715,
+              "z": 0.5627661035203411
+            }
+          }
+        ],
+        "ticks": 41
+      },
+      {
+        "id": "bramble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.8,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -1.8,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "moss",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 50
+      }
+    ]
+  },
+  {
+    "level": 2,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 3,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 39
+      }
+    ]
+  },
+  {
+    "level": 4,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 5,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 55
+      }
+    ]
+  },
+  {
+    "level": 6,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 7,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.4,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 84
+      }
+    ]
+  },
+  {
+    "level": 8,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "moss",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 59
+      }
+    ]
+  },
+  {
+    "level": 9,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3,
+              "z": -4.440892098500626e-16
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 10,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 36
+      }
+    ]
+  },
+  {
+    "level": 11,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 12,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 35
+      }
+    ]
+  },
+  {
+    "level": 13,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 153
+      }
+    ]
+  },
+  {
+    "level": 14,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 15,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "fizz",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.5999999999999999,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 0.5999999999999999,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 64
+      }
+    ]
+  },
+  {
+    "level": 16,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 17,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 35
+      }
+    ]
+  },
+  {
+    "level": 18,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 19,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 20,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 21,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 153
+      }
+    ]
+  },
+  {
+    "level": 22,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 23,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 35
+      }
+    ]
+  },
+  {
+    "level": 24,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 25,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 36
+      }
+    ]
+  },
+  {
+    "level": 26,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 27,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          }
+        ],
+        "ticks": 39
+      }
+    ]
+  },
+  {
+    "level": 28,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 29,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          }
+        ],
+        "ticks": 41
+      }
+    ]
+  },
+  {
+    "level": 30,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "mica",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 3.0347450764126416,
+              "z": 0.9713945557510995
+            }
+          }
+        ],
+        "ticks": 35
+      }
+    ]
+  },
+  {
+    "level": 31,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 32,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          }
+        ],
+        "ticks": 41
+      }
+    ]
+  },
+  {
+    "level": 33,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  },
+  {
+    "level": 34,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 35,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      }
+    ]
+  },
+  {
+    "level": 36,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "reed",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": 3.5999999999999996
+            }
+          }
+        ],
+        "ticks": 153
+      },
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 461
+      }
+    ]
+  },
+  {
+    "level": 37,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "nib",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -5.414213562373095,
+              "z": -3.8142135623730953
+            }
+          }
+        ],
+        "ticks": 52
+      },
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.4,
+              "z": -3.6
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.4,
+              "z": -3.6
+            }
+          }
+        ],
+        "ticks": 187
+      }
+    ]
+  },
+  {
+    "level": 38,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 34
+      },
+      {
+        "id": "fern",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.060518594388116,
+              "z": -2.081527234940414
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.060518594388116,
+              "z": -2.081527234940414
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 39,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.0787246176696212,
+              "z": -2.621159108325356
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.0787246176696212,
+              "z": -2.621159108325356
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 40,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "lark",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 51
+      },
+      {
+        "id": "quill",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": 2.3999999999999995
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": 2.3999999999999995
+            }
+          }
+        ],
+        "ticks": 197
+      },
+      {
+        "id": "nori",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.112447875012048,
+              "z": -2.1203928664646874
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.112447875012048,
+              "z": -2.1203928664646874
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 41,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 0.42860544424890074,
+              "z": -3.434745076412641
+            }
+          }
+        ],
+        "ticks": 35
+      }
+    ]
+  },
+  {
+    "level": 42,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pip",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3.8477590650225735,
+              "z": 2.1653668647301796
+            }
+          }
+        ],
+        "ticks": 52
+      }
+    ]
+  },
+  {
+    "level": 43,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "brin",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 36
+      }
+    ]
+  },
+  {
+    "level": 44,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          }
+        ],
+        "ticks": 41
+      }
+    ]
+  },
+  {
+    "level": 45,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.3716044150450358e-16,
+              "z": -3.52
+            }
+          }
+        ],
+        "ticks": 38
+      }
+    ]
+  },
+  {
+    "level": 46,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.0347450764126407,
+              "z": 0.9713945557510987
+            }
+          }
+        ],
+        "ticks": 39
+      },
+      {
+        "id": "glint",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 3,
+              "z": 1.1999999999999995
+            }
+          }
+        ],
+        "ticks": 51
+      }
+    ]
+  },
+  {
+    "level": 47,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "alba",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "coda",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.0787246176696212,
+              "z": -2.621159108325356
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 1.0787246176696212,
+              "z": -2.621159108325356
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 48,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "pebble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -1.0347450764126411,
+              "z": 3.128605444248901
+            }
+          }
+        ],
+        "ticks": 34
+      },
+      {
+        "id": "tumble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 1.4114648925682745,
+              "z": -2.475510636212094
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 1.4114648925682745,
+              "z": -2.475510636212094
+            }
+          }
+        ],
+        "ticks": 57
+      }
+    ]
+  },
+  {
+    "level": 49,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "juniper",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.5,
+              "z": -2.4000000000000004
+            }
+          }
+        ],
+        "ticks": 41
+      },
+      {
+        "id": "hush",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -5.4,
+              "z": -3.6
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -5.4,
+              "z": -3.6
+            }
+          }
+        ],
+        "ticks": 213
+      },
+      {
+        "id": "iris",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.494042217759235,
+              "z": 1.2835451920163274
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": -3.494042217759235,
+              "z": 1.2835451920163274
+            }
+          }
+        ],
+        "ticks": 42
+      }
+    ]
+  },
+  {
+    "level": 50,
+    "variant": 1,
+    "stages": [
+      {
+        "id": "alder",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          },
+          {
+            "tool": "berry",
+            "point": {
+              "x": 5.12,
+              "z": -2.4
+            }
+          }
+        ],
+        "ticks": 49
+      },
+      {
+        "id": "drift",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": -3.0946995381720175,
+              "z": 0.5636528869742556
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": -3.0946995381720175,
+              "z": 0.5636528869742556
+            }
+          }
+        ],
+        "ticks": 41
+      },
+      {
+        "id": "bramble",
+        "actions": [
+          {
+            "tool": "catcher",
+            "point": {
+              "x": 2.2537825432864538,
+              "z": 1.2483598371112004
+            }
+          },
+          {
+            "tool": "leaf",
+            "point": {
+              "x": 2.2537825432864538,
+              "z": 1.2483598371112004
+            }
+          }
+        ],
+        "ticks": 34
+      }
+    ]
+  }
+]

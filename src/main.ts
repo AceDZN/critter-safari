@@ -1,6 +1,8 @@
 import * as THREE from "three";
-import { SafariSimulation, distance, BOUNDS, TRAP_RADIUS, type Point } from "./simulation";
-import { CONTRACTS, GLOSSARY, type Archetype } from "./content";
+import { SafariSimulation, distance, BOUNDS, TRAP_RADIUS, CALM_RADIUS, CALM_SECONDS, FEEDER_SECONDS, type Point } from "./simulation";
+import { CONTRACTS, CHAPTERS, GLOSSARY, type Archetype } from "./content";
+import { habitatForLevel } from "./habitats";
+import { SafariProgression } from "./progression";
 import {
   createGarden,
   loadCritter,
@@ -18,8 +20,14 @@ const game = new SafariSimulation(Math.random() < 0.5 ? 0 : 1),
   soundtrack = new SafariAudio(),
   canvas = $<HTMLCanvasElement>("game");
 const requestedLevel = parseLevelParam(location.search, CONTRACTS.length);
-if (requestedLevel !== null) game.load(requestedLevel);
+let storage: Storage | null = null;
+try { storage = window.localStorage; } catch { /* Private browsing can deny storage. */ }
+const campaign = new SafariProgression(storage);
+const initialLevel = requestedLevel ?? campaign.currentLevel - 1;
+campaign.enter(initialLevel + 1, requestedLevel !== null);
+game.load(initialLevel);
 const workbookSession = new WorkbookSession(postToHost);
+let recordedLevel = -1, lastFacts = "", reservedFactsHeight = 0;
 let renderer: THREE.WebGLRenderer;
 try {
   renderer = new THREE.WebGLRenderer({
@@ -58,7 +66,7 @@ Object.assign(sun.shadow.camera, {
 sun.shadow.normalBias = 0.002;
 scene.add(sun);
 scene.add(sun.target);
-let garden = createGarden(scene, false, game.variant, 0),
+let garden: ReturnType<typeof createGarden> = { obstacles: [], update() {}, dispose() {} },
   shownLevel = -1,
   assetVersion = 0,
   ready = false,
@@ -79,6 +87,7 @@ const views = new Map<
     contact: THREE.Mesh;
     carried: THREE.Group;
     tag: THREE.Sprite;
+    labelGuide: THREE.Line;
     lastClip: string;
     playbackRate: number;
     last: Point;
@@ -161,10 +170,14 @@ async function buildAnimals() {
     });
     view.tag.material.map?.dispose();
     view.tag.material.dispose();
+    view.labelGuide.geometry.dispose();
+    (view.labelGuide.material as THREE.Material).dispose();
+    disposeSnack(view.carried);
     scene.remove(view.root);
   }
   views.clear();
   try {
+    await garden.ready;
     const pending = await Promise.all(
       game.actors.map(async (actor) => ({
         actor,
@@ -213,6 +226,8 @@ async function buildAnimals() {
             ? 0.9
             : 1.3;
       root.add(label);
+      const labelGuide = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,label.position.y-.08,0),new THREE.Vector3(0,label.position.y-.08,0)]), new THREE.LineBasicMaterial({ color:0xf6edcc, transparent:true, opacity:.8, depthTest:false }));
+      labelGuide.visible = false; labelGuide.renderOrder = 9; root.add(labelGuide);
       scene.add(root);
       let skins = 0;
       const bones = new Set<THREE.Bone>();
@@ -229,6 +244,7 @@ async function buildAnimals() {
         contact,
         carried,
         tag: label,
+        labelGuide,
         lastClip: "",
         playbackRate: 1,
         last: { x: actor.x, z: actor.z },
@@ -363,7 +379,42 @@ function snack(type: "leaf" | "berry") {
   }
   return group;
 }
-let held: "catcher" | "leaf" | "berry" | null = null,
+function disposeSnack(group: THREE.Group) {
+  group.traverse(node => {
+    if (node instanceof THREE.Mesh) {
+      node.geometry.dispose();
+      for (const material of Array.isArray(node.material) ? node.material : [node.material]) material.dispose();
+    }
+  });
+}
+const feederView = new THREE.Group();
+scene.add(feederView);
+const bowl = mesh(new THREE.CylinderGeometry(.38, .29, .15, 20), wood, feederView, 0, .08, 0);
+const rim = mesh(new THREE.TorusGeometry(.36, .045, 6, 28), brass, feederView, 0, .18, 0);
+rim.rotation.x = Math.PI / 2;
+const bowlLeaf = snack("leaf"), bowlBerry = snack("berry");
+for (const food of [bowlLeaf, bowlBerry]) { food.position.y = .17; feederView.add(food); }
+const feederClock = tag(""); feederClock.position.y = .8; feederView.add(feederClock);
+const calmView = new THREE.Group(); scene.add(calmView);
+const calmMaterial = new THREE.MeshBasicMaterial({ color: 0x91b9a2, transparent: true, opacity: .26, depthWrite: false });
+const calmCircle = mesh(new THREE.CircleGeometry(CALM_RADIUS, 48), calmMaterial, calmView, 0, .012, 0);
+calmCircle.rotation.x = -Math.PI / 2; calmCircle.castShadow = false;
+const calmRing = mesh(new THREE.TorusGeometry(CALM_RADIUS, .018, 4, 56), mat(0xa8c5a4), calmView, 0, .025, 0); calmRing.rotation.x = Math.PI / 2;
+const stem = mesh(new THREE.CylinderGeometry(.025,.025,.32,6), mat(0x5a7e44), calmView,0,.18,0);
+for (let i=0;i<5;i++) { const angle=i/5*Math.PI*2, petal=mesh(new THREE.SphereGeometry(.11,8,6),mat(0xffedba),calmView,Math.sin(angle)*.12,.36,Math.cos(angle)*.12); petal.scale.set(1,.35,1.6); petal.rotation.y=angle; }
+mesh(new THREE.SphereGeometry(.085,9,6),brass,calmView,0,.37,0);
+const calmClock = tag(""); calmClock.position.y = .9; calmView.add(calmClock);
+function updateClock(sprite: THREE.Sprite, text: string, pixelWidth: number, worldPixel: number) {
+  if (sprite.userData.text !== text) {
+    sprite.userData.text = text;
+    const material = sprite.material as THREE.SpriteMaterial, texture = material.map!;
+    const image = texture.image as HTMLCanvasElement, ctx = image.getContext("2d")!;
+    ctx.clearRect(0,0,image.width,image.height); ctx.fillStyle="#f9efdbed"; ctx.beginPath();ctx.roundRect(4,4,248,64,15);ctx.fill();
+    ctx.fillStyle="#3e5135";ctx.textAlign="center";ctx.font="bold 38px Arial";ctx.fillText(text,128,49);texture.needsUpdate=true;
+  }
+  sprite.scale.set(worldPixel*pixelWidth,worldPixel*pixelWidth*72/256,1);
+}
+let held: "catcher" | "leaf" | "berry" | "feeder" | "calm" | null = null,
   pointer: Point | null = null,
   drag: {
     id: number;
@@ -391,7 +442,9 @@ function worldPoint(x: number, y: number): Point | null {
 function valid(p: Point) {
   return held === "catcher"
     ? game.placementIssue(p) === null
-    : game.fits(p, 0.12);
+    : held === "feeder" ? game.fits(p, .4)
+    : held === "calm" ? game.calmCooldown === 0 && game.fits(p, .15)
+    : game.fits(p, .12);
 }
 function select(type: typeof held) {
   held = type;
@@ -423,7 +476,10 @@ function moveToken(x: number, y: number) {
 }
 function drop(p: Point | null) {
   if (!held || !p || !ready) return;
-  const success = held === "catcher" ? game.place(p) : game.toss(p, held);
+  const success = held === "catcher" ? game.place(p)
+    : held === "feeder" ? game.placeFeeder(p)
+    : held === "calm" ? game.placeCalm(p)
+    : game.toss(p, held);
   if (success) {
     soundtrack.play(held === "catcher" ? "trap" : "bait");
     select(null);
@@ -518,25 +574,51 @@ function alignAction() {
 new ResizeObserver(alignAction).observe($("contract"));
 new ResizeObserver(([entry]) => {
   document.documentElement.style.setProperty("--facts-height", `${entry.borderBoxSize[0]?.blockSize ?? 0}px`);
+  const height = entry.borderBoxSize[0]?.blockSize ?? 0;
+  if (height > 0) reservedFactsHeight = height;
+  resize();
 }).observe($("animal-stats"));
+new ResizeObserver(resize).observe($("action-prompt"));
 function fullscreen() {
   if (document.fullscreenElement) void document.exitFullscreen();
   else void document.documentElement.requestFullscreen();
 }
 function closePanel() {
+  const wasMap = game.mode === "levels";
   game.resume();
   lastStamp = performance.now();
   sync();
+  if (wasMap) $("progress").focus();
+  else if (game.mode === "caught") $("capture-btn").focus();
+  else canvas.focus();
 }
+function campaignHTML() {
+  const resume = campaign.highestUnlocked;
+  return `<div class="campaign-heading"><div><div class="eyebrow">CRITTER SAFARI · FIELD JOURNAL</div><h2>מסע הספארי</h2><p>50 שלבים · כל חילוץ פותח את הבא</p></div><button id="resume-btn" class="quiet" aria-label="סגירת מפת השלבים">×</button></div><div class="campaign-track" aria-label="${campaign.completedCount} מתוך 50הושלמו"><span style="width:${campaign.completedCount / CONTRACTS.length * 100}%"></span></div><div class="campaign-chapters">${CHAPTERS.map((chapter, i) => `<section class="campaign-chapter"><h3>${chapter.number}. ${chapter.titleHe}</h3><p>${habitatForLevel(i * 5).titleHe}</p><div class="level-stops" dir="ltr">${CONTRACTS.slice(i*5,i*5+5).map(c => { const done=!!campaign.save.completed[c.level], allowed=campaign.canPlay(c.level); return `<button data-level="${c.level}" class="level-stop ${done ? "done" : ""} ${game.level+1===c.level ? "current" : ""}" ${allowed ? "" : "disabled"} aria-label="שלב ${c.level}: ${c.titleHe}${done ? " · הושלם" : allowed ? " · פתוח" : " · נעול"}"><b>${c.level}</b><span>${done ? "✓" : allowed ? "פתוח" : "נעול"}</span></button>`; }).join("")}</div></section>`).join("")}</div><div class="campaign-bottom"><button id="continue-campaign" class="primary">ממשיכים לשלב ${resume} ←</button><p>${campaign.warning || `ההתקדמות נשמרת במכשיר הזה · ${campaign.completedCount} / 50 הושלמו`}</p></div>`;
+}
+function enterLevel(index: number, lesson = false) {
+  if (!campaign.enter(index + 1, lesson)) return;
+  game.load(index);
+  workbookSession.restart();
+  recordedLevel = -1;
+  shownLevel = -1;
+  lastMode = "";
+  lastFacts = "";
+  lastCapture = "";
+  select(null);
+  sync();
+}
+function openLevels() { campaign.refresh(); game.open("levels"); lastMode = ""; sync(); }
 function modalHTML() {
   const c = game.contract;
+  if (game.mode === "levels") return campaignHTML();
   if (game.mode === "notes")
-    return `<div class="eyebrow">POCKET FIELD NOTES</div><h2>מי נמצא בקרחת היער?</h2><p class="instruction" dir="ltr" lang="en">${c.instruction}</p><p class="fine">המספרים מתארים את החיות הבדיוניות במשחק. מהירות רגילה: ללא פיתיון, על אותו משטח ישר. העדפת מזון אינה עובדה על כל המין.</p><div class="table-wrap"><table lang="en" dir="ltr"><thead><tr><th>Name / animal</th><th>Prefers</th><th>Usual pace</th><th>Size</th><th>Habit</th></tr></thead><tbody>${c.creatures.map((a) => `<tr><td><b>${a.name}</b><br>${a.archetype}</td><td>${a.diet === "leaf" ? "leaves" : "berries"}</td><td>${a.usualSpeed.toFixed(2)}</td><td>${a.size.toFixed(2)}</td><td>${a.habit}</td></tr>`).join("")}</tbody></table></div><div class="actions"><button id="resume-btn" class="primary">חוזרים לשטח ←</button><button id="help-btn" class="quiet">מילים ורמז</button></div>`;
+    return `<div class="eyebrow">POCKET FIELD NOTES</div><h2>מי נמצא בקרחת היער?</h2><p class="instruction" dir="ltr" lang="en">${game.objective.instruction}</p>${game.objectiveTotal > 1 ? `<ol class="rescue-brief" lang="en" dir="ltr">${c.objectives!.map((o,i)=>`<li class="${i === game.objectiveIndex ? "active" : ""}">${o.instruction}</li>`).join("")}</ol>` : ""}<p class="fine">המספרים מתארים את החיות הבדיוניות במשחק. מהירות רגילה: ללא פיתיון, על אותו משטח ישר. העדפת מזון אינה עובדה על כל המין.</p><div class="table-wrap"><table lang="en" dir="ltr"><thead><tr><th>Name / animal</th><th>Prefers</th><th>Usual pace</th><th>Size</th><th>Habit</th></tr></thead><tbody>${c.creatures.map((a) => `<tr><td><b>${a.name}</b>${game.rescuedIds.includes(a.id) ? " ✓ rescued" : ""}<br>${a.archetype}</td><td>${a.diet === "leaf" ? "leaves" : "berries"}</td><td>${a.usualSpeed.toFixed(2)}</td><td>${a.size.toFixed(2)}</td><td>${a.habit}</td></tr>`).join("")}</tbody></table></div><div class="actions"><button id="resume-btn" class="primary">חוזרים לשטח ←</button><button id="help-btn" class="quiet">מילים ורמז</button></div>`;
   if (game.mode === "help")
-    return `<div class="eyebrow">PAUSED / LITTLE FIELD GUIDE</div><h2>מלכודת, פיתיון, בועה!</h2><p>גררו את המלכודת אל דשא פנוי, ואז גררו עלה או פרי לשטח. החיות שמעדיפות את המזון יתקרבו. הראשונה שנכנסת למלכודת נלכדת אוטומטית.</p><p>${c.helpHe || "קראו את התיאור החדש ובדקו את הנתונים החדשים ביומן."}</p><div class="glossary">${GLOSSARY.map(([en, he]) => `<div><b dir="ltr" lang="en">${en}</b><span>${he}</span></div>`).join("")}</div><p class="fine">אפשר לבחור כלי ואז להקיש על הדשא. במקלדת: Enter לבחירה, חיצים למיקום, Enter להנחה. אין צורך ללכת או לכוון מצלמה.</p><div class="actions"><button id="resume-btn" class="primary">מנסים בשטח ←</button><button id="help-notes" class="quiet">פתיחת יומן</button></div>`;
+    return `<div class="eyebrow">PAUSED / LITTLE FIELD GUIDE</div><h2>מלכודת, פיתיון, בועה!</h2><p>גררו את המלכודת אל דשא פנוי, ואז גררו עלה או פרי לשטח. החיות שמעדיפות את המזון יתקרבו. הראשונה שנכנסת למלכודת נלכדת אוטומטית.</p><p>${c.helpHe || "קראו את התיאור החדש ובדקו את הנתונים החדשים ביומן."}</p>${game.toolkit.feeder ? "<p><b>קערת הסחה:</b> הניחו קערה, ואז הוסיפו לתוכה עלה או פרי. החיות שמעדיפות אותו יעסקו באוכל10 שניות. אפשר להזיז ולמלא שוב.</p>" : ""}${game.toolkit.calm ? "<p><b>פרח הרגעה:</b> מאט חיות סמוכות5 שניות, ואז מתרענן. להשוואות משתמשים תמיד במהירות הרגילה שבנתונים.</p>" : ""}<div class="glossary">${GLOSSARY.map(([en, he]) => `<div><b dir="ltr" lang="en">${en}</b><span>${he}</span></div>`).join("")}</div><p class="fine">אפשר לבחור כלי ואז להקיש על הדשא. במקלדת: Enter לבחירה, חיצים למיקום, Enter להנחה. אין צורך ללכת או לכוון מצלמה.</p><div class="actions"><button id="resume-btn" class="primary">מנסים בשטח ←</button><button id="help-notes" class="quiet">פתיחת יומן</button></div>`;
   if (game.mode === "complete")
-    return `<div class="eyebrow">LITTLE WOODLAND ADVENTURES</div><h2>החברים הגיעו למחנה!</h2><div class="stamp-row">${game.completedLevels.map(() => "<span>✦</span>").join("")}</div><p>${game.completed === CONTRACTS.length ? "כל חמש המשימות הושלמו, כולל קרחת היער עם השמות וההרגלים החדשים." : `${game.completed === 1 ? "משימה אחת הושלמה" : `${game.completed} משימות הושלמו`} במסע הזה. אפשר להתחיל ספארי מלא מהמשימה הראשונה.`}</p><div class="actions"><button id="restart-btn" class="primary">עוד ספארי ←</button></div>`;
-  return `<div class="eyebrow">THE CLEARING IS PAUSED</div><h2>הפסקה קטנה</h2><p>החיות מחכות. חוזרים כשמוכנים.</p><div class="actions"><button id="resume-btn" class="primary">ממשיכים ←</button><button id="restart-btn" class="quiet">מסע חדש</button><button id="settings-help" class="quiet">איך משחקים?</button></div><div class="toggle-row"><button id="mute-btn" class="quiet">${soundtrack.muted ? "צליל כבוי" : "צליל פעיל"}</button><button id="motion-btn" class="quiet">${reduced ? "תנועה מופחתת" : "תנועה מלאה"}</button><button id="full-btn" class="quiet">מסך מלא</button></div><div class="audio-levels"><label for="music-volume">מוזיקה <output id="music-value">${Math.round(soundtrack.musicVolume * 100)}%</output></label><input id="music-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.musicVolume * 100}" aria-label="עוצמת מוזיקה"><label for="effects-volume">אפקטים <output id="effects-value">${Math.round(soundtrack.effectsVolume * 100)}%</output></label><input id="effects-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.effectsVolume * 100}" aria-label="עוצמת אפקטים"></div>`;
+    return `<div class="eyebrow">THE WOODLAND JOURNEY</div><h2>${campaign.completedCount === CONTRACTS.length ? "כל 50 השלבים הושלמו!" : "החילוץ האחרון הושלם!"}</h2><div class="journey-stamp">✦</div><p>${campaign.completedCount} מתוך ${CONTRACTS.length} שלבים הושלמו במכשיר הזה.</p><div class="actions"><button id="finish-map" class="primary">למפת השלבים ←</button><button id="restart-btn" class="quiet">שוב לשלב הזה</button></div>`;
+  return `<div class="eyebrow">THE CLEARING IS PAUSED</div><h2>הפסקה קטנה</h2><p>החיות מחכות. חוזרים כשמוכנים.</p><div class="actions"><button id="resume-btn" class="primary">ממשיכים ←</button><button id="settings-map" class="quiet">מפת50השלבים</button><button id="restart-btn" class="quiet">ניסיון חדש בשלב</button><button id="settings-help" class="quiet">איך משחקים?</button></div><div class="toggle-row"><button id="mute-btn" class="quiet">${soundtrack.muted ? "צליל כבוי" : "צליל פעיל"}</button><button id="motion-btn" class="quiet">${reduced ? "תנועה מופחתת" : "תנועה מלאה"}</button><button id="full-btn" class="quiet">מסך מלא</button></div><div class="audio-levels"><label for="music-volume">מוזיקה <output id="music-value">${Math.round(soundtrack.musicVolume * 100)}%</output></label><input id="music-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.musicVolume * 100}" aria-label="עוצמת מוזיקה"><label for="effects-volume">אפקטים <output id="effects-value">${Math.round(soundtrack.effectsVolume * 100)}%</output></label><input id="effects-volume" dir="ltr" type="range" min="0" max="100" value="${soundtrack.effectsVolume * 100}" aria-label="עוצמת אפקטים"></div>`;
 }
 function bind(id: string, fn: () => void) {
   $(id).onclick = fn;
@@ -552,8 +634,10 @@ function sync() {
       game.level,
     );
     shownLevel = game.level;
+    recordedLevel = -1;
+    lastFacts = "";
     $("animal-facts").innerHTML = game.contract.creatures.map(a =>
-      `<li data-creature="${a.id}"><b>${a.name} <span>· ${a.archetype}</span></b><span>prefers ${a.diet === "leaf" ? "leaves" : "berries"}</span><span>speed <strong>${a.usualSpeed.toFixed(2)}</strong> · size <strong>${a.size.toFixed(2)}</strong></span></li>`
+      `<li data-creature="${a.id}"><b>${a.name} <span>· ${a.archetype}</span></b><span>prefers ${a.diet === "leaf" ? "leaves" : "berries"}</span><span>speed <strong>${a.usualSpeed.toFixed(2)}</strong> · size <strong>${a.size.toFixed(2)}</strong></span><span class="habit">${a.habit}</span></li>`
     ).join("");
     $("animal-stats").dataset.count = String(game.actors.length);
     resize();
@@ -561,15 +645,25 @@ function sync() {
     lastCapture = "";
     select(null);
   }
-  $("instruction").textContent = game.contract.instruction;
-  $("progress").textContent = `${game.level + 1} / 5`;
-  $("chapter").textContent = game.contract.transfer
-    ? "NEW CLEARING"
-    : "FERN GARDEN";
+  const factsKey = `${game.level}:${game.rescuedIds.join(",")}`;
+  const factsChanged = lastFacts !== factsKey;
+  if (factsChanged) {
+    lastFacts = factsKey;
+    $("animal-facts").innerHTML = game.contract.creatures.map(a => `<li data-creature="${a.id}" class="${game.rescuedIds.includes(a.id) ? "rescued" : ""}"><b>${a.name} <span>· ${a.archetype}${game.rescuedIds.includes(a.id) ? " · rescued ✓" : ""}</span></b><span>prefers ${a.diet === "leaf" ? "leaves" : "berries"}</span><span>speed <strong>${a.usualSpeed.toFixed(2)}</strong> · size <strong>${a.size.toFixed(2)}</strong></span><span class="habit">${a.habit}</span></li>`).join("");
+  }
+  if (game.levelCleared && recordedLevel !== game.level) {
+    campaign.complete(game.level + 1, { attempts: game.attempts, hints: game.hints, seconds: game.time, rescues: game.objectiveTotal });
+    recordedLevel = game.level;
+  }
+  $("instruction").textContent = game.objective.instruction;
+  $("rescue-progress").hidden = game.objectiveTotal === 1;
+  $("rescue-progress").textContent = `חילוץ ${game.objectiveIndex + 1} מתוך ${game.objectiveTotal} · ${game.rescuedIds.length} בדרך למחנה`;
+  $("progress").textContent = `${game.level + 1} / ${CONTRACTS.length} ▦`;
+  $("chapter").textContent = habitatForLevel(game.level).titleEn.toUpperCase();
   $("action-prompt").textContent =
     game.mode === "caught"
       ? game.correct
-        ? "הצלחתם! לחצו על ׳עוד משימה׳ כדי להמשיך"
+        ? game.levelCleared ? "השלב הושלם! ממשיכים לשלב הבא" : "החילוץ הושלם! ממשיכים לתיאור הבא"
         : "לחצו על ׳שחרור וניסיון נוסף׳ כדי לנסות שוב"
       : game.mode === "complete"
         ? "כל החברים הגיעו למחנה!"
@@ -582,18 +676,25 @@ function sync() {
                 : pointer && game.placementIssue(pointer) === "animal"
                   ? "הטבעת קרובה לחיה — הניחו לצידה ופַתו אותה במזון"
                   : "הניחו את הטבעת על דשא פנוי בתוך הקו המקווקו"
-            : "הניחו את המזון על הדשא"
+            : held === "feeder" ? pointer && !valid(pointer) ? "הקערה צריכה להיות על דשא פנוי, בתוך הגבול ומחוץ לאבנים" : "הניחו קערת הסחה, ואז מלאו אותה בעלה או פרי"
+            : held === "calm" ? "הניחו פרח ליד יריבים כדי להאט אותם זמנית"
+            : game.feeder && pointer && distance(pointer, game.feeder) < .65 ? "מלאו את קערת ההסחה במזון שבחרתם" : "הניחו את המזון על הדשא"
+          : game.feeder && game.feeder.diet === null ? "הקערה ריקה — בחרו עלה או פרי והקישו על הקערה"
+          : game.level === 10 && !game.feeder && !game.trap ? "כלי חדש: קערת הסחה — הניחו אותה ומלאו בעלה או פרי"
           : game.phase() === "place-catcher"
             ? "גררו את המלכודת אל הדשא"
             : game.phase() === "drop-food"
               ? "ועכשיו גררו עלה או פרי אל השטח"
               : "הם בדרך… אפשר להזיז מלכודת או להסיח יריב";
+  if (factsChanged) alignAction();
   $("animal-stats").hidden = game.mode !== "playing";
   $("toast").hidden = held !== null || game.mode !== "playing";
-  for (const tool of document.querySelectorAll<HTMLButtonElement>(
-    "[data-tool]",
-  ))
-    tool.disabled = !ready || game.mode !== "playing";
+  $("feeder-tool").hidden = !game.toolkit.feeder;
+  $("calm-tool").hidden = !game.toolkit.calm;
+  $("tray").dataset.tools = game.toolkit.calm ? "5" : game.toolkit.feeder ? "4" : "3";
+  for (const tool of document.querySelectorAll<HTMLButtonElement>("[data-tool]"))
+    tool.disabled = !ready || game.mode !== "playing" || (tool.dataset.tool === "calm" && game.calmCooldown > 0);
+  $("calm-tool").querySelector("span")!.textContent = game.calmCooldown > 0 ? `הרגעה · ${Math.ceil(game.calmCooldown)}ש׳` : "פרח הרגעה";
   if (lastMessage !== game.message) {
     $("toast").textContent = game.message;
     lastMessage = game.message;
@@ -608,9 +709,13 @@ function sync() {
       .name;
     const caughtSpec = game.actors.find(a => a.spec.id === game.captureId)!.spec;
     $("capture-card").innerHTML =
-      `<div class="eyebrow">${game.correct ? "SAFE & SOUND" : "RELEASE & TRY AGAIN"}</div><h2>${game.correct ? `<bdi dir="ltr">${name}</bdi> בדרך למחנה!` : `<bdi dir="ltr">${name}</bdi> בתוך הבועה`}</h2><p lang="en" dir="ltr">prefers ${caughtSpec.diet === "leaf" ? "leaves" : "berries"} · speed ${caughtSpec.usualSpeed.toFixed(2)} · size ${caughtSpec.size.toFixed(2)}</p><p>${game.correct ? "בדיוק החיה שמתאימה לתיאור." : game.message}</p><button id="capture-btn" class="primary">${game.correct ? "עוד משימה ←" : "שחרור וניסיון נוסף ←"}</button>`;
+      `<div class="eyebrow">${game.correct ? "SAFE & SOUND" : "RELEASE & TRY AGAIN"}</div><h2>${game.correct ? `<bdi dir="ltr">${name}</bdi> בדרך למחנה!` : `<bdi dir="ltr">${name}</bdi> בתוך הבועה`}</h2><p lang="en" dir="ltr">prefers ${caughtSpec.diet === "leaf" ? "leaves" : "berries"} · speed ${caughtSpec.usualSpeed.toFixed(2)} · size ${caughtSpec.size.toFixed(2)}</p><p>${game.correct ? "בדיוק החיה שמתאימה לתיאור." : game.message}</p><button id="capture-btn" class="primary">${game.correct ? game.levelCleared ? game.level === CONTRACTS.length - 1 ? "סיום המסע ←" : `לשלב ${game.level + 2} ←` : "לחילוץ הבא ←" : "שחרור וניסיון נוסף ←"}</button>`;
     bind("capture-btn", () => {
-      if (game.correct) game.next();
+      if (game.correct) {
+        const oldLevel = game.level;
+        game.next();
+        if (game.level !== oldLevel) campaign.enter(game.level + 1, requestedLevel !== null);
+      }
       else {
         game.release();
         soundtrack.play("release");
@@ -621,17 +726,29 @@ function sync() {
     queueMicrotask(() => $("capture-btn").focus());
     dirty = true;
   }
-  const panel = ["notes", "help", "paused", "complete"].includes(game.mode);
+  const panel = ["notes", "help", "paused", "levels", "complete"].includes(game.mode);
   $("modal").hidden = !panel;
   if (lastMode !== game.mode) {
     lastMode = game.mode;
     dirty = true;
     select(null);
     if (panel) {
+      $("modal-body").dataset.panel = game.mode;
       $("modal-body").innerHTML = modalHTML();
-      queueMicrotask(() =>
-        document.querySelector<HTMLButtonElement>("#modal .primary")?.focus(),
-      );
+      $("modal-body").scrollTop = 0;
+      $("modal-body").querySelector("h2")?.setAttribute("id", "panel-title");
+      $("modal").setAttribute("aria-labelledby", "panel-title");
+      if (game.mode === "levels") {
+        for (const button of $("modal-body").querySelectorAll<HTMLButtonElement>("[data-level]")) button.onclick = () => enterLevel(Number(button.dataset.level) - 1);
+        bind("continue-campaign", () => enterLevel(campaign.highestUnlocked - 1));
+        queueMicrotask(() => $("modal-body").querySelector(".level-stop.current")?.scrollIntoView({ block: "nearest" }));
+      }
+      if (game.mode === "complete") bind("finish-map", openLevels);
+      queueMicrotask(() => {
+        const heading = $("modal-body").querySelector<HTMLElement>("h2");
+        if ((game.mode === "help" || game.mode === "notes") && heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); $("modal-body").scrollTop = 0; }
+        else document.querySelector<HTMLButtonElement>("#modal .primary")?.focus({ preventScroll: true });
+      });
       if (game.mode !== "complete") bind("resume-btn", closePanel);
       if (game.mode === "notes")
         bind("help-btn", () => {
@@ -646,11 +763,15 @@ function sync() {
       if (game.mode === "paused" || game.mode === "complete")
         bind("restart-btn", () => {
           game.restart();
+          shownLevel = -1;
+          recordedLevel = -1;
+          lastFacts = "";
           workbookSession.restart();
           lastCapture = "";
           sync();
         });
       if (game.mode === "paused") {
+        bind("settings-map", openLevels);
         bind("settings-help", () => {
           game.open("help");
           sync();
@@ -685,6 +806,8 @@ function sync() {
   }
   syncWorkbook();
 }
+bind("progress", openLevels);
+window.addEventListener("storage", e => { if (e.key === "critter-safari-campaign-v1") { campaign.refresh(); if (game.mode === "levels") { lastMode = ""; sync(); } } });
 bind("notes-btn", () => {
   game.open("notes");
   sync();
@@ -735,6 +858,7 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (game.mode !== "playing") return;
+  if (e.code === "KeyL") { openLevels(); return; }
   if (e.code === "KeyN") {
     game.open("notes");
     sync();
@@ -840,9 +964,11 @@ function resize() {
         low = Math.min(low, point.y); high = Math.max(high, point.y);
       }
     }
-    const top = $("contract").getBoundingClientRect().bottom + 55;
-    const factsHeight = 52 + Math.ceil(game.actors.length / 2) * 50;
-    const bottom = innerHeight - 130 - factsHeight - 12;
+    const top = $("action-prompt").getBoundingClientRect().bottom + 12;
+    const factsBox = $("animal-stats").getBoundingClientRect();
+    if (factsBox.height > 0) reservedFactsHeight = factsBox.height;
+    const factsHeight = reservedFactsHeight || 52 + Math.ceil(game.actors.length / 2) * 50;
+    const bottom = (factsBox.height > 0 ? factsBox.top : innerHeight - 130 - factsHeight) - 12;
     const halfHeight = Math.max(camera.top, (high - low) * innerHeight / Math.max(180, bottom - top) / 2);
     const center = (high + low) / 2 + ((top + bottom) / 2 - innerHeight / 2) * 2 * halfHeight / innerHeight;
     camera.top = center + halfHeight;
@@ -853,6 +979,38 @@ function resize() {
   camera.updateProjectionMatrix();
   dirty = true;
 }
+function layoutLabels() {
+  const placed: { x:number; y:number; w:number; h:number }[] = [];
+  const width = innerWidth < 700 ? 68 : 86, height = innerWidth < 700 ? 20 : 25;
+  const ceiling = innerWidth < 700 ? $("action-prompt").getBoundingClientRect().bottom + height/2 + 3 : height/2;
+  for (const actor of game.actors) {
+    const view = views.get(actor.spec.id);
+    if (!view) continue;
+    view.labelGuide.visible = false;
+    if (!view.root.visible || !view.tag.visible) continue;
+    const base = actor.spec.archetype === "deer" ? 1.65 : actor.spec.archetype === "tortoise" ? .9 : 1.3;
+    view.tag.position.y = base;
+    const world = new THREE.Vector3(actor.x, view.root.position.y + base * actor.spec.size, actor.z);
+    const projected = world.clone().project(camera), up = world.clone().add(new THREE.Vector3(0,1,0)).project(camera);
+    const x = (projected.x + 1) * innerWidth / 2, originalY = (1-projected.y)*innerHeight/2;
+    const pixelsPerY = Math.max(.001,Math.abs(up.y-projected.y)*innerHeight/2);
+    let y = Math.max(ceiling, originalY);
+    for (let tries=0;tries<4;tries++) {
+      const overlaps = placed.some(r=>Math.abs(r.x-x)<(r.w+width)/2+3 && Math.abs(r.y-y)<(r.h+height)/2+3);
+      if (!overlaps) break;
+      const above = y-height-4;
+      y = above >= ceiling ? above : originalY+height+4*(tries+1);
+    }
+    const shift = (originalY-y)/pixelsPerY/actor.spec.size;
+    view.tag.position.y = base + shift;
+    if (Math.abs(y-originalY)>2) {
+      const positions = view.labelGuide.geometry.getAttribute("position") as THREE.BufferAttribute;
+      positions.setXYZ(0,0,base-.08,0);positions.setXYZ(1,0,base+shift,0);positions.needsUpdate=true;
+      view.labelGuide.geometry.computeBoundingSphere();view.labelGuide.visible=true;
+    }
+    placed.push({x,y,w:width,h:height});
+  }
+}
 window.addEventListener("resize", resize);
 resize();
 function draw(dt = 0) {
@@ -861,6 +1019,8 @@ function draw(dt = 0) {
   for (const actor of game.actors) {
     const view = views.get(actor.spec.id);
     if (!view) continue;
+    view.root.visible = actor.mode !== "rescued";
+    if (actor.mode === "rescued") continue;
     view.carried.visible = actor.carrying !== null;
     view.contact.visible = actor.mode !== "caught";
     view.tag.visible =
@@ -879,8 +1039,8 @@ function draw(dt = 0) {
     view.heading.rotation.y +=
       turn * (reduced || dt === 0 ? 1 : Math.min(1, dt * 9));
     view.tag.scale.set(
-      (pxWorld * 86) / actor.spec.size,
-      (pxWorld * 25) / actor.spec.size,
+      (pxWorld * (innerWidth < 700 ? 68 : 86)) / actor.spec.size,
+      (pxWorld * (innerWidth < 700 ? 20 : 25)) / actor.spec.size,
       1,
     );
     const walk = view.visual.clips.find(c => /walk|hop/i.test(c.name)) ?? view.visual.clips[0];
@@ -901,10 +1061,10 @@ function draw(dt = 0) {
     }
     if (desired) {
       const nominal = view.visual.nominalSpeeds?.[desired.name];
-      const travelMultiplier = actor.mode === "lured" ? 1.35 : actor.mode === "escape" ? 1.5 : 1;
+      const travelMultiplier = game.movementMultiplier(actor);
       view.playbackRate = nominal
         ? actor.spec.usualSpeed * travelMultiplier / (actor.spec.size * nominal)
-        : 1;
+        : travelMultiplier;
       view.visual.mixer.clipAction(desired).setEffectiveTimeScale(view.playbackRate);
     }
     const hasIdleMotion = /idle|rest|breath/i.test(desired?.name ?? "");
@@ -913,6 +1073,7 @@ function draw(dt = 0) {
     );
     view.last = { x: actor.x, z: actor.z };
   }
+  layoutLabels();
   catcher.visible = !!game.trap;
   if (game.trap) {
     catcher.position.set(game.trap.x, 0, game.trap.z);
@@ -930,6 +1091,7 @@ function draw(dt = 0) {
   for (const [id, view] of snackViews)
     if (!ids.has(id)) {
       scene.remove(view);
+      disposeSnack(view);
       snackViews.delete(id);
     }
   for (const bait of game.baits) {
@@ -942,10 +1104,23 @@ function draw(dt = 0) {
     const t = 1 - bait.flight / 0.38;
     view.position.set(bait.x, 0.04 + Math.sin(t * Math.PI) * 0.85, bait.z);
   }
+  feederView.visible = game.feeder !== null;
+  if (game.feeder) {
+    feederView.position.set(game.feeder.x, 0, game.feeder.z);
+    bowlLeaf.visible = game.feeder.diet === "leaf" && game.feeder.remaining > 0;
+    bowlBerry.visible = game.feeder.diet === "berry" && game.feeder.remaining > 0;
+    updateClock(feederClock, game.feeder.remaining > 0 ? `${Math.ceil(game.feeder.remaining)}s` : "מלאו", 48, pxWorld);
+  }
+  calmView.visible = game.calm !== null;
+  if (game.calm) {
+    calmView.position.set(game.calm.x, 0, game.calm.z);
+    calmMaterial.opacity = .1 + .18 * game.calm.remaining / CALM_SECONDS;
+    updateClock(calmClock, `${Math.ceil(game.calm.remaining)}s`, 42, pxWorld);
+  }
   marker.visible = held !== null && pointer !== null && game.mode === "playing";
   if (marker.visible && pointer) {
     marker.position.set(pointer.x, 0.03, pointer.z);
-    marker.scale.setScalar(held === "catcher" ? TRAP_RADIUS : 0.27);
+    marker.scale.setScalar(held === "catcher" ? TRAP_RADIUS : held === "calm" ? CALM_RADIUS : held === "feeder" ? .4 : .27);
     (marker.material as THREE.MeshBasicMaterial).color.setHex(
       valid(pointer) ? 0xf6efb9 : 0xbb7357,
     );
@@ -960,7 +1135,7 @@ function syncWorkbook() {
   workbookSession.sync({
     ready: ready && hasRenderedModels,
     level: game.level + 1,
-    complete: game.mode === "caught" && game.correct,
+    complete: game.levelCleared,
     durationMs: game.time * 1000,
   });
 }
@@ -978,6 +1153,7 @@ Object.assign(window, {
   render_game_to_text: () =>
     JSON.stringify({
       ...game.text(),
+      campaign: { currentLevel: game.level + 1, highestUnlocked: campaign.highestUnlocked, completed: Object.keys(campaign.save.completed).map(Number), savedResume: campaign.currentLevel, warning: campaign.warning },
       heldTool: held,
       planning: held !== null,
       ready,

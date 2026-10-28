@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SafariSimulation, distance, type Point } from '../src/simulation';
+import { SafariSimulation, distance, findRoute, segmentClear, type Point } from '../src/simulation';
 import type { Diet } from '../src/content';
 
 const DT = 1 / 60;
@@ -12,10 +12,10 @@ function idle(sim: SafariSimulation, seconds: number) {
 // selectCandidates/validateContract. Calls mirror only ordinary trap/food drops.
 const PLANS = [
   { level: 0, id: 'moss', diet: 'leaf', trap: { x: 0, z: 0 } },
-  { level: 1, id: 'pip', diet: 'berry', trap: { x: 0, z: 1.3 } },
-  { level: 2, id: 'tumble', diet: 'leaf', trap: { x: 1.6, z: -2.2 } },
-  { level: 3, id: 'reed', diet: 'leaf', trap: { x: -2, z: -2.1 } },
-  { level: 4, id: 'brin', diet: 'berry', trap: { x: 4, z: -2.4 } },
+  { level: 1, id: 'pebble', diet: 'berry', trap: { x: 0, z: 0 } },
+  { level: 2, id: 'reed', diet: 'leaf', trap: { x: 0, z: 0 } },
+  { level: 3, id: 'pip', diet: 'berry', trap: { x: 0, z: 0 } },
+  { level: 4, id: 'glint', diet: 'berry', trap: { x: 0, z: 0 } },
 ] as const;
 interface Plan { level: number; id: string; diet: Diet; trap: Point }
 const reflected = (point: Point, variant: 0 | 1): Point => ({ x: point.x * (variant ? -1 : 1), z: point.z });
@@ -53,7 +53,7 @@ for (const variant of [0, 1] as const) for (const plan of PLANS) {
     assert.equal(sim.correct, true);
     assert.equal(sim.attempts, 1);
     sim.next();
-    assert.equal(sim.mode, plan.level === 4 ? 'complete' : 'playing');
+    assert.equal(sim.mode, 'playing');
     assert.equal(sim.completed, 1);
     assert.deepEqual(sim.completedLevels, [plan.level + 1]);
   });
@@ -92,7 +92,7 @@ test('the wrong rabbit is genuinely capturable, release returns the trap to its 
 });
 
 test('notes, vocabulary help and pause freeze animal travel, bait flight, arming and clock', () => {
-  for (const panel of ['notes', 'help', 'paused'] as const) {
+  for (const panel of ['notes', 'help', 'paused', 'levels'] as const) {
     const sim = new SafariSimulation();
     assert.equal(sim.place({ x: 0, z: 0 }), true);
     assert.equal(sim.toss({ x: 0, z: 0 }, 'leaf'), true);
@@ -117,10 +117,10 @@ test('a drop must land on clear grass, with room for the whole trap and no anima
   assert.equal(sim.place({ x: 4.8, z: 0 }), true, 'clear grass inside the rails is usable');
   assert.equal(sim.place({ x: -2, z: 0 }), false, 'cannot drop directly onto Moss');
   assert.equal(sim.toss({ x: 7, z: 0 }, 'leaf'), false, 'bait also respects the arena edge');
-  sim.load(2);
-  assert.equal(sim.place({ x: 0.15, z: -0.3 }), false, 'solid central stone');
-  assert.equal(sim.placementIssue({ x: 0.15, z: -0.3 }), 'rock');
-  assert.equal(sim.toss({ x: 0.15, z: -0.3 }, 'leaf'), false, 'bait cannot be hidden inside a stone');
+  sim.load(20);
+  assert.equal(sim.place({ x: 0, z: -0.45 }), false, 'solid central stone');
+  assert.equal(sim.placementIssue({ x: 0, z: -0.45 }), 'rock');
+  assert.equal(sim.toss({ x: 0, z: -0.45 }, 'leaf'), false, 'bait cannot be hidden inside a stone');
   assert.equal(sim.place({ x: 1.6, z: -2.2 }), true);
   assert.equal(sim.toss({ x: 1.6, z: -2.2 }, 'leaf'), true);
   sim.resetTrap();
@@ -144,21 +144,14 @@ test('an individual does not follow its non-preferred lure, while the other rabb
   assert.equal(pipReacted, true);
 });
 
-test('a blocked approach takes a physical detour instead of crossing the central stone', () => {
-  const sim = new SafariSimulation();
-  sim.load(2);
-  const nib = sim.actors.find((actor) => actor.spec.id === 'nib')!;
-  const rock = { x: 0.15, z: -0.3, r: 0.62 }; // Independent authored collider fixture.
-  assert.equal(sim.toss({ x: -1.8, z: -1.2 }, 'berry'), true);
-  let lured = false, reachedFarSide = false;
-  for (let frame = 0; frame < 360; frame++) {
-    sim.update(DT);
-    assert.ok(distance(nib, rock) >= 0.82 - 1e-5, 'Nib body stays outside the solid stone');
-    if (nib.mode === 'lured') lured = true;
-    if (lured && nib.x < -1) reachedFarSide = true;
-  }
-  assert.equal(lured, true);
-  assert.equal(reachedFarSide, true, 'bait on the opposite side remains physically achievable');
+test('a blocked route takes a physical detour around an independently specified stone', () => {
+  const from = { x: 1.1, z: .7 }, to = { x: -1.8, z: -1.2 }, rock = { x: .15, z: -.3, r: .62 };
+  assert.equal(segmentClear(from, to, [rock], .216), false);
+  const route = findRoute(from, to, [rock], .216);
+  assert.ok(route.length > 1); assert.deepEqual(route.at(-1), to);
+  let previous = from, travelled = 0;
+  for (const point of route) { assert.equal(segmentClear(previous, point, [rock], .216), true); travelled += distance(previous, point); previous = point; }
+  assert.ok(travelled > distance(from,to));
 });
 
 test('field-note usual pace equals ordinary unbaited motion on clear level ground', () => {
@@ -170,20 +163,20 @@ test('field-note usual pace equals ordinary unbaited motion on clear level groun
   assert.ok(Math.abs(distance(before, moss) - 0.62 * DT) < 1e-9);
 });
 
-test('restart produces a fresh first task, clears prior evidence and requires new drops', () => {
+test('retry restarts the current level and requires new drops without wiping earned levels', () => {
   const sim = new SafariSimulation();
   dropAndCapture(sim, PLANS[0]);
   sim.next();
   sim.open('help');
   sim.restart();
   assert.equal(sim.mode, 'playing');
-  assert.equal(sim.level, 0);
-  assert.equal(sim.completed, 0);
+  assert.equal(sim.level, 1);
+  assert.equal(sim.completed, 1);
   assert.equal(sim.trap, null);
   assert.equal(sim.baits.length, 0);
   assert.equal(sim.attempts, 0);
   assert.equal(sim.hints, 0);
   assert.equal(sim.captureId, null);
   assert.equal(sim.actors.length, 2);
-  assert.deepEqual(sim.events.map((event) => event.type), ['restart']);
+  assert.deepEqual(sim.events.map((event) => event.type), ['restart-level']);
 });

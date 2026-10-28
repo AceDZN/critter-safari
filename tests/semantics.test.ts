@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLEARING_CREATURES, COMPARISON_CREATURES, CONTRACTS, INTRO_CREATURES, TRANSFER_CREATURES, type Contract, type CreatureSpec } from '../src/content';
+import { CLEARING_CREATURES, COMPARISON_CREATURES, LEGACY_CONTRACTS as CONTRACTS, INTRO_CREATURES, TRANSFER_CREATURES, type Contract, type CreatureSpec } from '../src/content';
 import { acceptsCapture, selectCandidates, validateContract } from '../src/semantics';
 
 // Hand-authored answer oracle. This does not compute expected answers using the selector.

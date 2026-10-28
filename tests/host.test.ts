@@ -8,19 +8,19 @@ import {
 } from "../src/host";
 import { SafariSimulation } from "../src/simulation";
 
-test("Workbook deep links accept only the five authored integer contracts", () => {
-  for (let n = 1; n <= 5; n++)
-    assert.equal(parseLevelParam(`?level=${n}`, 5), n - 1);
+test("Workbook deep links accept only the fifty authored integer contracts", () => {
+  for (let n = 1; n <= 50; n++)
+    assert.equal(parseLevelParam(`?level=${n}`, 50), n - 1);
   for (const search of [
     "",
     "?level=0",
-    "?level=6",
+    "?level=51",
     "?level=-1",
     "?level=2.5",
     "?level=NaN",
     "?level=2abc",
   ])
-    assert.equal(parseLevelParam(search, 5), null);
+    assert.equal(parseLevelParam(search, 50), null);
 });
 test("bridge targets only first-party Workbook HTTPS hosts or local development", () => {
   for (const origin of [
@@ -49,7 +49,7 @@ test("real capture/recovery sends ready, starts and correct completion once, wit
     session.sync({
       ready,
       level: sim.level + 1,
-      complete: sim.mode === "caught" && sim.correct,
+      complete: sim.levelCleared,
       durationMs: sim.time * 1000,
     });
   observe(false);
@@ -95,10 +95,10 @@ test("real capture/recovery sends ready, starts and correct completion once, wit
   sim.restart();
   session.restart();
   observe();
-  assert.deepEqual(messages.at(-1), { type: "level-start", level: 1 });
+  assert.deepEqual(messages.at(-1), { type: "level-start", level: 2 });
   assert.equal(messages.filter((m) => m.type === "ready").length, 1);
 });
-test("starting at contract five reports only that completed contract", () => {
+test("a direct lesson reports one earned contract without pretending skipped levels were done", () => {
   const sim = new SafariSimulation();
   sim.load(4);
   const messages: HostMessage[] = [],
@@ -107,20 +107,20 @@ test("starting at contract five reports only that completed contract", () => {
     session.sync({
       ready: true,
       level: sim.level + 1,
-      complete: sim.mode === "caught" && sim.correct,
+      complete: sim.levelCleared,
       durationMs: sim.time * 1000,
     });
   observe();
-  assert.equal(sim.place({ x: 4, z: -2.4 }), true);
-  assert.equal(sim.toss({ x: 4, z: -2.4 }, "berry"), true);
+  assert.equal(sim.place({ x: 0, z: 0 }), true);
+  assert.equal(sim.toss({ x: 0, z: 0 }, "berry"), true);
   for (let i = 0; i < 1200 && sim.mode === "playing"; i++) {
     sim.update(1 / 60);
     observe();
   }
-  assert.equal(sim.captureId, "brin");
+  assert.equal(sim.captureId, "glint");
   assert.equal(sim.correct, true);
   sim.next();
-  assert.equal(sim.mode, "complete");
+  assert.equal(sim.mode, "playing");
   assert.equal(sim.completed, 1);
   assert.deepEqual(sim.completedLevels, [5]);
   assert.deepEqual(
@@ -129,5 +129,5 @@ test("starting at contract five reports only that completed contract", () => {
   );
   assert.equal(messages[1]?.type === "level-start" && messages[1].level, 5);
   sim.restart();
-  assert.deepEqual(sim.completedLevels, []);
+  assert.deepEqual(sim.completedLevels, [5]);
 });

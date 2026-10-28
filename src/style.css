@@ -541,3 +541,55 @@ td:first-child {
   cursor: default;
   transform: none;
 }
+/* Campaign journal: ten chapters, fifty real actions, no grade controls. */
+#rescue-progress { margin: 7px 0 0; font: 11px/1.4 Field,Arial,sans-serif; color:#66784d; direction:rtl; }
+#animal-facts li.rescued { color:#72816b; background:#d8dfc044; }
+#animal-facts li.rescued > b { color:#76856c; }
+#progress { pointer-events:auto; }
+#modal-body[data-panel="levels"] { width:min(1000px,100%); padding:24px 30px; background:linear-gradient(90deg,#e8d9b94d,transparent 4%,transparent 49.8%,#b9a77c33 50%,transparent 50.2%,transparent 96%,#e8d9b94d),#f7efd9; }
+.campaign-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.campaign-heading h2 { font-size:32px!important; margin-bottom:0!important; }
+.campaign-heading p { margin:3px 0 12px!important; color:#71805b; }
+.campaign-heading > button { font-size:28px; min-width:44px; padding:0; }
+.campaign-track { height:5px; border-radius:5px; overflow:hidden; background:#c7cbaa; margin:4px 0 18px; direction:ltr; }
+.campaign-track span { display:block; height:100%; background:#64874b; transition:width .25s; }
+.campaign-chapters { display:grid; grid-template-columns:1fr 1fr; gap:16px 34px; max-height:59svh; overflow:auto; padding:4px; }
+.campaign-chapter h3 { margin:0; font-size:14px; }
+#modal .campaign-chapter p { margin:2px 0 9px; font-size:10px; color:#7d8869; line-height:1.3; }
+.level-stops { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+.level-stop { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; min-height:49px; padding:5px 2px; border-radius:50%; aspect-ratio:1; width:min(100%,54px); justify-self:center; box-shadow:none; border:1px solid #9aab7a77; background:#e8e6cc; }
+.level-stop b { font:20px/1.1 Georgia,serif; }
+.level-stop span { font:9px/1.25 Field,Arial,sans-serif; }
+.level-stop.done { color:#fff8df; background:#668249; border-color:#5f793e; }
+.level-stop.current { outline:3px solid #b69b50; outline-offset:2px; }
+.level-stop:disabled { opacity:1; color:#71775f; cursor:default; background:#dedcc8; border-color:transparent; }
+.campaign-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:20px; }
+#modal .campaign-bottom p { font-size:11px; color:#71805b; }
+.journey-stamp { font-size:65px; color:#6a8b4f; text-align:center; padding:15px; animation:rescue-stamp .3s ease-out; }
+.rescue-brief { font:14px/1.6 Georgia,serif; padding-inline-start:23px; }
+.rescue-brief li { padding:5px 0; color:#77816b; }
+.rescue-brief li.active { color:#30482d; font-weight:bold; }
+#tray[data-tools="4"] .tool, #tray[data-tools="5"] .tool { width:86px; }
+.tool:disabled { opacity:.45; cursor:default; transform:none; }
+@keyframes rescue-stamp { from { opacity:0; transform:scale(1.2) rotate(-7deg); } to { opacity:1; transform:scale(1) rotate(0); } }
+@media(max-width:700px) {
+ #modal-body[data-panel="levels"] { padding:20px 15px; }
+ .campaign-chapters { grid-template-columns:1fr; gap:20px; max-height:58svh; }
+ .campaign-bottom { flex-direction:column; align-items:stretch; gap:2px; }
+ .campaign-bottom p { text-align:center; }
+ .campaign-heading h2 { font-size:26px!important; }
+ .level-stop { min-height:48px; max-width:52px; }
+ #tray[data-tools="4"], #tray[data-tools="5"] { width:calc(100vw - 24px); max-width:420px; padding-inline:6px; gap:2px; }
+ #tray[data-tools="4"] .tool, #tray[data-tools="5"] .tool { width:auto; flex:1; min-width:0; padding-inline:2px; }
+ #tray[data-tools="4"] .tool svg, #tray[data-tools="5"] .tool svg { width:48px; height:47px; }
+ #tray[data-tools="4"] .tool span, #tray[data-tools="5"] .tool span { font-size:9px; }
+ #rescue-progress { font-size:10px; }
+}
+@media(prefers-reduced-motion:reduce) { .journey-stamp { animation:none; } .campaign-track span { transition:none; } }
+@media(max-width:700px) {
+ #toast { display:none; }
+ #animal-stats[data-count="6"] #animal-facts { grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:8px; }
+ #animal-stats[data-count="6"] #animal-facts li { font-size:9.5px; }
+ #animal-stats[data-count="6"] #animal-facts li > b { font-size:11px; }
+ #animal-stats[data-count="6"] #animal-facts li > b span { font-size:8px; }
+}

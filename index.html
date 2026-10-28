@@ -18,9 +18,10 @@
         <section id="contract" lang="en" dir="ltr">
           <small>CRITTER SAFARI · <span id="chapter">FERN GARDEN</span></small>
           <h1 id="instruction"></h1>
+          <p id="rescue-progress" hidden></p>
         </section>
         <div class="top-actions">
-          <span id="progress" dir="ltr" aria-label="התקדמות">1 / 5</span
+          <button id="progress" dir="ltr" aria-label="מפת השלבים">1 / 50</button
           ><button id="notes-btn" title="יומן ועזרה">יומן</button
           ><button id="pause-btn" aria-label="השהיה והגדרות">Ⅱ</button>
         </div>
@@ -131,7 +132,11 @@
               stroke-linecap="round"
             /></svg
           ><span>פרי</span></button
-        ><small>גררו אל הדשא · אפשר גם לבחור ואז להקיש</small>
+        ><button class="tool" id="feeder-tool" data-tool="feeder" hidden aria-label="קערת הסחה — הניחו ואז מלאו בעלה או פרי">
+          <svg viewBox="0 0 72 64" aria-hidden="true"><ellipse cx="36" cy="42" rx="27" ry="13" fill="#89643c"/><path d="M9 40q4 24 27 20 22 1 27-20" fill="#b79863" stroke="#6b522f" stroke-width="2"/><ellipse cx="36" cy="39" rx="23" ry="9" fill="#e0c58d"/><path d="M22 38Q24 15 45 19q1 20-23 19Z" fill="#719b47" stroke="#436332" stroke-width="2"/><path d="m24 37 17-13" stroke="#c8d992" stroke-width="2"/></svg><span>קערת הסחה</span>
+        </button><button class="tool" id="calm-tool" data-tool="calm" hidden aria-label="פרח הרגעה — מאט זמנית חיות סמוכות">
+          <svg viewBox="0 0 72 64" aria-hidden="true"><path d="M35 55V29M34 50Q10 53 17 35q16 0 17 15M37 51q23 2 18-16-15 0-18 16" stroke="#4a713d" stroke-width="3" fill="#749b53"/><g fill="#f9efcf" stroke="#bba568" stroke-width="1.5"><ellipse cx="36" cy="16" rx="7" ry="12"/><ellipse cx="48" cy="24" rx="12" ry="7" transform="rotate(-28 48 24)"/><ellipse cx="43" cy="36" rx="7" ry="12" transform="rotate(-26 43 36)"/><ellipse cx="27" cy="35" rx="7" ry="12" transform="rotate(28 27 35)"/><ellipse cx="23" cy="23" rx="12" ry="7" transform="rotate(28 23 23)"/></g><circle cx="36" cy="27" r="7" fill="#d5a546"/></svg><span>פרח הרגעה</span>
+        </button><small>גררו אל הדשא · אפשר גם לבחור ואז להקיש</small>
       </footer>
       <div id="drag-token" hidden></div>
       <div id="modal" hidden role="dialog" aria-modal="true">

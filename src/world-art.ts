@@ -2,10 +2,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { CLEARING_OBSTACLES, TRANSFER_OBSTACLES } from './simulation';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { habitatForLevel, obstaclesForLevel, type FoliageKind, type HabitatConfig } from './habitats';
 
 export interface GardenObstacle { x: number; z: number; r: number }
-export interface GardenArt { obstacles: GardenObstacle[]; update(time: number, reducedMotion?: boolean): void; dispose(): void }
+export interface GardenArt { obstacles: GardenObstacle[]; ready?: Promise<void>; update(time: number, reducedMotion?: boolean): void; dispose(): void }
 export interface CritterVisual { root: THREE.Group; mixer: THREE.AnimationMixer; clips: THREE.AnimationClip[]; nominalSpeeds?: Record<string, number> }
 
 const palette = { soil: 0x59412e, moss: 0x486633, lightMoss: 0x788a49, leaf: 0x315d34, youngLeaf: 0x62843b, bark: 0x72533a, stone: 0x9c9b73 };
@@ -13,7 +14,7 @@ function rng(seed: number) { return () => { seed = (Math.imul(seed, 1664525) + 1
 function material(color: number, roughness = .87) { return new THREE.MeshStandardMaterial({ color, roughness }); }
 
 /** Small deterministic, original texture fields; no external image dependency. */
-function organicTexture(kind: 'soil' | 'moss' | 'leaf', size: number, repeatX = 1, repeatY = repeatX) {
+function organicTexture(kind: 'soil' | 'moss' | 'leaf' | 'stone', size: number, repeatX = 1, repeatY = repeatX) {
   const rgb = new Uint8Array(size * size * 4), heights = new Uint8Array(size * size * 4);
   const hash = (x: number, y: number) => {
     let h = Math.imul(x, 374761393) ^ Math.imul(y, 668265263) ^ 0x45d9f3b;
@@ -42,6 +43,10 @@ function organicTexture(kind: 'soil' | 'moss' | 'leaf', size: number, repeatX = 
       g = 62 + broad * 34 + fibre * 36 + grain * 12;
       b = 24 + fine * 20 + fibre * 8;
       height = 72 + fine * 80 + fibre * 80;
+    } else if (kind === 'stone') {
+      const fleck = grain > .97 ? 12 : grain < .04 ? -18 : 0;
+      r = 144 + broad * 28 + fine * 14 + fleck; g = 141 + broad * 25 + fine * 12 + fleck; b = 113 + broad * 25 + fine * 11 + fleck * .7;
+      height = 96 + fine * 58 + grain * 32 + fleck;
     } else {
       // Central and angled side veins stay subdued enough for natural leaves.
       const center = Math.exp(-Math.pow((u - .5) * 88, 2));
@@ -64,11 +69,64 @@ function organicTexture(kind: 'soil' | 'moss' | 'leaf', size: number, repeatX = 
   return { color: make(rgb, true), height: make(heights, false) };
 }
 
+type FoliageAsset = { geometry: THREE.BufferGeometry; material: THREE.Material }[];
+const foliageLoader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+const foliageCache = new Map<FoliageKind, Promise<FoliageAsset>>();
+function cachedFoliage(kind: FoliageKind): Promise<FoliageAsset> {
+  if (!foliageCache.has(kind)) foliageCache.set(kind, foliageLoader.loadAsync(`${import.meta.env.BASE_URL}models/habitats/${kind}.glb`).then(gltf => {
+    gltf.scene.updateMatrixWorld(true);
+    const bounds = new THREE.Box3().setFromObject(gltf.scene, true), center = bounds.getCenter(new THREE.Vector3());
+    const height = Math.max(bounds.max.y - bounds.min.y, .001), parts: FoliageAsset = [];
+    gltf.scene.traverse(node => {
+      if (!(node instanceof THREE.Mesh)) return;
+      if (Array.isArray(node.material)) throw new Error('Habitat foliage requires one material per primitive');
+      // Convert quantized/interleaved attributes once, before applying node transforms.
+      const geometry = new THREE.BufferGeometry();
+      for (const [name, attribute] of Object.entries(node.geometry.attributes) as [string, THREE.BufferAttribute | THREE.InterleavedBufferAttribute][]) {
+        const values = new Float32Array(attribute.count * attribute.itemSize);
+        for (let i = 0; i < attribute.count; i++) for (let component = 0; component < attribute.itemSize; component++) {
+          const value = component === 0 ? attribute.getX(i) : component === 1 ? attribute.getY(i) : component === 2 ? attribute.getZ(i) : attribute.getW(i);
+          values[i * attribute.itemSize + component] = value;
+        }
+        geometry.setAttribute(name, new THREE.BufferAttribute(values, attribute.itemSize));
+      }
+      if (node.geometry.index) geometry.setIndex(node.geometry.index.clone());
+      geometry.applyMatrix4(node.matrixWorld).translate(-center.x, -bounds.min.y, -center.z).scale(1 / height, 1 / height, 1 / height);
+      geometry.computeBoundingBox(); geometry.computeBoundingSphere();
+      parts.push({ geometry, material: node.material });
+    });
+    return parts;
+  }));
+  return foliageCache.get(kind)!;
+}
+
+interface FoliagePlacement { x: number; z: number; height: number; yaw: number }
+function foliagePlacements(habitat: HabitatConfig, kind: FoliageKind, random: () => number): FoliagePlacement[] {
+  if (kind === 'olive') return [{ x: -7.85, z: -3.8, height: 1.85, yaw: .35 }];
+  if (kind === 'cypress') {
+    const xs = habitat.feature === 'cypress' ? [-6, -2.1, 2.1, 6] : habitat.feature === 'limestone' ? [-5.8, 0, 5.8] : [-5.9, 5.8];
+    return xs.map((x, i) => ({ x, z: -6.15 - (i % 2) * .18, height: 1.9 + random() * .45, yaw: random() * 6.28 }));
+  }
+  if (kind === 'bush') {
+    const slots = habitat.feature === 'berries' ? [[-5, -5.85], [-1.7, -5.85], [1.7, -5.85], [5, -5.85]] : [[-7.5, 2.5], [7.5, -1.5]];
+    return slots.map(([x, z]) => ({ x, z, height: .72 + random() * .16, yaw: random() * 6.28 }));
+  }
+  const count = habitat.feature === 'flowers' ? 8 : 5;
+  return Array.from({ length: count }, (_, i) => {
+    const side = i % 4, along = (random() - .5);
+    return { x: side < 2 ? along * 12.5 : (side === 2 ? -1 : 1) * (7.2 + random() * .3), z: side < 2 ? (side ? 1 : -1) * (5.55 + random() * .15) : along * 8.6, height: .19 + random() * .075, yaw: random() * 6.28 };
+  });
+}
+
 /** Author-created terrain and props. Characters remain local Tripo assets. */
 export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 1 = 0, stage = 0): GardenArt {
   const group = new THREE.Group(); group.name = 'authored-terrarium'; scene.add(group);
   group.scale.x = variant === 1 ? -1 : 1;
-  const random = rng(transfer ? 412 : 41);
+  const habitat = habitatForLevel(stage), random = rng(41 + Math.floor(Math.max(stage, 0)) * 97 + (transfer ? 13 : 0));
+  group.userData.habitat = habitat.id;
+  let disposed = false;
+  const importedInstances: THREE.InstancedMesh[] = [];
+  const ownedInstances: THREE.InstancedMesh[] = [];
   const retiredGeometries = new Set<THREE.BufferGeometry>();
   // Bake each static part's transform into one non-indexed geometry per material.
   // Plant roots are batched separately so their subtle sway remains independent.
@@ -101,27 +159,33 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     soil: material(palette.soil), moss: material(palette.moss), leaf: material(palette.leaf),
     lightMoss: material(palette.lightMoss), youngLeaf: material(palette.youngLeaf), bark: material(palette.bark),
     barkLight: material(0x987151), stone: material(palette.stone), stem: material(0x477b34), flowerWhite: material(0xf4eedb), flowerGold: material(0xe9bd45), flowerLilac: material(0xa2a0d9),
-    water: new THREE.MeshPhysicalMaterial({ color: 0x8bbca4, transparent: true, opacity: .53, roughness: .12, metalness: .08, clearcoat: 1 }),
+    autumn: material(0xb77e39),
+    water: new THREE.MeshPhysicalMaterial({ color: 0x7ca99c, transparent: true, opacity: .68, roughness: .23, metalness: .02, clearcoat: .4 }),
     dew: new THREE.MeshPhysicalMaterial({ color: 0xc4f1df, transparent: true, opacity: .74, roughness: .05, metalness: .12, clearcoat: 1 }),
   };
   const soilTexture = organicTexture('soil', 256, 13, 11);
   const mossTexture = organicTexture('moss', 128, 2);
   const leafTexture = organicTexture('leaf', 128);
-  const textures = [soilTexture.color, soilTexture.height, mossTexture.color, mossTexture.height, leafTexture.color, leafTexture.height];
+  const stoneTexture = organicTexture('stone', 128, 2);
+  const textures = [soilTexture.color, soilTexture.height, mossTexture.color, mossTexture.height, leafTexture.color, leafTexture.height, stoneTexture.color, stoneTexture.height];
   Object.assign(mats.soil, { color: new THREE.Color(0xffffff), map: soilTexture.color, bumpMap: soilTexture.height, bumpScale: .045, roughness: .98 });
   Object.assign(mats.moss, { color: new THREE.Color(0xffffff), map: mossTexture.color, bumpMap: mossTexture.height, bumpScale: .028, roughness: .98 });
   Object.assign(mats.lightMoss, { color: new THREE.Color(0xd1d7a3), map: mossTexture.color, bumpMap: mossTexture.height, bumpScale: .028, roughness: .98 });
   Object.assign(mats.leaf, { color: new THREE.Color(0xe4edcc), map: leafTexture.color, bumpMap: leafTexture.height, bumpScale: .022, roughness: .8 });
   Object.assign(mats.youngLeaf, { color: new THREE.Color(0xf1e6a1), map: leafTexture.color, bumpMap: leafTexture.height, bumpScale: .022, roughness: .82 });
+  Object.assign(mats.stone, { color: new THREE.Color(0xffffff), map: stoneTexture.color, bumpMap: stoneTexture.height, bumpScale: .018, roughness: .97 });
   // A single authored meadow map gives the fixed camera a green clearing and a soft dirt trail.
   const meadowBytes = new Uint8Array(256 * 256 * 4);
   for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
     const wx = (x / 255 - .5) * 20, wz = (y / 255 - .5) * 18;
     let h = Math.imul(x + 17, 374761393) ^ Math.imul(y + 31, 668265263); h = Math.imul(h ^ h >>> 13, 1274126177); const grain = ((h ^ h >>> 16) >>> 0) / 4294967295 - .5;
-    const trail = Math.exp(-Math.pow((wx - Math.sin(wz * .7) * 1.35) / .67, 2));
+    const distance = habitat.path === 'diagonal' ? Math.abs(wx - wz * .7) : habitat.path === 'fork' ? Math.min(Math.abs(wx - Math.sin(wz * .55) * 1.3), Math.abs(wx + 2.4 + wz * .42)) : habitat.path === 'crescent' ? Math.abs(Math.hypot(wx + 1.7, wz * .85) - 3.7) : habitat.path === 'twin' ? Math.min(Math.abs(wx - 2.3 - Math.cos(wz * .55) * .4), Math.abs(wx + 2.3 + Math.cos(wz * .55) * .4)) : habitat.path === 'loop' ? Math.abs(Math.hypot(wx * .85, wz) - 3.5) : Math.abs(wx - Math.sin(wz * .7) * 1.35);
+    let trail = Math.exp(-Math.pow(distance / .64, 2));
+    if (habitat.feature === 'creek') trail = Math.max(trail, Math.exp(-Math.pow((wx + 8.5 - Math.cos(wz * .65) * .18) / .5, 2)));
     const variation = Math.sin(wx * 1.4 + wz * .6) * 2 + grain * 5;
     const i = (y * 256 + x) * 4;
-    meadowBytes[i] = 61 + variation + trail * 49; meadowBytes[i + 1] = 98 + variation - trail * 18; meadowBytes[i + 2] = 29 + variation * .4 + trail * 14; meadowBytes[i + 3] = 255;
+    for (let c = 0; c < 3; c++) { const shift = (2 - c) * 8, grass = habitat.grass >> shift & 255, earth = habitat.earth >> shift & 255; meadowBytes[i + c] = grass + (earth - grass) * trail + variation * (c === 2 ? .4 : 1); }
+    meadowBytes[i + 3] = 255;
   }
   const meadowMap = new THREE.DataTexture(meadowBytes, 256, 256, THREE.RGBAFormat); meadowMap.colorSpace = THREE.SRGBColorSpace; meadowMap.magFilter = THREE.LinearFilter; meadowMap.minFilter = THREE.LinearMipmapLinearFilter; meadowMap.generateMipmaps = true; meadowMap.needsUpdate = true; textures.push(meadowMap); mats.soil.map = meadowMap; mats.soil.bumpMap = null;
   function mesh(geo: THREE.BufferGeometry, mat: THREE.Material, x: number, y: number, z: number) {
@@ -134,17 +198,25 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     // rails, plus a paw-width margin, exactly on that plane. Relief starts outside.
     const x = p.getX(i), z = p.getZ(i), edge = Math.max(0, Math.abs(x) - 7.3, Math.abs(z) - 5.8);
     const relief = Math.sin(x * .7) * Math.cos(z * .82) * .035 + (random() - .5) * .035;
-    p.setY(i, edge * .22 + relief * Math.min(1, edge / .7));
+    let height = edge * .22 + relief * Math.min(1, edge / .7);
+    if (habitat.feature === 'pond') { const d = Math.hypot(x, z - 7); if (edge > 0 && d < 1.35) height = THREE.MathUtils.lerp(-.16, height, THREE.MathUtils.smoothstep(d, .95, 1.35)); }
+    if (habitat.feature === 'creek' && Math.abs(x + 8.5 - Math.cos(z * .65) * .18) < .52) height = -.045;
+    p.setY(i, height);
   }
   groundGeo.computeVertexNormals(); mesh(groundGeo, mats.soil, 0, 0, 0).castShadow = false;
   // Low timber rails frame the open clearing instead of forming an overhead tunnel.
   const fenceGeo = new THREE.BoxGeometry(.14, .85, .14);
-  const fence = new THREE.InstancedMesh(fenceGeo, mats.barkLight, 18);
+  const fence = new THREE.InstancedMesh(fenceGeo, mats.barkLight, habitat.border === 'stone' ? 0 : 18); ownedInstances.push(fence);
   const fenceDummy = new THREE.Object3D();
-  for (let i = 0; i < 18; i++) { const side = i < 9 ? -1 : 1; fenceDummy.position.set((i % 9 - 4) * 1.6, .37, side * 5.25); fenceDummy.rotation.z = (random() - .5) * .03; fenceDummy.updateMatrix(); fence.setMatrixAt(i, fenceDummy.matrix); }
+  for (let i = 0; i < fence.count; i++) { const side = i < 9 ? -1 : 1; fenceDummy.position.set((i % 9 - 4) * 1.6, .37, side * 5.25); fenceDummy.rotation.z = (random() - .5) * .03; fenceDummy.updateMatrix(); fence.setMatrixAt(i, fenceDummy.matrix); }
   fence.castShadow = true; fence.receiveShadow = true; group.add(fence);
-  for (const z of [-5.25, 5.25]) for (const y of [.23, .58]) mesh(new THREE.BoxGeometry(13.4, .075, .075), mats.barkLight, 0, y, z);
-  for (const x of [-7.5, 7.5]) { const tree = mesh(new THREE.CylinderGeometry(.32, .55, 6.8, 9), mats.bark, x, 3.1, -5.9); tree.rotation.z = x > 0 ? -.04 : .04; }
+  if (habitat.border !== 'stone') for (const z of [-5.25, 5.25]) for (const y of [.23, .58]) mesh(new THREE.BoxGeometry(13.4, .075, .075), mats.barkLight, 0, y, z);
+  if (habitat.border !== 'timber') {
+    const blocks = new THREE.InstancedMesh(new THREE.BoxGeometry(.77, .21, .27), mats.stone, habitat.border === 'stone' ? 64 : 32); ownedInstances.push(blocks);
+    for (let i = 0; i < blocks.count; i++) { const course = Math.floor(i / 32), side = i % 32 < 16 ? -1 : 1; fenceDummy.position.set((i % 16 - 7.5) * .82 + course * .08, .105 + course * .21, side * 5.45); fenceDummy.rotation.set(0, 0, (random() - .5) * .025); fenceDummy.updateMatrix(); blocks.setMatrixAt(i, fenceDummy.matrix); }
+    blocks.castShadow = blocks.receiveShadow = true; group.add(blocks);
+  }
+  if (habitat.feature === 'ferns' || habitat.feature === 'leaves') for (const x of [-7.7, 7.7]) { const tree = mesh(new THREE.CylinderGeometry(.17, .3, 3.7, 8), mats.bark, x, 1.8, -6.1); tree.rotation.z = x > 0 ? -.04 : .04; }
   const mossGeo = new THREE.SphereGeometry(1, 12, 8);
   const mossPositions = mossGeo.attributes.position;
   for (let i = 0; i < mossPositions.count; i++) {
@@ -153,18 +225,21 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     mossPositions.setXYZ(i, x * lobe, y * (1 + Math.sin(x * 11 + z * 8) * .1), z * lobe);
   }
   mossGeo.computeVertexNormals();
-  const moss = new THREE.InstancedMesh(mossGeo, mats.moss, 220); moss.receiveShadow = true; moss.castShadow = true;
+  const moss = new THREE.InstancedMesh(mossGeo, mats.moss, 160); moss.receiveShadow = true; moss.castShadow = true; ownedInstances.push(moss);
   const dummy = new THREE.Object3D(), color = new THREE.Color();
-  for (let i = 0; i < 220; i++) {
+  let mossCount = 0;
+  for (let i = 0; i < 160; i++) {
     const x = (random() - .5) * 17, z = (random() - .5) * 13;
-    const inCenter = Math.abs(x) < 3.5 && Math.abs(z) < 2.5; const radius = (.07 + random() * .13) * (inCenter ? (random() < .12 ? .2 : 0) : 1); dummy.position.set(x, -.025, z); dummy.scale.set(radius, radius ? .025 + radius * .3 : 0, radius * (.7 + random() * .55)); dummy.rotation.y = random() * 6.28; dummy.updateMatrix(); moss.setMatrixAt(i, dummy.matrix);
-    color.setHSL(.23 + random() * .03, .06, .78 + random() * .18); moss.setColorAt(i, color);
+    if (Math.abs(x) < 5.8 && Math.abs(z) < 4.3) continue;
+    const radius = .07 + random() * .11; dummy.position.set(x, 0, z); dummy.scale.set(radius, .018 + radius * .25, radius * (.7 + random() * .55)); dummy.rotation.y = random() * 6.28; dummy.updateMatrix(); moss.setMatrixAt(mossCount, dummy.matrix);
+    color.setHSL(.23 + random() * .03, .06, .78 + random() * .18); moss.setColorAt(mossCount++, color);
   }
+  moss.count = mossCount;
   group.add(moss);
   // Fine grass is instanced, leaving the observation clearing readable.
   const blade = new THREE.ConeGeometry(.045, .29, 3); blade.translate(0, .145, 0);
-  const grass = new THREE.InstancedMesh(blade, mats.youngLeaf, 500);
-  for (let i = 0; i < 500; i++) {
+  const grass = new THREE.InstancedMesh(blade, mats.youngLeaf, 400); ownedInstances.push(grass);
+  for (let i = 0; i < 400; i++) {
     const x = (random() - .5) * 16, z = (random() - .5) * 12;
     dummy.position.set(x, -.03, z); dummy.scale.setScalar((.3 + random() * .4) * (Math.abs(x) < 3.5 && Math.abs(z) < 2.5 ? .26 : 1)); dummy.rotation.set((random() - .5) * .5, random() * 6.28, (random() - .5) * .5); dummy.updateMatrix(); grass.setMatrixAt(i, dummy.matrix);
   }
@@ -183,9 +258,10 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     batchMeshes(plantRoot);
     sway.push(plantRoot);
   }
-  for (let i = 0; i < 14; i++) {
-    const theta = i / 14 * Math.PI * 2;
-    plant(Math.sin(theta) * (6.7 + random() * .6), Math.cos(theta) * (4.8 + random() * .5), .3 + random() * .18, 3);
+  const plantCount = habitat.feature === 'ferns' ? 10 : 6;
+  for (let i = 0; i < plantCount; i++) {
+    const side = i % 4, along = random() - .5;
+    plant(side < 2 ? along * 12 : (side === 2 ? -1 : 1) * 7.5, side < 2 ? (side ? 1 : -1) * 5.85 : along * 8.5, .3 + random() * .12, 3);
   }
   // Restrained daisies and small woodland flowers brighten selected border pockets.
   const petalParts: THREE.BufferGeometry[] = [];
@@ -194,6 +270,7 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   const flowerStems = new THREE.InstancedMesh(new THREE.CylinderGeometry(.008, .012, .23, 4), mats.stem, 42);
   const flowerCenters = new THREE.InstancedMesh(new THREE.SphereGeometry(.027, 6, 4), mats.flowerGold, 42);
   const flowerMeshes = [mats.flowerWhite, mats.flowerGold, mats.flowerLilac].map(mat => new THREE.InstancedMesh(flowerGeo, mat, 14));
+  ownedInstances.push(flowerStems, flowerCenters, ...flowerMeshes);
   for (let i = 0; i < 42; i++) {
     const a = i / 42 * Math.PI * 2 + random() * .14, x = Math.sin(a) * (5.8 + random() * .55), z = Math.cos(a) * (4.05 + random() * .45), y = .16 + random() * .13;
     dummy.position.set(x, y, z); dummy.rotation.set(0, random() * 6.28, 0); dummy.scale.setScalar(.8 + random() * .35); dummy.updateMatrix(); flowerMeshes[i % 3].setMatrixAt(Math.floor(i / 3), dummy.matrix);
@@ -201,21 +278,25 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
     dummy.position.y = y - .115; dummy.scale.set(1, y / .23 * 1.4, 1); dummy.updateMatrix(); flowerStems.setMatrixAt(i, dummy.matrix);
   }
   group.add(flowerStems, flowerCenters, ...flowerMeshes);
-  const obstacles: GardenObstacle[] = stage < 2 ? [] : (transfer ? TRANSFER_OBSTACLES : CLEARING_OBSTACLES).map(o => ({...o}));
+  const obstacles: GardenObstacle[] = obstaclesForLevel(stage);
+  group.userData.colliderLandmarks = obstacles.map(o => ({ ...o, x: variant === 1 ? -o.x : o.x }));
   for (const o of obstacles) {
-    const rock = mesh(new THREE.IcosahedronGeometry(o.r, 1), mats.stone, o.x, .25, o.z); rock.scale.set(1, .58, .87); rock.rotation.set(.1, random() * 3, .2);
-    for (let j = 0; j < 5; j++) { const m = mesh(mossGeo, mats.lightMoss, o.x + (random() - .5) * .8, .49, o.z + (random() - .5) * .6); m.scale.set(.2, .14, .17); }
+    const rock = mesh(new THREE.IcosahedronGeometry(o.r, 2), mats.stone, o.x, o.r * .35, o.z); rock.scale.set(1, .65, 1); rock.rotation.y = random() * 3;
+    for (let j = 0; j < 3; j++) { const m = mesh(mossGeo, mats.lightMoss, o.x + (random() - .5) * o.r, o.r * .78, o.z + (random() - .5) * o.r); m.scale.set(o.r * .25, o.r * .12, o.r * .22); }
   }
   // Fallen twig gives a local trap landmark without blocking the center lane.
-  const twig = new THREE.Group(); twig.position.set(-3.1, .12, -4.55); twig.rotation.y = -.48; group.add(twig);
+  const twig = new THREE.Group(); twig.position.set(habitat.feature === 'orchard' ? 2.8 : -3.1, .12, -5.8); twig.rotation.y = -.48; group.add(twig);
   const wood = new THREE.Mesh(new THREE.CylinderGeometry(.13, .18, 2.5, 9), mats.bark); wood.rotation.z = Math.PI / 2; wood.castShadow = true; wood.receiveShadow = true; twig.add(wood);
   for (const side of [-1, 1]) { const end = new THREE.Mesh(new THREE.CylinderGeometry(.118, .118, .012, 12), mats.barkLight); end.rotation.z = Math.PI / 2; end.position.x = side * 1.253; twig.add(end); }
   const branch = new THREE.Mesh(new THREE.CylinderGeometry(.035, .065, .75, 6), mats.bark); branch.position.set(-.3, .17, .23); branch.rotation.x = 1; branch.rotation.z = .8; twig.add(branch);
-  // Earth is painted into the meadow texture; flat overlay disks clipped the uneven terrain.
-  for (let i = 0; i < 45; i++) {
-    const x = (random() - .5) * 16, z = (random() - .5) * 12;
-    if (Math.abs(x) < 6.2 && Math.abs(z) < 4.5) continue;
-    const rock = mesh(new THREE.IcosahedronGeometry(.25 + random() * .3, 1), i % 3 ? mats.stone : mats.bark, x, .05 + random() * .12, z); rock.scale.y = .45; rock.rotation.set(random(), random(), random());
+  // Water is confined to a real basin beyond the playable/floor safety margin.
+  if (habitat.feature === 'pond') {
+    const water = mesh(new THREE.CircleGeometry(.75, 40), mats.water, 0, -.04, 7); water.rotation.x = -Math.PI / 2; water.castShadow = false;
+  }
+  if (habitat.feature === 'leaves') {
+    const leaves = new THREE.InstancedMesh(leafGeo, mats.autumn, 64); ownedInstances.push(leaves);
+    for (let i = 0; i < 64; i++) { const side = i % 4, along = random() - .5; dummy.position.set(side < 2 ? along * 13 : (side === 2 ? -1 : 1) * 7.15, .008, side < 2 ? (side ? 1 : -1) * 5.15 : along * 9.2); dummy.rotation.set(0, random() * 6.28, .03); dummy.scale.set(.13, .12, .1); dummy.updateMatrix(); leaves.setMatrixAt(i, dummy.matrix); }
+    leaves.receiveShadow = true; group.add(leaves);
   }
   const dewGeo = new THREE.SphereGeometry(.045, 7, 5);
   for (let i = 0; i < 24; i++) { const theta = random() * Math.PI * 2; mesh(dewGeo, mats.dew, Math.sin(theta) * (7.5 + random() * 2), .14 + random() * .12, Math.cos(theta) * (6.4 + random() * 2)).castShadow = false; }
@@ -229,12 +310,31 @@ export function createGarden(scene: THREE.Scene, transfer = false, variant: 0 | 
   const liveGeometries = new Set<THREE.BufferGeometry>();
   group.traverse(o => { if (o instanceof THREE.Mesh || o instanceof THREE.Points) liveGeometries.add(o.geometry); });
   for (const geometry of retiredGeometries) if (!liveGeometries.has(geometry)) geometry.dispose();
-  leafGeo.dispose(); dewGeo.dispose();
+  if (!liveGeometries.has(leafGeo)) leafGeo.dispose(); dewGeo.dispose();
   group.userData.optimization = { plantMeshesPerRoot: 2, staticMaterialBatches: true, moteDraws: 1 };
+  const placements = habitat.foliage.map(kind => ({ kind, placements: foliagePlacements(habitat, kind, random) }));
+  group.userData.foliage = { state: 'loading', requested: habitat.foliage.length, loaded: 0 };
+  const ready = Promise.allSettled(placements.map(async entry => ({ ...entry, parts: await cachedFoliage(entry.kind) }))).then(results => {
+    if (disposed) return;
+    let loaded = 0;
+    for (const result of results) {
+      if (result.status !== 'fulfilled') continue;
+      const { kind, parts, placements: instances } = result.value;
+      for (const part of parts) {
+        const imported = new THREE.InstancedMesh(part.geometry, part.material, instances.length);
+        imported.name = `habitat-${kind}`; imported.castShadow = kind === 'olive' || kind === 'cypress'; imported.receiveShadow = true;
+        instances.forEach((placement, index) => { dummy.position.set(placement.x, kind === 'bush' ? -placement.height * .08 : 0, placement.z); dummy.rotation.set(0, placement.yaw, 0); dummy.scale.setScalar(placement.height); dummy.updateMatrix(); imported.setMatrixAt(index, dummy.matrix); });
+        imported.computeBoundingSphere(); importedInstances.push(imported); group.add(imported);
+      }
+      loaded++;
+    }
+    group.userData.foliage = { state: loaded === placements.length ? 'ready' : 'partial', requested: placements.length, loaded };
+  });
   return {
     obstacles: obstacles.map(o => ({ ...o, x: variant === 1 ? -o.x : o.x })),
+    ready,
     update(time, reducedMotion = false) { if (reducedMotion) return; sway.forEach((p, i) => { p.rotation.z = Math.sin(time * .6 + i) * .014; }); for (let i = 0; i < 18; i++) motePositions[i * 3 + 1] = moteBaseY[i] + Math.sin(time * .3 + i) * .16; moteGeo.attributes.position.needsUpdate = true; },
-    dispose() { for (const geometry of liveGeometries) geometry.dispose(); Object.values(mats).forEach(m => m.dispose()); textures.forEach(t => t.dispose()); moteMat.dispose(); scene.remove(group); },
+    dispose() { disposed = true; for (const instance of [...ownedInstances, ...importedInstances]) instance.dispose(); for (const geometry of liveGeometries) geometry.dispose(); Object.values(mats).forEach(m => m.dispose()); textures.forEach(t => t.dispose()); moteMat.dispose(); scene.remove(group); },
   };
 }
 

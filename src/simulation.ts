@@ -1,5 +1,6 @@
 import { CONTRACTS, type CreatureSpec, type Diet } from "./content";
-import { acceptsCapture } from "./semantics";
+import { acceptsCapture, objectiveFor, objectiveCount } from "./semantics";
+import { obstaclesForLevel } from "./habitats";
 export interface Point {
   x: number;
   z: number;
@@ -12,12 +13,13 @@ export type GameMode =
   | "notes"
   | "help"
   | "paused"
+  | "levels"
   | "caught"
   | "complete";
 export interface Actor extends Point {
   spec: CreatureSpec;
   angle: number;
-  mode: "wander" | "lured" | "eating" | "escape" | "caught";
+  mode: "wander" | "lured" | "eating" | "feeding" | "escape" | "caught" | "rescued";
   timer: number;
   destination: Point;
   route: Point[];
@@ -35,6 +37,9 @@ export interface Bait extends Point {
 export const BOUNDS = { x: 6.5, z: 4.9 };
 export const TRAP_RADIUS = 0.76;
 export const CAPTURE_RADIUS = 0.64;
+export const FEEDER_SECONDS = 10;
+export const CALM_SECONDS = 5;
+export const CALM_RADIUS = 1.45;
 export const CLEARING_OBSTACLES: Obstacle[] = [
   { x: 0.15, z: -0.3, r: 0.62 },
   { x: -3.9, z: -2.6, r: 0.45 },
@@ -83,11 +88,11 @@ export function findRoute(
 ): Point[] {
   if (segmentClear(from, to, obstacles, radius)) return [to];
   const step = 0.4,
-    nx = 27,
-    nz = 18;
+    nx = 31,
+    nz = 23;
   const pos = (id: number): Point => ({
-    x: -5.2 + (id % nx) * step,
-    z: -3.4 + Math.floor(id / nx) * step,
+    x: -6 + (id % nx) * step,
+    z: -4.4 + Math.floor(id / nx) * step,
   });
   const nearest = (p: Point) => {
     let id = -1,
@@ -170,6 +175,12 @@ export class SafariSimulation {
   attempts = 0;
   hints = 0;
   completed = 0;
+  objectiveIndex = 0;
+  rescuedIds: string[] = [];
+  feeder: (Point & { diet: Diet | null; remaining: number }) | null = null;
+  calm: (Point & { remaining: number }) | null = null;
+  calmCooldown = 0;
+  private collisionObstacles: Obstacle[] = [];
   private finishedContracts = new Set<number>();
   get completedLevels() { return [...this.finishedContracts].map(level => level + 1); }
   private baitId = 0;
@@ -186,26 +197,32 @@ export class SafariSimulation {
   get contract() {
     return CONTRACTS[this.level]!;
   }
+  get objective() { return objectiveFor(this.contract, this.objectiveIndex); }
+  get objectiveTotal() { return objectiveCount(this.contract); }
+  get levelCleared() { return this.mode === "caught" && this.correct && this.objectiveIndex === this.objectiveTotal - 1; }
+  get toolkit() { return { feeder: this.level >= 10, calm: this.level >= 25 }; }
   get obstacles() {
-    const base =
-      this.level < 2
-        ? []
-        : this.contract.scene === "transfer"
-          ? TRANSFER_OBSTACLES
-          : CLEARING_OBSTACLES;
-    return this.variant ? base.map((o) => ({ ...o, x: -o.x })) : base;
+    return this.collisionObstacles;
   }
   home(spec: CreatureSpec): Point {
     return { x: spec.spawn[0] * (this.variant ? -1 : 1), z: spec.spawn[1] };
   }
   load(level: number) {
+    if (!Number.isInteger(level) || level < 0 || level >= CONTRACTS.length) throw new RangeError("Invalid safari level");
     this.level = level;
+    this.collisionObstacles = obstaclesForLevel(level).map(o => ({ ...o, x: o.x * (this.variant ? -1 : 1) }));
     this.time = 0;
     this.trap = null;
     this.baits = [];
+    this.objectiveIndex = 0;
+    this.rescuedIds = [];
+    this.feeder = null;
+    this.calm = null;
+    this.calmCooldown = 0;
     this.captureId = null;
     this.correct = false;
-    this.message = "";
+    this.message = level === 10 ? "כלי חדש: קערת הסחה. הניחו אותה ואז גררו לתוכה עלה או פרי כדי להעסיק יריב."
+      : level === 25 ? "כלי חדש: פרח הרגעה. האטו חיות סמוכות זמנית; להשוואה משתמשים במהירות הרגילה שבנתונים." : "";
     this.hints = 0;
     this.attempts = 0;
     this.mode = "playing";
@@ -237,20 +254,16 @@ export class SafariSimulation {
     if (this.events.length > 100) this.events.shift();
   }
   phase() {
-    return !this.trap
-      ? "place-catcher"
-      : !this.baits.length &&
-          !this.actors.some((a) => a.mode === "lured" || a.mode === "eating")
-        ? "drop-food"
-        : "watch";
+    return !this.trap ? "place-catcher" : !this.baits.length ? "drop-food" : "watch";
   }
+
   fits(p: Point, r = 0.25) {
     return pointClear(p, this.obstacles, r);
   }
   placementIssue(point: Point): "edge" | "rock" | "animal" | null {
     if (Math.abs(point.x) >= BOUNDS.x - TRAP_RADIUS || Math.abs(point.z) >= BOUNDS.z - TRAP_RADIUS) return "edge";
     if (this.obstacles.some(o => distance(o, point) <= o.r + TRAP_RADIUS)) return "rock";
-    if (this.actors.some(a => distance(a, point) < TRAP_RADIUS + 0.15 * a.spec.size)) return "animal";
+    if (this.actors.some(a => a.mode !== "rescued" && distance(a, point) < TRAP_RADIUS + 0.15 * a.spec.size)) return "animal";
     return null;
   }
   place(point: Point) {
@@ -275,6 +288,13 @@ export class SafariSimulation {
       this.message = "הניחו את המזון על הדשא, מחוץ לאבן.";
       return false;
     }
+    if (this.feeder && distance(this.feeder, point) < .65) {
+      this.feeder.diet = diet;
+      this.feeder.remaining = FEEDER_SECONDS;
+      this.message = "הקערה תעסיק את החיות שמעדיפות את המזון הזה למשך10שניות. הציבו מלכודת במקום אחר.";
+      this.noteEvent("fill-feeder");
+      return true;
+    }
     this.baits.push({
       ...point,
       id: ++this.baitId,
@@ -287,6 +307,26 @@ export class SafariSimulation {
     this.noteEvent("bait");
     return true;
   }
+  placeFeeder(point: Point) {
+    if (this.mode !== "playing" || !this.toolkit.feeder) return false;
+    if (!this.fits(point, .4)) { this.message = "הניחו את כל הקערה על דשא פנוי, מחוץ לאבנים ולגבול."; return false; }
+    this.feeder = { ...point, diet: null, remaining: 0 };
+    this.message = "הקערה ריקה. גררו לתוכה עלה או פרי כדי להסיח חיות מתחרות.";
+    this.noteEvent("place-feeder");
+    return true;
+  }
+  placeCalm(point: Point) {
+    if (this.mode !== "playing" || !this.toolkit.calm || this.calmCooldown > 0 || !this.fits(point, .15)) return false;
+    this.calm = { ...point, remaining: CALM_SECONDS };
+    this.calmCooldown = 9;
+    this.message = "הפרח מאט זמנית חיות סמוכות. המהירות הרגילה ביומן נשארת הנתון להשוואה.";
+    this.noteEvent("calming-patch");
+    return true;
+  }
+  movementMultiplier(actor: Actor) {
+    const ordinary = actor.mode === "lured" ? 1.35 : actor.mode === "escape" ? 1.5 : 1;
+    return ordinary * (this.calm && distance(actor, this.calm) < CALM_RADIUS ? .35 : 1);
+  }
   private capture(actor: Actor) {
     if (!this.trap) return;
     actor.x = this.trap.x;
@@ -295,12 +335,12 @@ export class SafariSimulation {
     actor.carrying = null;
     this.trap.pop = 1;
     this.captureId = actor.spec.id;
-    this.correct = acceptsCapture(this.contract, actor.spec.id);
+    this.correct = acceptsCapture(this.contract, actor.spec.id, this.objectiveIndex, this.rescuedIds);
     this.attempts++;
     this.mode = "caught";
     this.message = this.correct
       ? "בדיוק! עוד חיה בדרך למחנה."
-      : this.contract.misconceptionHe;
+      : this.objective.misconceptionHe ?? this.contract.misconceptionHe;
     this.noteEvent("capture", actor.spec.id);
   }
   release() {
@@ -313,12 +353,31 @@ export class SafariSimulation {
     this.captureId = null;
     this.baits = [];
     this.trap = null;
+    this.feeder = null;
+    this.calm = null;
+    this.calmCooldown = 0;
     this.mode = "playing";
     this.message = "החיה שוחררה. מזיזים מלכודת, בוחרים מזון, ומנסים שוב.";
     this.noteEvent("retry");
   }
   next() {
     if (this.mode !== "caught" || !this.correct) return;
+    this.rescuedIds.push(this.captureId!);
+    this.actors.find(a => a.spec.id === this.captureId)!.mode = "rescued";
+    if (this.objectiveIndex + 1 < this.objectiveTotal) {
+      this.objectiveIndex++;
+      this.captureId = null;
+      this.correct = false;
+      this.trap = null;
+      this.baits = [];
+      this.feeder = null;
+      this.calm = null;
+      this.calmCooldown = 0;
+      this.mode = "playing";
+      this.message = "חילוץ אחד הושלם. התיאור הבא מתייחס גם לחיות שכבר חולצו — הנתונים נשארים ביומן.";
+      this.noteEvent("rescue-step");
+      return;
+    }
     this.noteEvent("contract-complete", this.captureId!);
     this.finishedContracts.add(this.level);
     this.completed = this.finishedContracts.size;
@@ -337,12 +396,10 @@ export class SafariSimulation {
   }
   restart() {
     this.events = [];
-    this.completed = 0;
-    this.finishedContracts.clear();
-    this.load(0);
-    this.noteEvent("restart");
+    this.load(this.level);
+    this.noteEvent("restart-level");
   }
-  open(mode: "notes" | "help" | "paused") {
+  open(mode: "notes" | "help" | "paused" | "levels") {
     if (["playing", "caught", "complete"].includes(this.mode))
       this.suspendedMode = this.mode as "playing" | "caught" | "complete";
     this.mode = mode;
@@ -352,7 +409,7 @@ export class SafariSimulation {
     }
   }
   resume() {
-    if (["notes", "help", "paused"].includes(this.mode))
+    if (["notes", "help", "paused", "levels"].includes(this.mode))
       this.mode = this.suspendedMode;
   }
   private move(actor: Actor, goal: Point, speed: number, dt: number) {
@@ -387,6 +444,9 @@ export class SafariSimulation {
     if (this.mode !== "playing") return;
     dt = Math.min(dt, 0.05);
     this.time += dt;
+    this.calmCooldown = Math.max(0, this.calmCooldown - dt);
+    if (this.calm) { this.calm.remaining -= dt; if (this.calm.remaining <= 0) this.calm = null; }
+    if (this.feeder) { this.feeder.remaining = Math.max(0, this.feeder.remaining - dt); }
     if (this.trap) {
       this.trap.arming = Math.max(0, this.trap.arming - dt);
       this.trap.pop = Math.max(0, this.trap.pop - dt * 2);
@@ -397,8 +457,12 @@ export class SafariSimulation {
     }
     this.baits = this.baits.filter((b) => b.age < 16);
     for (const a of this.actors) {
-      if (a.mode === "caught") continue;
+      if (a.mode === "caught" || a.mode === "rescued") continue;
       a.timer -= dt;
+      if (a.mode === "feeding") {
+        if (this.feeder && this.feeder.remaining > 0 && this.feeder.diet === a.spec.diet && distance(a, this.feeder) < .85) continue;
+        a.mode = "wander"; a.carrying = null; a.timer = 0; a.route = []; a.destination = this.home(a.spec);
+      }
       if (a.mode === "eating" && a.timer > 0) continue;
       if (a.mode === "eating") {
         a.mode = "escape";
@@ -409,17 +473,23 @@ export class SafariSimulation {
       const lure =
         a.mode === "escape"
           ? null
-          : this.baits
+          : [...this.baits
               .filter(
                 (b) =>
                   !b.flight && b.diet === a.spec.diet && distance(a, b) < 6.2,
-              )
+              ), ...(this.feeder && this.feeder.remaining > 0 && this.feeder.diet === a.spec.diet && distance(a, this.feeder) < 6.2 ? [this.feeder] : [])]
               .sort((b, c) => distance(a, b) - distance(a, c))[0];
+      if (!lure && a.mode === "lured") {
+        a.mode = "wander"; a.carrying = null; a.route = []; a.timer = 0; a.destination = this.home(a.spec);
+      }
       if (lure) {
         if (a.mode !== "lured" || distance(a.destination, lure) > 0.15)
           a.route = [];
         a.destination = lure;
         a.mode = "lured";
+        if (lure === this.feeder && distance(a, lure) < .5) {
+          a.mode = "feeding"; a.carrying = a.spec.diet; a.route = []; continue;
+        }
         if (distance(a, lure) < 0.24) {
           a.mode = "eating";
           a.timer = 1.2;
@@ -453,8 +523,7 @@ export class SafariSimulation {
       this.move(
         a,
         a.destination,
-        a.spec.usualSpeed *
-          (a.mode === "lured" ? 1.35 : a.mode === "escape" ? 1.5 : 1),
+        a.spec.usualSpeed * this.movementMultiplier(a),
         dt,
       );
     }
@@ -463,7 +532,7 @@ export class SafariSimulation {
       for (let j = i + 1; j < this.actors.length; j++) {
         const a = this.actors[i],
           b = this.actors[j];
-        if (a.mode === "caught" || b.mode === "caught") continue;
+        if (["caught", "rescued"].includes(a.mode) || ["caught", "rescued"].includes(b.mode)) continue;
         const d = distance(a, b),
           gap = 0.24 * (a.spec.size + b.spec.size);
         if (d > 0 && d < gap) {
@@ -484,7 +553,7 @@ export class SafariSimulation {
       const nearest = this.actors
         .filter(
           (a) =>
-            a.mode !== "caught" &&
+            a.mode !== "caught" && a.mode !== "rescued" &&
             distance(a, this.trap!) < CAPTURE_RADIUS &&
             segmentClear(a, this.trap!, this.obstacles, 0.15),
         )
@@ -501,7 +570,17 @@ export class SafariSimulation {
       phase: this.phase(),
       variant: this.variant,
       contract: this.level + 1,
-      instruction: this.contract.instruction,
+      instruction: this.objective.instruction,
+      brief: this.contract.instruction,
+      chapter: this.contract.chapter,
+      objective: this.objectiveIndex + 1,
+      objectiveTotal: this.objectiveTotal,
+      rescuedIds: [...this.rescuedIds],
+      levelCleared: this.levelCleared,
+      toolkit: this.toolkit,
+      feeder: this.feeder,
+      calm: this.calm,
+      calmCooldown: +this.calmCooldown.toFixed(2),
       trap: this.trap,
       baits: this.baits.map(({ id, x, z, diet, age, flight }) => ({
         id,

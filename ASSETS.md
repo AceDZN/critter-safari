@@ -103,3 +103,23 @@ User-supplied categories inspected in their Chrome: [Animal](https://studio.trip
 ## Earlier access failures, resolved
 
 The initial old puffling text attempt stopped at75characters before its awaited Generate click: **no puffling job or debit occurred**. Repeated Chrome timeouts and later a precise Mac-locked report interrupted acquisition. After the human unlocked the Mac, Chrome background tab control using explicit browser ID1 recovered. No credentials, automatic-unlock bypass, duplicate job or purchase was used. Native Chrome sessions used the shared atomic lock and released it while processing/waiting; other crews' tabs and jobs were preserved.
+
+## Campaign habitat reuse — 28 October 2026
+
+After local search and the lead's inspected campaign map target, five existing pH Rangers plant outputs were approved for reuse. These are original text-generated assets from the user's signed-in Tripo account, not public gallery downloads. Source prompts, normal UI exports, historical costs and local optimization commands remain in `/Users/acedzn/dev/AceDZN-exp/ph-rangers/ASSETS.md`. That ledger records account-default Sharing Only, 1k UI exports and subsequent WebP/meshopt processing; it does not independently assert that those earlier exports were Private. The original-output account/terms basis and the explicit approval to reuse owned plants apply here. No new browser task, generation, download, purchase or credit spend occurred for this campaign pass.
+
+Runtime copies under `public/models/habitats/` are byte-identical to the source project's shipped files:
+
+| File | Bytes | Triangles | Original Tripo task | SHA256 |
+|---|---:|---:|---|---|
+|`cypress.glb` |138,176 |4,783 |[0758e7c2-13d5-490b-9a2f-fcd318dac973](https://studio.tripo3d.ai/workspace/generate/0758e7c2-13d5-490b-9a2f-fcd318dac973) |`3e26bcea23fa496a8636bc54fe50622a2a8a676f8a573bdafbba086f76282ef2` |
+|`bush.glb` |172,344 |4,766 |[59ec3978-801a-4b00-8fa6-6081e53857cd](https://studio.tripo3d.ai/workspace/generate/59ec3978-801a-4b00-8fa6-6081e53857cd) |`d8e3ab9ad2ced9b7db635e599287a173cf368ee202dd90dedd583a065ede147a` |
+|`olive.glb` |350,388 |19,291 |[cf63a88e-5fc4-4735-90da-d2e7712d043d](https://studio.tripo3d.ai/workspace/generate/cf63a88e-5fc4-4735-90da-d2e7712d043d) |`41214f212ecdc3a603fe7eb277d3c4bb9b6510a3bd27239545b438f63ef3099f` |
+|`anemone.glb` |83,252 |2,831 |[8dace501-2e8c-4be6-8f18-1e6e4de7bc81](https://studio.tripo3d.ai/workspace/generate/8dace501-2e8c-4be6-8f18-1e6e4de7bc81) |`8a974a4736f7b89f9679ffa019dc08057133bbc7898663b67793b449537c373c` |
+|`poppy-daisy.glb` |76,752 |2,836 |[e8a2d1bf-3ad7-47cb-8235-4e8ba60228b8](https://studio.tripo3d.ai/workspace/generate/e8a2d1bf-3ad7-47cb-8235-4e8ba60228b8) |`73dde55798f71dd320885d702342b8d50e8af50a58affc50bcb10d8224fc89a7` |
+
+Total five-file pack: **820,912bytes**, five static meshes/materials, no skins or clips. Combined animal GLBs/authored motion plus this pack total **4,982,113bytes**, before application code, fonts and audio. The files require EXT_meshopt_compression, KHR_mesh_quantization and EXT_texture_webp. A separate foliage loader uses the already-bundled Three MeshoptDecoder; no CDN or new package is needed. Node transforms/quantized vertex attributes are baked once into cached float geometry, then each habitat uses instancing per material. Source files and materials are preserved; only placement/normalization changes at runtime.
+
+`src/habitats.ts` owns ten chapter environments and the exact zero-based `obstaclesForLevel` arrays. Garden boulders use those arrays directly, with the same x reflection as simulation. First five levels have no boulders; later layouts use two to five. New water/dry-channel relief stays outside the flat playable support margin. Optional foliage loading is lazy and guarded after garden disposal, with a bounded five-asset cache. `garden.ready` lets diagnostics await enrichment.
+
+The rabbit/deer/tortoise loader, normalization and gait section was preserved byte-for-byte during environment work (SHA256 of the section starting `export type CritterKind`: `2dd2f5bbd0dae5890a3c8c50e0f33aabd5d5acfde8672de58ed105e2f79dc451`). No new animal or primitive animal substitute was added. Local inventory, excluded animal candidates, habitat composition and performance limits are in `docs/campaign/art-plan.md`; actual campaign visual/performance acceptance is tracked by the lead.

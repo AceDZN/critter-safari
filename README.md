@@ -2,43 +2,30 @@
 
 [Play in Workbook](https://english-games.workbook.co.il/critter-safari)
 
-A real3D woodland capture game for Hebrew-speaking grade-7/8 English learners. Read a short contract, drag a bubble trap onto the grass, and drop suitable food. Creatures follow the lure; the first one entering the ring is caught automatically.
+A real3D English-reading campaign with **50 sequential levels across 10 habitats**. Everyone follows the same journey: there is no grade selector or grade-based level limit. The campaign grows from two-animal preference clues to comparisons, negation, equality, described references, conditional exceptions and 2–3-animal rescue sequences. Fifty levels contain 63 genuine rescue objectives.
 
-The rebuild replaces the rejected first-person prototype's movement/aim/pulse controls with **two direct world gestures**. It opens on two rabbits with an always-visible preference/pace/size roster and one Hebrew action prompt. Wrong animals remain capturable, with one-button release and retry. English changes whom to catch; placement and competing feeders change what actually happens.
+Read the current description, drag a bubble trap onto clear grass, and offer a leaf or berries. The first animal reaching the ring is caught automatically. Wrong catches can be released immediately. All individual names, preferences, usual speeds, sizes and habits remain visible; rescued animals leave the field but keep their facts available for later references.
+
+## Progress and controls
+
+- Each completed level opens the next. The 50-stop journal shows chapters, completed levels and the next available level. Progress saves locally; refresh resumes, completed levels can be replayed, and retry restarts the current level without deleting earned progress. L opens the level map.
+- Drag a tray tool to the ground, or choose it then tap the ground. Keyboard: focus a tool, Enter to select, arrows to position, Enter to place, Escape to cancel.
+- Trap + leaf/berries are available from the opening. At 11 the distraction feeder unlocks: place the bowl, then drop food into it to occupy interested rivals for 10 seconds. At 26 the calming flower unlocks: nearby animals slow for 5 seconds, followed by recharge. Neither tool changes the usual-speed facts used by the English.
+- Holding a tool, reading, help, the map and settings pause without penalty. N opens notes; P pauses; F toggles fullscreen. Settings have separate music/effects volume, mute and reduced motion. Losing focus pauses.
+- `?level=1` through `?level=50` support deliberate Workbook lesson practice. A direct final-level completion earns that level only and never invents49 skipped completions.
 
 ## Run
 
-Node22.12+ recommended. `npm ci`, then `npm run dev` at http://localhost:5232 (strict port). `npm run build` creates static `dist/`; `npm run preview` serves http://localhost:4232 (strict port). Dependencies and lockfile are pinned. Relative Vite base, local models/font/audio; no backend, accounts, runtime AI, microphone or API keys. Standalone play sends no analytics; inside Workbook, a scoped parent bridge reports readiness and contract progress to the existing player.
+Node 22.12+; `npm ci`, then `npm run dev` at http://localhost:5232. `npm run build` creates static `dist/`; `npm run preview` serves http://localhost:4232. Both ports are strict. Models, font, music and effects are local. No game backend, account, runtime AI, microphone or API key. Standalone play sends no analytics; the exact-origin Workbook parent bridge reports ready/start and final-objective completion to the existing host.
 
-## Controls
+## Art and teaching sources
 
-- Drag the trap from its tray to clear grass. Drag the placed trap to move it. A dashed meadow boundary and the same full-size placement preview explain edge/rock/animal clearance.
-- Drag a leaf or berry onto the grass. A second drop can distract a rival. The trap bubbles automatically.
-- Tap a tray item and then tap the ground as an alternative to dragging.
-- Holding a selected item pauses planning. Reading/help/settings also pause without penalty.
-- Animal facts: all names, preferences, usual pace and size stay visible during play. Journal: expanded facts and vocabulary. Settings: independent music/effects levels, global mute, reduced motion, restart and fullscreen.
-- Keyboard alternative: focus a tray item and press Enter, use arrows to position it in screen space, then Enter to drop; Escape cancels. N opens notes, P pauses, F toggles fullscreen.
+Three original owned Tripo animals retain weighted skeletons, contact grounding and the authored four-paw rabbit Walk/Trot. Five existing owned plant models add distinct paths, borders and habitats without new generation. ASSETS.md records provenance, hashes, sizes and the unchanged animal section. “Fern Garden Waltz” and matching effects are original local music; AUDIO.md retains the composition/render sources.
 
-## Slice and source material
+CURRICULUM.md maps all 50 levels to 11 exact Workbook lessons spanning the underlying grade 7–9 material. Those grades are provenance, not player restrictions or claims of complete grade coverage. All sentences are original game fixtures. Preferences, habits and usual pace describe fictional individuals, not biological species. Reading success does not demonstrate productive grammar, speaking or validated learning gains.
 
-Five authored contracts: individual food preference, independent size/pace comparison, two constraints, bounded fastest within a named subset, and a changed-context slowest with new names/traits/terrain. Contracts3–4 share the same scene but require different targets. A session chooses one of two verified horizontal reflections. These are fictional individuals' preferences and game pace, not claims about real animal species.
+## Verification and release
 
-CURRICULUM.md maps exact original fixtures to saved Workbook sources. These are reading-comprehension tasks, not proof of grammar production or validated learning gains.
+`npm test` runs 119 independent semantic, physical, state, progression, tool and host checks, including 100 level/layout witnesses and 126 actual captures. `npm run test:browser` exercises the whole earned 1→50 journey through normal inputs. `CRITTER_BROWSER_PATH` can select an installed Chromium; `CRITTER_HEADLESS=1` selects headless. Install Chromium with `npx playwright install chromium` if needed. PLAYTEST.md records the actual scope and remaining checks; unit fixture loading is not a substitute for an earned browser journey.
 
-## Art and music
-
-Three original private Pro Tripo models were generated after existing gallery candidates were inspected and rejected for fit, riggability or unverified reuse rights. All three GLBs have acquired weighted creature skeletons. Deer/tortoise use their imported Walk; rabbit now uses locally authored four-paw Walk/Trot clips on its acquired rig after the generic preset produced a bipedal posture. Cadence follows measured stride and individual travel speed. GLBs total3,861,104bytes; local rabbit motion adds300,097bytes, totaling4,161,201bytes. Each GLB is below3MB. ASSETS.md records prompts, jobs, costs, license basis, file hashes and skeletal evidence. There is no separate idle clip; locomotion stops advancing while stationary/paused.
-
-“Fern Garden Waltz” is an original57.6-second composition with sampled woodwinds, pizzicato strings, harp and celesta, plus matching bait/trap/bubble/capture/release cues. AUDIO.md records creation, sources and reproducible MIDI/render scripts. Music is local and starts after a gesture.
-
-## Verification
-
-`npm test` runs40 independent semantic/physical/state/host tests, including all five captures in both reflected layouts, mistakes, recovery, pause, collision detours and preserved capture reading. `npm run test:browser` is the normal-input browser sequence; install Playwright Chromium with `npx playwright install chromium` if needed. `CRITTER_BROWSER_PATH` may select an installed Chromium binary, and `CRITTER_HEADLESS=1` enables headless.
-
-PLAYTEST.md and VISUAL_REVIEW.md distinguish the rebuilt slice's actual desktop/touch evidence and remaining visual differences from historical prototype captures. Fresh built-in imagegen concepts/prompts are in docs/visual-targets/rebuild; actual frames are separately under docs/actual-captures/rebuild. Automated plans establish solvability and input behavior; they do not establish fun or learning gains.
-
-## Workbook release
-
-The English games app in `AceDZN/acedzn-tools` hosts the static build through its existing same-origin R2 rewrite. `?level=1` through `?level=5` open the corresponding contract. The bridge emits ready after actual models render, then one start and one successful completion per contract. Wrong captures, notes and retries do not report success. Direct entry counts only contracts actually completed. See workbook/README.md and docs/verification/workbook-host.json.
-
-Build command `npm run build`; output directory `dist`; relative Vite assets require no game environment variables. The human approved release to the existing Workbook games app on27 October2026. Main receives working checkpoints, without force pushes.
+Built-in imagegen campaign mockups and exact prompts are under docs/visual-targets/campaign. Actual captures and target differences are separate in VISUAL_REVIEW.md. The English games app in AceDZN/acedzn-tools serves immutable static R2 releases through its same-origin versioned rewrite. No new standalone hosting project is needed. Workbook release was approved 27 October2026; this 50-level expansion was requested 28 October2026. See workbook/README.md for the bridge and progress contract.
