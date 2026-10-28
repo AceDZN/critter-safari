@@ -12,6 +12,13 @@ The previous five-contract checks below are historical. Current source has50 seq
 
 Evidence: docs/verification/campaign-browser.json, campaign-physical-plans.json, campaign-source-pages.json and actual frames under docs/actual-captures/campaign. Automated checks establish behavior and the earned campaign, not learner enjoyment, learning gains, productive grammar, complete grade coverage or account sign-in.
 
+
+## Workbook release verification
+
+The immutable `2026-10-28` release contains 22 public files / 7,236,867 bytes, including the actual-gameplay poster. Every public object matches the frozen tested build by SHA-256 and has the expected content type and immutable caching. Source commit: `e85ac17`; per-file results: `docs/verification/campaign-release.json`.
+
+The production-built Workbook app on localhost 4117 passes home card → 50-level detail with 11 distinct lesson sources → direct level 50, then all three actual captures and one completion event. The save contains only `[50]` completed with unlock frontier 1. Portrait 390×844 passes both level 39 rescues via actual touch and shows all six fact rows. No JavaScript or HTTP failures occurred in that run. `scripts/check-workbook-campaign.mjs` exercises this boundary; `docs/verification/campaign-workbook-local.json` records the result. Production rollout is checked separately after the catalog merge.
+
 ---
 
 # Historical five-contract verification

@@ -7,3 +7,10 @@ Slug `critter-safari`, subject English, orientation any. The existing English ga
 The bridge accepts exact HTTPS Workbook parents and local HTTP test parents; standalone play posts nothing. Ready follows real model/foliage rendering. One start is reported per loaded attempt; a multi-rescue level sends completion only after its final correct capture. Wrong catches, intermediate captures and reading panels do not report level success. Retry/map replay reset the attempt latch without a second document-ready event. Duration is active simulation time, excluding reading/planning/paused time.
 
 `src/progression.ts`, `src/host.ts` and tests provide the persistence/bridge contract. The current campaign evidence is in docs/verification/campaign-*.json and PLAYTEST.md. Earlier workbook-host.json/workbook-production.json files describe the historical five-contract release, not the current50-level scope. No account-login or learner-fun/learning-gain claim is made by these automated tests.
+
+
+## Fifty-level release — 28 October 2026
+
+The catalog update was merged in [Workbook PR 371](https://github.com/AceDZN/acedzn-tools/pull/371), merge commit `bcfb71167ba539b26da083223d2ec4501c7195ca`. Its immutable bundle is `2026-10-28`, built from source game commit `e85ac17`. Subsequent verification-only commits do not change those release bytes.
+
+All 22 public objects / 7,236,867 bytes match the frozen tested bundle by SHA-256. The production-built local Workbook app passed its 50-level detail, 11 distinct lesson sources, three actual final-level rescues and two actual portrait touch rescues. Catalog checks were rerun after merging concurrent game releases: 16 passed, followed by catalog typecheck and the full English Games production build. The repository discovery check passed on the merged PR head. See `docs/verification/campaign-release.json` and `campaign-workbook-local.json`. Live production verification follows deployment.

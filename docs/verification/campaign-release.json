@@ -1,0 +1,178 @@
+[
+  {
+    "file": "favicon.svg",
+    "status": 200,
+    "bytes": 271,
+    "sha256": "47c9e55f38fde1c64b2c15364bde3ade7f4bb110a31e7e4133afdb71acafdbfa",
+    "type": "image/svg+xml",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "index.html",
+    "status": 200,
+    "bytes": 6623,
+    "sha256": "8a955ccbf5eecb7eb85aa8cb5193a8265603c3631cc1378bf0d94a180987a0be",
+    "type": "text/html; charset=utf-8",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "assets/index-CMoszmcE.css",
+    "status": 200,
+    "bytes": 11573,
+    "sha256": "cadb45ad19590dd7045b8d5ef9bd78b55b769e367e06744235136e4c363c14d2",
+    "type": "text/css; charset=utf-8",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "assets/index-jx_oyVQf.js",
+    "status": 200,
+    "bytes": 728193,
+    "sha256": "595026775def0b1d114b7f38a99fbe3dd736af892f4feeada8bb70620a36cca7",
+    "type": "text/javascript; charset=utf-8",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/bait.mp3",
+    "status": 200,
+    "bytes": 19864,
+    "sha256": "cab46a303cc497bed1b8dc3431aa749696bc94ba072974a81ce1eea183733d8c",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/capture.mp3",
+    "status": 200,
+    "bytes": 33464,
+    "sha256": "17948161fc74f783b14b6a863901ddc817ef6a1bcd30de70783fead7a800d605",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/fern-garden.mp3",
+    "status": 200,
+    "bytes": 1047399,
+    "sha256": "54b9504605f7800220263d379b1c2a3ae48a540fe1c35658ceba4617a47d7dea",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/pulse.mp3",
+    "status": 200,
+    "bytes": 28543,
+    "sha256": "ce38a7a828c8b6b8d6aa5906321ce812cc15bbe69dade355aaace38f46c61fa8",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/release.mp3",
+    "status": 200,
+    "bytes": 36838,
+    "sha256": "17f71953b2511ef5b99736ef13805272084b1cd420ea43b3ed67b1c75bfb28a4",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "audio/trap.mp3",
+    "status": 200,
+    "bytes": 12879,
+    "sha256": "c775dbeb703d09303fc5637cc5bf82601a0cec8adedce7be35e1d2b81c871d19",
+    "type": "audio/mpeg",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "fonts/NotoSansHebrew.ttf",
+    "status": 200,
+    "bytes": 112640,
+    "sha256": "7ef36a2c3593758cdb622e1bdef4f84523e92fbc3ccc667438dd80ff54c2de88",
+    "type": "font/ttf",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "fonts/OFL.txt",
+    "status": 200,
+    "bytes": 4382,
+    "sha256": "9b9fe028b5ba74d231659a1bbaf0ed09b11e759d1ca6a070999e16d151616b47",
+    "type": "text/plain; charset=utf-8",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/deer.glb",
+    "status": 200,
+    "bytes": 1263100,
+    "sha256": "23ef02815dad1b7a772e3483d6d0df84f9dddac0fb17517da4c45fd23020286b",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/rabbit-gaits.json",
+    "status": 200,
+    "bytes": 300097,
+    "sha256": "3a3b713cad0a652baa289ec8a25e8d75301fb1915d155b128ba127f0c8ed225f",
+    "type": "application/json",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/rabbit.glb",
+    "status": 200,
+    "bytes": 1195884,
+    "sha256": "a374444210a92c13801841c55d837be650e86a0ae508df0a7f33bb8fae11207c",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/tortoise.glb",
+    "status": 200,
+    "bytes": 1402120,
+    "sha256": "c20319f24e571d897130553ae05321ea1c10dde65a0c343d9dec17b14d3ea990",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/habitats/anemone.glb",
+    "status": 200,
+    "bytes": 83252,
+    "sha256": "8a974a4736f7b89f9679ffa019dc08057133bbc7898663b67793b449537c373c",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/habitats/bush.glb",
+    "status": 200,
+    "bytes": 172344,
+    "sha256": "d8e3ab9ad2ced9b7db635e599287a173cf368ee202dd90dedd583a065ede147a",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/habitats/cypress.glb",
+    "status": 200,
+    "bytes": 138176,
+    "sha256": "3e26bcea23fa496a8636bc54fe50622a2a8a676f8a573bdafbba086f76282ef2",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/habitats/olive.glb",
+    "status": 200,
+    "bytes": 350388,
+    "sha256": "41214f212ecdc3a603fe7eb277d3c4bb9b6510a3bd27239545b438f63ef3099f",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "models/habitats/poppy-daisy.glb",
+    "status": 200,
+    "bytes": 76752,
+    "sha256": "73dde55798f71dd320885d702342b8d50e8af50a58affc50bcb10d8224fc89a7",
+    "type": "model/gltf-binary",
+    "cache": "public, max-age=31536000, immutable"
+  },
+  {
+    "file": "poster.jpg",
+    "status": 200,
+    "bytes": 212085,
+    "sha256": "3949bcabcf03445aea87c4473b49fadecb9e9cf64e4c0c9473bc04d3d460e462",
+    "type": "image/jpeg",
+    "cache": "public, max-age=31536000, immutable"
+  }
+]

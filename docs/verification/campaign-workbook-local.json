@@ -1,0 +1,84 @@
+{
+  "base": "http://localhost:4117",
+  "version": "2026-10-28",
+  "catalogLevels": 50,
+  "lessons": [
+    "https://english.workbook.co.il/grade-8/chapter-11/relative-clauses-reference",
+    "https://english.workbook.co.il/grade-7/chapter-3/compare-two-places",
+    "https://english.workbook.co.il/grade-7/chapter-1/be-statements-and-questions",
+    "https://english.workbook.co.il/grade-7/chapter-10/present-simple-rules",
+    "https://english.workbook.co.il/grade-8/chapter-3/extremes-and-fair-comparisons",
+    "https://english.workbook.co.il/grade-9/chapter-11/comparatives-and-superlatives-reference",
+    "https://english.workbook.co.il/grade-9/chapter-11/relative-clauses-reference",
+    "https://english.workbook.co.il/grade-8/chapter-9/tracking-reference-and-connections",
+    "https://english.workbook.co.il/grade-9/chapter-4/a-rule-and-its-exception",
+    "https://english.workbook.co.il/grade-9/chapter-11/conditionals-reference",
+    "https://english.workbook.co.il/grade-9/chapter-12/reading-comprehension-and-evidence-reference"
+  ],
+  "desktop": {
+    "level": 50,
+    "variant": 1,
+    "captures": [
+      "alder",
+      "drift",
+      "bramble"
+    ],
+    "messages": [
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "ready"
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-start",
+        "level": 50
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-complete",
+        "level": 50,
+        "durationMs": 2058
+      }
+    ]
+  },
+  "phone": {
+    "level": 39,
+    "variant": 1,
+    "captures": [
+      "alba",
+      "coda"
+    ],
+    "messages": [
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "ready"
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-start",
+        "level": 39
+      },
+      {
+        "source": "workbook-game",
+        "version": 1,
+        "slug": "critter-safari",
+        "type": "level-complete",
+        "level": 39,
+        "durationMs": 1783
+      }
+    ]
+  },
+  "errors": [],
+  "gameFailures": [],
+  "nonGameHttpFailures": []
+}
